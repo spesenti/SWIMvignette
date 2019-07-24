@@ -1,0 +1,10 @@
+---
+title: "Introduction"
+output: html_document
+---
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# SWIM: Scenario Weights for Importance Measurement
