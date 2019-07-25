@@ -1,0 +1,10 @@
+---
+title: "A working example"
+output: html_document
+---
+
+# showcasing the functions of the package
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```

@@ -3,8 +3,8 @@ title: "Introduction"
 output: html_document
 ---
 
-```{r setup, include=TRUE}
-knitr::opts_chunk$set(echo = FALSE)
-```
+# Introduction
 
-# SWIM: Scenario Weights for Importance Measurement
+## some more into
+
+

@@ -1,0 +1,8 @@
+---
+title: "Advanced Models"
+output: html_document
+---
+
+
+# Applications to some more advanced models.
+

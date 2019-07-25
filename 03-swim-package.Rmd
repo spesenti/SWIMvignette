@@ -1,0 +1,7 @@
+---
+title: "The SWIM package"
+output: html_document
+---
+
+
+# details about the package
