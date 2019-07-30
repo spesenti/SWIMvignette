@@ -1,10 +1,42 @@
----
-title: "A working example"
-output: html_document
----
 
-# showcasing the functions of the package
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+# A working example
+
+``` {r, cache = TRUE, include = FALSE}
+set.seed(0)
+SD <- c(70, 45, 50, 60, 75)
+Corr <- matrix(rep(0.5, 5^2), nrow = 5) + diag(rep(1 - 0.5, 5))
+
+if (!requireNamespace("mvtnorm", quietly = TRUE))
+   stop("Package \"mvtnorm\" needed for this function 
+   to work. Please install it.")
+   
+x <- mvtnorm::rmvnorm(10^5, 
+   mean =  rep(100, 5), 
+   sigma = (SD %*% t(SD)) * Corr)
+data <- data.frame(rowSums(x), x)
+names(data) <- c("Y", "X1", "X2", "X3", "X4", "X5")
 ```
+
+Consider a portfolio $Y = \sum_{i = 1}^5 X_i$, where $X_1, X_2, X_3, X_4, X_5$ are correlated normally distributed with mean equal to `r round(colMeans(data)[3],0)` and standard deviations `r SD`, respectively. The example is based on a simulated data set of size $10^5$ of the input risk factors $\textbf{X} = (X_1, X_2, X_3, X_4, X_5)$ and the corresponding output $Y$.
+
+The function `stress()` allows to stress different probabilistic summaries of the inputs and outputs, for example stressing simultaneously the mean of $X_1$ and $X_2$ by $5$%. The distribution functions of the original (baseline) and stressed input factors, $X_1$ and $X_2$, are displayed in Figure \@ref(fig:working-example-mean)
+
+
+``` {r, working-example-mean, cache = TRUE, fig.show='hold', out.width = '50%', fig.cap = "Baseline and stressed empirical distribution fucntions of input factors $X_1$ (left) and $X_2$ (right)."}
+res_mean <- SWIM::stress(type = "mean", x = data, k = c(2, 3), new_means = c(105, 105))
+SWIM::plot_cdf(res_mean, xCol = "X1", base = TRUE)
+SWIM::plot_cdf(res_mean, xCol = "X2", base = TRUE)
+summary(res_mean)
+```
+
+We can additionally to the $5$% stress of the mean of inputs $X_1$ and $X_2$, increase the standard deviation to $80$ and $50$, respectively. Figures \@ref(fig:working-example-mean-sd) display the baseline and the stressed histograms for input factors $X_1$ and $X_2$.
+
+``` {r, working-example-mean-sd, cache = TRUE, fig.show='hold', out.width = '50%', fig.cap = "Histogram of the baseline and stressed input factors $X_1$ (left) and $X_2$ (right)."}
+res_mean_sd <- SWIM::stress(type = "mean sd", x = data, k = c(2, 3), 
+                            new_means = c(105, 105), new_sd = c(80, 50))
+SWIM::plot_hist(res_mean_sd, xCol = "X1", base = TRUE)
+SWIM::plot_hist(res_mean_sd, xCol = "X2", base = TRUE)
+```
+
+

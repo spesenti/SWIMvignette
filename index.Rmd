@@ -13,9 +13,9 @@ date: "`r format(Sys.time(), '%d %B %Y')`"
 site: bookdown::bookdown_site
 documentclass: book
 output:
-  
   bookdown::gitbook: default
   bookdown::pdf_book: default
+bibliography: bibliography.bib
 biblio-style: apalike
 link-citations: yes
 ---
@@ -24,7 +24,7 @@ link-citations: yes
 
 The SWIM package provides weights on simulated scenarios from a
 stochastic model, such that stressed model components (random variables)
-fulfil given probabilistic constraints (e.g. specified values for risk
+fulfil given probabilistic constraints (e.g. specified values for risk
 measures), under the new scenario weights. Scenario weights are selected
 by constrained minimisation of the relative entropy to the baseline
 model.
@@ -34,13 +34,11 @@ model.
 
 The SWIM package can be install from [CRAN](https://CRAN.R-project.org/package=SWIM) :
 
-1. via the link <https://CRAN.R-project.org/package=SWIM>;
+<https://CRAN.R-project.org/package=SWIM>;
 
-alternatively from [GitHub](https://github.com/spesenti/SWIM): 
+alternatively from [GitHub](https://github.com/spesenti/SWIM) in R studio:
 
 
-2.  with the following R code:
-
-``` r
+``` r}
 install.packages("spesenti/SWIM")
 ```

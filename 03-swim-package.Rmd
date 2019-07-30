@@ -1,7 +1,50 @@
----
-title: "The SWIM package"
-output: html_document
----
 
 
-# details about the package
+
+# The Scope of the SWIM package
+
+
+
+## Stressing a model
+
+
+A **model** is defined to consist of a random vector $\boldsymbol{X} = (X_1, \ldots, X_n)$, the *input factors*, a function $g \colon \mathbb{R}^n \to \mathbb{R}$, called the *aggregation function*, which gives, when applied to the input factors $\boldsymbol{X}$, the one-dimensional random *output* of interest $Y = g(\boldsymbol{X})$. Starting from a **baseline probability**, $P$, a probability measure describing the current beliefs regarding (or software implementation of) the model, we are interested in **stressed models** that fulfil probabilistic constraints and have minimal Kullback-Leibler divergence. Specifically, a stressed model $Q$ is the solution to 
+\begin{equation} 
+\min_{ Q \in \mathcal{P}} D_\text{KL}(Q \| P), \quad
+\text{s.t. probabilistic constraints of the model under }Q \text{ hold},
+(\#eq:optimisation)
+\end{equation}
+where the Kullback-Leibler divergence is given by $D_\text{KL}(Q \| P)  = \int \frac{dQ}{dP} \log \big(\frac{dQ}{dP} \big)\mathrm{d}P$, if $Q$ is absolutely continuous with respect to $P$. 
+
+The optimisation \@ref(eq:optimisation) with moment constraint has been studied by [@Csiszar1975].
+
+
+
+
+## Stresses
+The SWIM package provides sensitivity analysis tools for stressing model
+components (random variables). Implemented stresses are:
+
+| R function             | Stress                                |
+| ---------------------- | -----------------------------         |
+| `stress()`             | a wrapper for the `stress_` functions |
+| `stress_VaR()`         | VaR risk measure, a quantile          |
+| `stress_VaR_ES()`      | VaR and ES risk measures              |
+| `stress_mean()`        | means                                 |
+| `stress_mean_sd()`     | means and standard deviations         |
+| `stress_mean_moment()` | moments, functions of moments         |
+| `stress_prob()`        | probabilities of intervals            |
+| `stress_user()`        | user defined scenario weights         |
+
+## Visual tools
+
+
+
+
+
+
+
+
+
+
+

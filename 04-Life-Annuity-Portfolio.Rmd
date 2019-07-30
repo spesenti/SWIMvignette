@@ -1,0 +1,6 @@
+
+
+# Life Annuity Portfolio
+
+In this section we showcase the SWIM package to conduct sensitivity analysis of a life annuity portfolio. The life annuity portfolio consists of...
+

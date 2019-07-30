@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4 The Scope of the SWIM package | SWIM: Scenario Weights for Importance Measurement</title>
+  <meta name="description" content="4 The Scope of the SWIM package | SWIM: Scenario Weights for Importance Measurement" />
+  <meta name="generator" content="bookdown 0.12 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="4 The Scope of the SWIM package | SWIM: Scenario Weights for Importance Measurement" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4 The Scope of the SWIM package | SWIM: Scenario Weights for Importance Measurement" />
+  
+  
+  
+
+
+
+<meta name="date" content="2019-07-30" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="a-working-example.html">
+<link rel="next" href="life-annuity-portfolio.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Overview</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#installation"><i class="fa fa-check"></i><b>1.1</b> Installation</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
+<li class="chapter" data-level="3" data-path="a-working-example.html"><a href="a-working-example.html"><i class="fa fa-check"></i><b>3</b> A working example</a></li>
+<li class="chapter" data-level="4" data-path="the-scope-of-the-swim-package.html"><a href="the-scope-of-the-swim-package.html"><i class="fa fa-check"></i><b>4</b> The Scope of the SWIM package</a><ul>
+<li class="chapter" data-level="4.1" data-path="the-scope-of-the-swim-package.html"><a href="the-scope-of-the-swim-package.html#stressing-a-model"><i class="fa fa-check"></i><b>4.1</b> Stressing a model</a></li>
+<li class="chapter" data-level="4.2" data-path="the-scope-of-the-swim-package.html"><a href="the-scope-of-the-swim-package.html#stresses"><i class="fa fa-check"></i><b>4.2</b> Stresses</a></li>
+<li class="chapter" data-level="4.3" data-path="the-scope-of-the-swim-package.html"><a href="the-scope-of-the-swim-package.html#visual-tools"><i class="fa fa-check"></i><b>4.3</b> Visual tools</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="life-annuity-portfolio.html"><a href="life-annuity-portfolio.html"><i class="fa fa-check"></i><b>5</b> Life Annuity Portfolio</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">SWIM: Scenario Weights for Importance Measurement</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="the-scope-of-the-swim-package" class="section level1">
+<h1><span class="header-section-number">4</span> The Scope of the SWIM package</h1>
+<div id="stressing-a-model" class="section level2">
+<h2><span class="header-section-number">4.1</span> Stressing a model</h2>
+<p>A <strong>model</strong> is defined to consist of a random vector <span class="math inline">\(\boldsymbol{X} = (X_1, \ldots, X_n)\)</span>, the <em>input factors</em>, a function <span class="math inline">\(g \colon \mathbb{R}^n \to \mathbb{R}\)</span>, called the <em>aggregation function</em>, which gives, when applied to the input factors <span class="math inline">\(\boldsymbol{X}\)</span>, the one-dimensional random <em>output</em> of interest <span class="math inline">\(Y = g(\boldsymbol{X})\)</span>. Starting from a <strong>baseline probability</strong>, <span class="math inline">\(P\)</span>, a probability measure describing the current beliefs regarding (or software implementation of) the model, we are interested in <strong>stressed models</strong> that fulfil probabilistic constraints and have minimal Kullback-Leibler divergence. Specifically, a stressed model <span class="math inline">\(Q\)</span> is the solution to
+<span class="math display" id="eq:optimisation">\[\begin{equation} 
+\min_{ Q \in \mathcal{P}} D_\text{KL}(Q \| P), \quad
+\text{s.t. probabilistic constraints of the model under }Q \text{ hold},
+\tag{4.1}
+\end{equation}\]</span>
+where the Kullback-Leibler divergence is given by <span class="math inline">\(D_\text{KL}(Q \| P) = \int \frac{dQ}{dP} \log \big(\frac{dQ}{dP} \big)\mathrm{d}P\)</span>, if <span class="math inline">\(Q\)</span> is absolutely continuous with respect to <span class="math inline">\(P\)</span>.</p>
+<p>The optimisation <a href="the-scope-of-the-swim-package.html#eq:optimisation">(4.1)</a> with moment constraint has been studied by <span class="citation">(Csiszár <a href="#ref-Csiszar1975">1975</a>)</span>.</p>
+</div>
+<div id="stresses" class="section level2">
+<h2><span class="header-section-number">4.2</span> Stresses</h2>
+<p>The SWIM package provides sensitivity analysis tools for stressing model
+components (random variables). Implemented stresses are:</p>
+<table>
+<thead>
+<tr class="header">
+<th>R function</th>
+<th>Stress</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>stress()</code></td>
+<td>a wrapper for the <code>stress_</code> functions</td>
+</tr>
+<tr class="even">
+<td><code>stress_VaR()</code></td>
+<td>VaR risk measure, a quantile</td>
+</tr>
+<tr class="odd">
+<td><code>stress_VaR_ES()</code></td>
+<td>VaR and ES risk measures</td>
+</tr>
+<tr class="even">
+<td><code>stress_mean()</code></td>
+<td>means</td>
+</tr>
+<tr class="odd">
+<td><code>stress_mean_sd()</code></td>
+<td>means and standard deviations</td>
+</tr>
+<tr class="even">
+<td><code>stress_mean_moment()</code></td>
+<td>moments, functions of moments</td>
+</tr>
+<tr class="odd">
+<td><code>stress_prob()</code></td>
+<td>probabilities of intervals</td>
+</tr>
+<tr class="even">
+<td><code>stress_user()</code></td>
+<td>user defined scenario weights</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="visual-tools" class="section level2">
+<h2><span class="header-section-number">4.3</span> Visual tools</h2>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-Csiszar1975">
+<p>Csiszár, Imre. 1975. “I-Divergence Geometry of Probability Distributions and Minimization Problems.” <em>The Annals of Probability</em> 3 (1): 146–58.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="a-working-example.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="life-annuity-portfolio.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
