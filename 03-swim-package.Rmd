@@ -1,6 +1,5 @@
 
 
-
 # The Scope of the SWIM package
 
 

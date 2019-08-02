@@ -1,0 +1,12 @@
+bookdown::gitbook:
+  lib_dir: assets
+  split_by: chapter
+  config:
+    toolbar:
+      position: static
+bookdown::pdf_book:
+  keep_tex: yes
+bookdown::html_book:
+  css: toc.css
+split_bib: no
+citation_package: natbib

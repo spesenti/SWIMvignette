@@ -1,0 +1,210 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{}
+    \pretitle{\vspace{\droptitle}}
+  \posttitle{}
+    \author{}
+    \preauthor{}\postauthor{}
+    \date{}
+    \predate{}\postdate{}
+  
+
+\begin{document}
+
+\hypertarget{life-annuity-portfolio}{%
+\section{Life Annuity Portfolio}\label{life-annuity-portfolio}}
+
+In this section we showcase the SWIM package to conduct sensitivity
+analysis of a life annuity portfolio.
+
+Model inspired by Olivieri \& Pitacco (2003). See also Hari et
+al.~(2009) for an application to a pension scheme. Point of view of an
+insurer who aims at building up a partial internal model for a portfolio
+of life annuities.
+
+Types of risks:\\
++ The \emph{mortality risk} is originated by the random lifetimes of
+annuitants. It can be split in process and longevity risk.\\
+- The \emph{investment risk} originates from the randomness stemming
+from financial markets in which the insurer invests.
+
+\textbf{Assumptions}\textbackslash{} Annuitants same age \(x\) at entry
+time \(t=0\) (when they buy the annuity) \(\rightarrow\) single cohort.
+In \(t=n\) every policy holder is deceased. Same immediate life annuity
+(\(R\) annual amount) for every policy holder.
+\textbackslash{}\textbackslash{} Notation:
+
+\begin{itemize}
+    \item $Z_t$ portfolio fund at time t ;
+    \item $N_t$  number of annuitants at time t;
+    \item $D_t = N_t - N_{t+1}$;
+    \item $I_t$ rate of return for the period ($t-1,t$);
+    \item $\omega -1 $ maximum attainable age;
+    \item $\Pi$ single premium;
+    \item $M$ (initial) solvency margin.
+\end{itemize}
+
+At time \(t=0\), initial fund: \begin{displaymath}
+Z_0 = N_0 \Pi + M.
+\end{displaymath} Portfolio fund dynamics: \begin{displaymath}
+Z_t = (Z_{t-1} - N_{t-1} R) (1+I_{t}), \ \ \ t=1,\ldots,\omega-x. 
+\end{displaymath} For a fixed solvency level \(\varepsilon\), the
+initial margin \(M\) is chosen so that: \begin{displaymath}
+P(Z_n \ge 0) \ge 1-\varepsilon.
+\end{displaymath} \newpage
+
+\subsection{Mortality Model}
+
+The model considers simultaneously age \(x\) and calendar year
+\(t\).\textbackslash{}\textbackslash{} The random variable
+\(\tilde{q}_{x+t,t}\) gives the one-year death probability for an
+individual aged x+t in calendar year \(\hat{t}+t\) (where \(\hat{t}\) is
+a fixed year). \textbackslash{}\textbackslash{} Under the assumptions of
+homogeneous and indipendent lives, the conditional probability
+distribution of \(D_t\) is Binomial: \begin{equation}
+D_t|N_{t},\tilde{q}_{x+t,t} \sim \text{Binom}(N_{t},\tilde{q}_{x+t,t}), \ \ t=0,\ldots,\omega-x-1. \label{binom}
+\end{equation} In \eqref{binom}, the uncertainty of
+\(\tilde{q}_{x+t,t}\) represents the longevity risk.
+\textbackslash{}\textbackslash{}
+\textbf{Longevity Risk}\textbackslash{}\textbackslash{} Model: M7
+(Quadratic CBD model with cohort effects) \(\rightarrow\) extension of
+Lee-Carter model. See Cairns et
+al.~(2009).\textbackslash{}\textbackslash{} Be careful: notation here is
+a bit different! (the single cohort of policy holders in the life
+annuity portfolio allows a simplified notation):
+
+\begin{itemize}
+    \item $D_{x,t}$ number of deaths in a reference population at age $x$ last birthday during calendar year $t$;
+    \item $E_{x,t}^0$ initial exposed to risk  at age $x$ in year $t$;
+    \item $\tilde{q}_{x,t}$ one-year death probability for an individual aged $x$ last birthday and in calendar year $t$.
+    \end{itemize}
+
+Structure of M7. See GAPC family \(\rightarrow\) StMoMo (Villegas et
+al.~(2018): \begin{displaymath}
+\begin{split}
+& (1) \ D_{x,t} \sim \text{Binom}(E_{x,t}^0 \ , \ \tilde{q}_{x,t}), \\
+& (2) \ \text{logit} (\tilde{q}_{x,t}) = \eta_{x,t}, \\
+& (3) \ \eta_{x,t} = \kappa_t^{(1)} + (x-\overline{x}) \kappa_t^{(2)} + ((x-\overline{x}) - \tilde{\sigma}_x^2)^2  \kappa_t^{(3)} + \gamma_{t-x}.
+\end{split}
+\end{displaymath} Model M7 is fitted to Italy male mortality data for
+ages from 55 to 89 and calendar years from 1950 to 2014 \(\rightarrow\)
+M7 is the best.
+
+\subsection{Financial Risk}
+
+\(I_t\) is defined by the equation: \begin{displaymath}
+1+I_t = \frac{S_{t+1}}{S_t}.
+\end{displaymath} \(S_t\) is a Geometric Brownian motion:
+\begin{equation}
+\frac{dS_t}{S_t} = \mu d_t + \sigma dW_t, \label{sde}
+\end{equation} where \(W_{t}\) is a Wiener process, \(\mu\) (percentage
+drift) and \(\sigma\) (percentage volatility) are constants. The
+stochastic differential equation \eqref{sde} admits analytic solution:
+\begin{displaymath}
+ S_{t}=S_{0}\exp \left(\left(\mu -{\frac {\sigma ^{2}}{2}}\right)t+\sigma W_{t}\right),
+\end{displaymath} hence \begin{displaymath}
+1+I_t = \text{exp}\left( \left(\mu-\frac{\sigma^2}{2}\right)  +\sigma(W_{t+1}-W_t)  \right).
+\end{displaymath}
+
+\subsection{Reverse sensitivity analysis}
+
+\textbf{Output} variable: \begin{displaymath}
+Y = -Z_n.
+\end{displaymath} The opposite of the fund at time \(n\) is chosen as
+output variable to allow adverse scenarios as stress.
+\textbackslash{}\textbackslash{} Risk Factors \(\textbf{X}\):
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{@{}cccc@{}}
+        \toprule
+        & Mortality  & Yield  & Risk Factors        \\ \midrule
+        Model 4  & Full Stochastic & Stochastic  & $N_t \ \ \tilde{q}_{x+t,t} \ \ I_t$   \\ \bottomrule
+    \end{tabular}
+\end{table}
+
+\(\\\) We have: \begin{displaymath}
+Y = g((N_t), (I_t), (\tilde{q}_{x+t,t}))
+\end{displaymath} where \(g\) is implicitly defined by the equations in
+previous sections.\textbackslash{}\textbackslash{} Stress:
+\begin{displaymath}
+\begin{split}
+\alpha &=0.9, \ \ \ \ \ q=VaR_\alpha^Q(Y)=0, \\ 
+stress_{ES}&=0.2, \ \ \ \ \  s=ES_\alpha^Q(Y)=\E(Y|Y>q) \ (1+stress_{ES}).
+\end{split}
+\end{displaymath}
+
+
+\end{document}

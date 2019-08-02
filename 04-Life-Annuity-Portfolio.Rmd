@@ -1,6 +1,111 @@
 
-
 # Life Annuity Portfolio
 
-In this section we showcase the SWIM package to conduct sensitivity analysis of a life annuity portfolio. The life annuity portfolio consists of...
+In this section we showcase the SWIM package to conduct sensitivity analysis of a life annuity portfolio. 
 
+
+Model inspired by Olivieri \& Pitacco (2003). See also Hari et al. (2009) for an application to a pension scheme.
+Point of view of an insurer who aims at building up a partial internal model for a portfolio of life annuities.   
+
+Types of risks:    
+  + The *mortality risk* is originated by the random lifetimes of annuitants. It can be split in process and longevity risk.   
+- The *investment risk* originates from the randomness stemming from financial markets in which
+	the insurer invests.
+
+
+\textbf{Assumptions}\\
+Annuitants same age $x$ at entry time $t=0$ (when they buy the annuity) $\rightarrow$ single cohort. In $t=n$ every policy holder is deceased. 
+Same immediate life annuity ($R$ annual amount) for every policy holder. \\\\
+Notation:
+\begin{itemize}
+	\item $Z_t$ portfolio fund at time t ;
+	\item $N_t$  number of annuitants at time t;
+	\item $D_t = N_t - N_{t+1}$;
+	\item $I_t$ rate of return for the period ($t-1,t$);
+	\item $\omega -1 $ maximum attainable age;
+	\item $\Pi$ single premium;
+	\item $M$ (initial) solvency margin.
+\end{itemize}
+At time $t=0$, initial fund:
+\begin{displaymath}
+Z_0 = N_0 \Pi + M.
+\end{displaymath}
+Portfolio fund dynamics:
+\begin{displaymath}
+Z_t = (Z_{t-1} - N_{t-1} R) (1+I_{t}), \ \ \ t=1,\ldots,\omega-x. 
+\end{displaymath} 
+For a fixed solvency level $\varepsilon$, the initial margin $M$ is chosen so that:
+\begin{displaymath}
+P(Z_n \ge 0) \ge 1-\varepsilon.
+\end{displaymath}
+\newpage
+\subsection{Mortality Model}
+The model considers simultaneously age $x$ and calendar year $t$.\\\\
+The random variable $\tilde{q}_{x+t,t}$ gives the one-year death probability for an individual aged x+t in calendar year $\hat{t}+t$ (where $\hat{t}$ is a fixed year). \\\\
+Under the assumptions of homogeneous and indipendent lives, the conditional probability distribution of $D_t$ is Binomial:
+\begin{equation}
+D_t|N_{t},\tilde{q}_{x+t,t} \sim \text{Binom}(N_{t},\tilde{q}_{x+t,t}), \ \ t=0,\ldots,\omega-x-1. \label{binom}
+\end{equation}
+In \eqref{binom}, the uncertainty of $\tilde{q}_{x+t,t}$ represents the longevity risk.   \\\\
+\textbf{Longevity Risk}\\\\
+Model: M7 (Quadratic CBD model with cohort effects) $\rightarrow$ extension of Lee-Carter model. See Cairns et al. (2009).\\\\
+Be careful: notation here is a bit different! (the single cohort of policy holders in the life annuity portfolio allows a simplified notation):
+\begin{itemize}
+	\item $D_{x,t}$ number of deaths in a reference population at age $x$ last birthday during calendar year $t$;
+	\item $E_{x,t}^0$ initial exposed to risk  at age $x$ in year $t$;
+	\item $\tilde{q}_{x,t}$ one-year death probability for an individual aged $x$ last birthday and in calendar year $t$.
+	\end{itemize}
+Structure of M7. See GAPC family $\rightarrow$ StMoMo (Villegas et al. (2018):
+\begin{displaymath}
+\begin{split}
+& (1) \ D_{x,t} \sim \text{Binom}(E_{x,t}^0 \ , \ \tilde{q}_{x,t}), \\
+& (2) \ \text{logit} (\tilde{q}_{x,t}) = \eta_{x,t}, \\
+& (3) \ \eta_{x,t} = \kappa_t^{(1)} + (x-\overline{x}) \kappa_t^{(2)} + ((x-\overline{x}) - \tilde{\sigma}_x^2)^2  \kappa_t^{(3)} + \gamma_{t-x}.
+\end{split}
+\end{displaymath}
+Model M7 is fitted to Italy male mortality data for ages from 55 to 89 and calendar years from 1950 to 2014 $\rightarrow$ M7 is the best.
+\subsection{Financial Risk}
+$I_t$ is defined by the equation:
+\begin{displaymath}
+1+I_t = \frac{S_{t+1}}{S_t}.
+\end{displaymath}
+$S_t$ is a Geometric Brownian motion:
+\begin{equation}
+\frac{dS_t}{S_t} = \mu d_t + \sigma dW_t, \label{sde}
+\end{equation}
+where $W_{t}$ is a Wiener process, $\mu$ (percentage drift) and $\sigma$ (percentage volatility) are constants.
+The stochastic differential equation \eqref{sde} admits analytic solution:
+\begin{displaymath}
+ S_{t}=S_{0}\exp \left(\left(\mu -{\frac {\sigma ^{2}}{2}}\right)t+\sigma W_{t}\right),
+\end{displaymath}
+hence
+\begin{displaymath}
+1+I_t = \text{exp}\left( \left(\mu-\frac{\sigma^2}{2}\right)  +\sigma(W_{t+1}-W_t)  \right).
+\end{displaymath}
+\subsection{Reverse sensitivity analysis}
+\textbf{Output} variable: 
+\begin{displaymath}
+Y = -Z_n.
+\end{displaymath}
+The opposite of the fund at time $n$ is chosen as output variable to allow adverse scenarios as stress. \\\\
+Risk Factors $\textbf{X}$:
+\begin{table}[h]
+	\centering
+	\begin{tabular}{@{}cccc@{}}
+		\toprule
+		& Mortality  & Yield  & Risk Factors        \\ \midrule
+		Model 4  & Full Stochastic & Stochastic  & $N_t \ \ \tilde{q}_{x+t,t} \ \ I_t$   \\ \bottomrule
+	\end{tabular}
+\end{table} $\\$
+We have:
+\begin{displaymath}
+Y = g((N_t), (I_t), (\tilde{q}_{x+t,t}))
+\end{displaymath}
+where $g$ is implicitly defined by the equations in previous sections.\\\\
+Stress:
+\begin{displaymath}
+\begin{split}
+\alpha &=0.9, \ \ \ \ \ q=VaR_\alpha^Q(Y)=0, \\ 
+stress_{ES}&=0.2, \ \ \ \ \  s=ES_\alpha^Q(Y)=\E(Y|Y>q) \ (1+stress_{ES}).
+\end{split}
+\end{displaymath}
