@@ -3,3 +3,4 @@ repo: https://github.com/spesenti/SWIMvignette
 output_dir: docs
 clean: [packages.bib, bookdown.bbl]
 new_session: no
+# rmd_files: ["index.Rmd"]

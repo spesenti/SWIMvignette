@@ -23,7 +23,7 @@
 
 
 
-<meta name="date" content="2019-08-02" />
+<meta name="date" content="2019-08-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -133,7 +133,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.2" data-path="the-scope-of-the-swim-package.html"><a href="the-scope-of-the-swim-package.html#stresses"><i class="fa fa-check"></i><b>4.2</b> Stresses</a></li>
 <li class="chapter" data-level="4.3" data-path="the-scope-of-the-swim-package.html"><a href="the-scope-of-the-swim-package.html#visual-tools"><i class="fa fa-check"></i><b>4.3</b> Visual tools</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="life-annuity-portfolio.html"><a href="life-annuity-portfolio.html"><i class="fa fa-check"></i><b>5</b> Life Annuity Portfolio</a></li>
+<li class="chapter" data-level="5" data-path="life-annuity-portfolio.html"><a href="life-annuity-portfolio.html"><i class="fa fa-check"></i><b>5</b> Life Annuity Portfolio</a><ul>
+<li class="chapter" data-level="5.1" data-path="life-annuity-portfolio.html"><a href="life-annuity-portfolio.html#assumptions"><i class="fa fa-check"></i><b>5.1</b> Assumptions</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -154,65 +156,58 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="life-annuity-portfolio" class="section level1">
 <h1><span class="header-section-number">5</span> Life Annuity Portfolio</h1>
-<p>In this section we showcase the SWIM package to conduct sensitivity analysis of a life annuity portfolio.</p>
-<p>Model inspired by Olivieri &amp; Pitacco (2003). See also Hari et al. (2009) for an application to a pension scheme.
-Point of view of an insurer who aims at building up a partial internal model for a portfolio of life annuities.</p>
-<p>Types of risks:<br />
-+ The <em>mortality risk</em> is originated by the random lifetimes of annuitants. It can be split in process and longevity risk.<br />
-- The <em>investment risk</em> originates from the randomness stemming from financial markets in which
-the insurer invests.</p>
-\
-Annuitants same age <span class="math inline">\(x\)</span> at entry time <span class="math inline">\(t=0\)</span> (when they buy the annuity) <span class="math inline">\(\rightarrow\)</span> single cohort. In <span class="math inline">\(t=n\)</span> every policy holder is deceased.
-Same immediate life annuity (<span class="math inline">\(R\)</span> annual amount) for every policy holder. \\
-Notation:
-
-At time <span class="math inline">\(t=0\)</span>, initial fund:
-
-Portfolio fund dynamics:
-
-For a fixed solvency level <span class="math inline">\(\varepsilon\)</span>, the initial margin <span class="math inline">\(M\)</span> is chosen so that:
-
-
-
-The model considers simultaneously age <span class="math inline">\(x\)</span> and calendar year <span class="math inline">\(t\)</span>.\\
-The random variable <span class="math inline">\(\tilde{q}_{x+t,t}\)</span> gives the one-year death probability for an individual aged x+t in calendar year <span class="math inline">\(\hat{t}+t\)</span> (where <span class="math inline">\(\hat{t}\)</span> is a fixed year). \\
-Under the assumptions of homogeneous and indipendent lives, the conditional probability distribution of <span class="math inline">\(D_t\)</span> is Binomial:
+<p><strong>comment Silvana: I added the text Alberto wrote, might be a starting point</strong></p>
+<p>In this section we showcase the SWIM package to conduct sensitivity analysis of a life annuity portfoliol inspired by <span class="citation">Olivieri and Pitacco (<a href="#ref-Olivieri2003">2003</a>)</span>, which includes the following types of risks:</p>
+<ul>
+<li><em>mortality risk</em> including process and longevity risk.<br />
+</li>
+<li><em>investment risk</em> originating from the financial markets in which the insurer invests.</li>
+</ul>
+<div id="assumptions" class="section level2">
+<h2><span class="header-section-number">5.1</span> Assumptions</h2>
+<p>A single cohort, where the annuitants have age <span class="math inline">\(x\)</span> at time <span class="math inline">\(t=0\)</span>. It is assumed that at time <span class="math inline">\(t=n\)</span> every policy holder is deceased. Every policy holder has an immediate life annuity withy annual amout <span class="math inline">\(R\)</span>.<br />
+Notation:</p>
+<ul>
+<li><span class="math inline">\(Z_t\)</span> portfolio fund at time <span class="math inline">\(t\)</span><br />
+</li>
+<li><span class="math inline">\(N_t\)</span> number of annuitants at time <span class="math inline">\(t\)</span><br />
+</li>
+<li><span class="math inline">\(D_t = N_t - N_{t+1}\)</span><br />
+</li>
+<li><span class="math inline">\(I_t\)</span> rate of return for the period (<span class="math inline">\(t-1,t\)</span>)<br />
+</li>
+<li>$-1 $ maximum attainable age<br />
+</li>
+<li><span class="math inline">\(\Pi\)</span> single premium<br />
+</li>
+<li><span class="math inline">\(M\)</span> (initial) solvency margin.</li>
+</ul>
+<p>The portfolio fund is modelled via
 <span class="math display">\[\begin{equation}
-D_t|N_{t},\tilde{q}_{x+t,t} \sim \text{Binom}(N_{t},\tilde{q}_{x+t,t}), \ \ t=0,\ldots,\omega-x-1. \label{binom}
+Z_t = (Z_{t-1} - N_{t-1} R) (1+I_{t}), \ \ \ t=1,\ldots,\omega-x,
 \end{equation}\]</span>
-In , the uncertainty of <span class="math inline">\(\tilde{q}_{x+t,t}\)</span> represents the longevity risk. \\
-\\
-Model: M7 (Quadratic CBD model with cohort effects) <span class="math inline">\(\rightarrow\)</span> extension of Lee-Carter model. See Cairns et al. (2009).\\
-Be careful: notation here is a bit different! (the single cohort of policy holders in the life annuity portfolio allows a simplified notation):
-
-Structure of M7. See GAPC family <span class="math inline">\(\rightarrow\)</span> StMoMo (Villegas et al. (2018):
-
-Model M7 is fitted to Italy male mortality data for ages from 55 to 89 and calendar years from 1950 to 2014 <span class="math inline">\(\rightarrow\)</span> M7 is the best.
-
-<span class="math inline">\(I_t\)</span> is defined by the equation:
-
-<span class="math inline">\(S_t\)</span> is a Geometric Brownian motion:
+with initial fund equal to
 <span class="math display">\[\begin{equation}
-\frac{dS_t}{S_t} = \mu d_t + \sigma dW_t, \label{sde}
-\end{equation}\]</span>
-where <span class="math inline">\(W_{t}\)</span> is a Wiener process, <span class="math inline">\(\mu\)</span> (percentage drift) and <span class="math inline">\(\sigma\)</span> (percentage volatility) are constants.
-The stochastic differential equation  admits analytic solution:
+Z_0 = N_0 \Pi + M.
+\end{equation}\]</span></p>
+<p>For a fixed solvency level <span class="math inline">\(\varepsilon\)</span>, the initial margin <span class="math inline">\(M\)</span> is chosen so that:
+<span class="math display">\[\begin{equation}
+P(Z_n \ge 0) \ge 1-\varepsilon.
+\end{equation}\]</span></p>
+<p><em>Mortality Model</em>
+The random variable <span class="math inline">\(\tilde{q}_{x+t,t}\)</span> denotes the one-year death probability for an individual aged <span class="math inline">\(x+t\)</span> in calendar year <span class="math inline">\(\hat{t}+t\)</span> (where <span class="math inline">\(\hat{t}\)</span> is fixed).
+Under the assumptions of homogeneous and indipendent lives, the conditional probability distribution of <span class="math inline">\(D_t\)</span> given <span class="math inline">\(N_t\)</span> is Binomial distributed</p>
+<p><span class="math display">\[\begin{equation}
+D_t|N_{t},\tilde{q}_{x+t,t} \sim \text{Binom}(N_{t},\tilde{q}_{x+t,t}),  t=0,\ldots,\omega-x-1.
+\end{equation}\]</span></p>
 
-hence
-
-
- variable:
-
-The opposite of the fund at time <span class="math inline">\(n\)</span> is chosen as output variable to allow adverse scenarios as stress. \\
-Risk Factors <span class="math inline">\(\textbf{X}\)</span>:
-
-<p><span class="math inline">\(\\\)</span>
-We have:
-
-where <span class="math inline">\(g\)</span> is implicitly defined by the equations in previous sections.\\
-Stress:
-</p>
-
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-Olivieri2003">
+<p>Olivieri, Annamaria, and Ermanno Pitacco. 2003. “Solvency Requirements for Pension Annuities.” <em>Journal of Pension Economics &amp; Finance</em> 2 (2): 127–57.</p>
+</div>
 </div>
             </section>
 

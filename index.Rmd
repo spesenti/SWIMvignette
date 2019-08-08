@@ -1,23 +1,27 @@
 ---
-title: "SWIM: Scenario Weights for Importance Measurement"
-author: 
-  - name: "Silvana M. Pesenti"
-    email: silvana.pesenti@utoronto.ca
-    affiliation: University of Toronto
-  - name: "Alberto Bettini"
-  - name: "Pietro Millossovich" 
-    affiliation: DEAMS, University of Trieste Cass Business School, City, University of London
-  - name: "Andreas Tsanakas"  
-    affiliation: Cass Business School, City, University of London
+title: 'SWIM: Scenario Weights for Importance Measurement'
+author:
+- affiliation: University of Toronto
+  email: silvana.pesenti@utoronto.ca
+  name: Silvana M. Pesenti
+- name: Alberto Bettini
+- affiliation: DEAMS, University of Trieste Cass Business School, City, University
+    of London
+  name: Pietro Millossovich
+- affiliation: Cass Business School, City, University of London
+  name: Andreas Tsanakas
 date: "`r format(Sys.time(), '%d %B %Y')`"
-site: bookdown::bookdown_site
-documentclass: book
 bibliography: bibliography.bib
-biblio-style: apalike
+documentclass: book
 github-repo: spesenti/SWIMvignette
 link-citations: yes
+site: bookdown::bookdown_site
+biblio-style: apalike
 ---
 
+``` {r, setup, echo=FALSE, cache=FALSE}
+options(digits = 2) # auto round to 2 decimals when printed
+```
 
 # Overview
 
@@ -26,7 +30,7 @@ stochastic model, such that stressed model components (random variables)
 fulfil given probabilistic constraints (e.g. specified values for risk
 measures), under the new scenario weights. Scenario weights are selected
 by constrained minimisation of the relative entropy to the baseline
-model.
+model. The SWIM package is based on the paper Pesenti S.M, Millossovich P., Tsanakas A. (2019) "Reverse Sensitivity Testing: What does it take to break the model", [doi:10.1016/j.ejor.2018.10.003](https://doi.org/10.1016/j.ejor.2018.10.003).
 
 
 ## Installation
