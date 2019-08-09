@@ -2,13 +2,16 @@
 
 # Introduction
 
-## A first example
+The SWIM package is an efficient sensitivty analysis tool for stochastic models developped in @Pesenti2019. It provides a stressed version of a stochastic model, subject to model components (random variables) fulfilling given probabilistic constraints (stresses). Possible constraints include stressing moments, propability intervals and risk measures such as the Value-at-Risk and the Expected Shortfall. Provided with simulated scenarios from a stochastic model, the SWIM package returns scenario weights under which the stochastic model satisfies the stress and minimises the relative entropy with respect to the baseline model. 
 
+
+## An example
 
 ``` {r, cache = TRUE, include = FALSE}
 set.seed(0)
 SD <- c(70, 45, 50, 60, 75)
-Corr <- matrix(rep(0.5, 5^2), nrow = 5) + diag(rep(1 - 0.5, 5))
+corr_val <- 0.15
+Corr <- matrix(rep(corr_val, 5^2), nrow = 5) + diag(rep(1 - corr_val, 5))
 
 if (!requireNamespace("mvtnorm", quietly = TRUE))
    stop("Package \"mvtnorm\" needed for this function 
@@ -22,25 +25,42 @@ names(data) <- c("Y", "X1", "X2", "X3", "X4", "X5")
 ```
 
 
-Consider a portfolio $Y = \sum_{i = 1}^5 X_i$, where $X_1, X_2, X_3, X_4, X_5$ are correlated normally distributed with mean equal to `r round(colMeans(data)[3],0)` and standard deviations `r SD`, respectively. The example is based on a simulated data set of size $10^5$ of the input risk factors $\textbf{X} = (X_1, X_2, X_3, X_4, X_5)$ and the corresponding output $Y$.
+Consider a portfolio $Y = \sum_{i = 1}^5 X_i$, consisting of five lines of business (LoB's) $X_1, \ldots, X_5$ that are positively correlated and normally distributed with mean equal to `r round(colMeans(data)[3],0)` and standard deviations `r SD`, respectively. Adopting the convention that positive realisations represent losses, a risk manager might be interested in the scenario in which the means of the LoB's $X_1$ and $X_2$ increase by $5\%$.
 
-The function `stress()` allows to stress different probabilistic summaries of the inputs and outputs, for example stressing simultaneously the mean of $X_1$ and $X_2$ by $5$%. The distribution functions of the original (baseline) and stressed input factors, $X_1$ and $X_2$, are displayed in Figure \@ref(fig:working-example-mean)
+The stressed porfolio, satisfying simulatneously a $5\%$ increse of the mean of $X_1$ and $X_2$, can be obtained via the `stress()` function. The function `stress()` applies for different stresses, see Section \@ref(Rfunctions) for an overview, thus for stressing the means `type = "mean"` need to be supplied. The parameter `x` corresponds to the data.frame containting simulated values of the portfolio, $(Y, X_1, X_2, X_3, X_4, X_5)$, which in this example is a data set of $10^5$ simulations. To apply the stress, we additionally have to provide the components of `x` that are stressed (`k`) as well as the stressed values of the means (`new_means`). 
 
 
-``` {r, working-example-mean, cache = TRUE, fig.show='hold', out.width = '50%', fig.cap = "Baseline and stressed empirical distribution fucntions of input factors $X_1$ (left) and $X_2$ (right)."}
+The subsequent table summarises every component of the baseline as well as the stressed model. Figure \@ref(fig:working-example-mean) displays the distribution functions of the original (baseline) and stressed LoB $X_1$ (left) and $X_2$ (right).
+
+
+``` {r, working-example-mean, cache = TRUE, fig.show='hold', out.width = '50%', fig.cap = "Baseline and stressed empirical distribution functions of input factors $X_1$ (left) and $X_2$ (right)."}
 res_mean <- SWIM::stress(type = "mean", x = data, k = c(2, 3), new_means = c(105, 105))
 SWIM::plot_cdf(res_mean, xCol = "X1", base = TRUE)
 SWIM::plot_cdf(res_mean, xCol = "X2", base = TRUE)
-summary(res_mean)
-```
-
-We can additionally to the $5$% stress of the mean of inputs $X_1$ and $X_2$, increase the standard deviation to $80$ and $50$, respectively. Figures \@ref(fig:working-example-mean-sd) display the baseline and the stressed histograms for input factors $X_1$ and $X_2$.
-
-``` {r, working-example-mean-sd, cache = TRUE, fig.show='hold', out.width = '50%', fig.cap = "Histogram of the baseline and stressed input factors $X_1$ (left) and $X_2$ (right)."}
-res_mean_sd <- SWIM::stress(type = "mean sd", x = data, k = c(2, 3), 
-                            new_means = c(105, 105), new_sd = c(80, 50))
-SWIM::plot_hist(res_mean_sd, xCol = "X1", base = TRUE)
-SWIM::plot_hist(res_mean_sd, xCol = "X2", base = TRUE)
+summary(res_mean, base = TRUE)
 ```
 
 
+Another stress, relevant for risk management, is on the tail of the portfolio loss $Y$, via for example an increasing in the Value-at-Risk ($\text{VaR}$). The $\text{VaR}$ at level $0 < \alpha < 1$ of a random variable $Z$ with distribution function $F_Z$, is defined by $\text{VaR}_\alpha(Z) = F_Z^{-1}(\alpha) = \inf \{z \in \mathbb{R} ~|~F_Z(y) \geq z \}$. Figure \@ref(fig:working-example-var) display the histograms (left) and the empirical distribution functions (right) of the baseline and the output, stressed by a $5\%$ increase of its $\text{VaR}$ at level $\alpha = 0.95$.
+
+``` {r, working-example-var, cache = TRUE, fig.show='hold', out.width = '50%', fig.cap = "Histograms (left) and empirical distribution functions (right) of the baseline and stressed output."}
+res_var <- SWIM::stress(type = "VaR", x = data, alpha = 0.95, q_ratio = 1.05) 
+SWIM::plot_hist(res_var, xCol = "Y", base = TRUE)
+SWIM::plot_cdf(res_var, xCol = "Y", base = TRUE)
+```
+
+
+
+Comparison of the scenario weights of the stress a) a $5\%$ increase in the mean of $X_1$ and $X_2$ with b) a $5\%$ increase in the $\text{VaR}_{0.95}$ of $Y$ are given in the Figures \@ref(fig:working-example-weights-var) and \@ref(fig:working-example-weights-mean.). The secario weights of a stressed model can be extracted throught the `get_weights` function. 
+
+``` {r, working-example-weights-var, cache = TRUE,fig.cap = "The scenario weights for stresses on the means of $X_1$ and $X_2$ (green) and the $VaR_{0.95}$ of $Y$ (blue) against the output $Y$."}
+
+plot(data[,"Y"], SWIM::get_weights(res_var), cex = 0.2, col = "darkblue", xlab = "Y", ylab = "")
+points(data[,"Y"], SWIM::get_weights(res_mean), cex = 0.2, col = "darkgreen")
+```
+
+``` {r, working-example-weights-mean, cache = TRUE, fig.show='hold', out.width = '50%', fig.cap = "The scenario weights for the stress on the means of $X_1$ and $X_2$ against $X_1$ (green) and $X_2$ (right)."}
+
+plot(data[,"X1"], SWIM::get_weights(res_mean), cex = 0.2, col = "darkblue", xlab = "X1", ylab = "")
+plot(data[,"X2"], SWIM::get_weights(res_mean), cex = 0.2, col = "darkgreen", xlab = "X2", ylab = "")
+```

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>SWIM: Scenario Weights for Importance Measurement</title>
+  <meta name="description" content="SWIM: Scenario Weights for Importance Measurement" />
+  <meta name="generator" content="bookdown 0.12 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="SWIM: Scenario Weights for Importance Measurement" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  <meta name="github-repo" content="spesenti/SWIMvignette" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="SWIM: Scenario Weights for Importance Measurement" />
+  
+  
+  
+
+
+
+<meta name="date" content="2019-08-09" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+
+<script src="assets/jquery-2.2.3/jquery.min.js"></script>
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path=""><a href="#overview"><i class="fa fa-check"></i><b>1</b> Overview</a><ul>
+<li class="chapter" data-level="1.1" data-path=""><a href="#installation"><i class="fa fa-check"></i><b>1.1</b> Installation</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">SWIM: Scenario Weights for Importance Measurement</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">SWIM: Scenario Weights for Importance Measurement</h1>
+<p class="author"><em>Silvana M. Pesenti</em></p>
+<address class="author_afil">
+University of Toronto<br><a class="author_email" href="mailto:#"><a href="mailto:silvana.pesenti@utoronto.ca" class="email">silvana.pesenti@utoronto.ca</a></a>
+</address>
+<p class="author"><em>Alberto Bettini</em></p>
+<p class="author"><em>Pietro Millossovich</em></p>
+<address class="author_afil">
+DEAMS, University of Trieste Cass Business School, City, University of London<br><p class="author"><em>Andreas Tsanakas</em></p>
+<address class="author_afil">
+Cass Business School, City, University of London<br><p class="date"><em>09 August 2019</em></p>
+</div>
+<div id="overview" class="section level1">
+<h1><span class="header-section-number">1</span> Overview</h1>
+<p>The SWIM package provides weights on simulated scenarios from a
+stochastic model, such that stressed model components (random variables)
+fulfil given probabilistic constraints (e.g. specified values for risk
+measures), under the new scenario weights. Scenario weights are selected
+by constrained minimisation of the relative entropy to the baseline
+model. The SWIM package is based on the paper Pesenti S.M, Millossovich P., Tsanakas A. (2019) “Reverse Sensitivity Testing: What does it take to break the model”, <a href="https://doi.org/10.1016/j.ejor.2018.10.003">doi:10.1016/j.ejor.2018.10.003</a>.</p>
+<div id="installation" class="section level2">
+<h2><span class="header-section-number">1.1</span> Installation</h2>
+<p>The SWIM package can be install from <a href="https://CRAN.R-project.org/package=SWIM">CRAN</a> :</p>
+<p><a href="https://CRAN.R-project.org/package=SWIM" class="uri">https://CRAN.R-project.org/package=SWIM</a>;</p>
+<p>alternatively from <a href="https://github.com/spesenti/SWIM">GitHub</a> in R studio:</p>
+<pre class="r}"><code>install.packages(&quot;spesenti/SWIM&quot;)</code></pre>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/lunr.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+},
+"toolbar": {
+"position": "static"
+},
+"search": false
+});
+});
+</script>
+
+</body>
+
+</html>
