@@ -1,0 +1,113 @@
+
+
+# Scope of the SWIM package
+
+
+
+## Stressing a model {#Rfunctions}
+
+
+We define a **model** to consist of a random vector $\boldsymbol{X} = (X_1, \ldots, X_n)$, the **model components** or **input factors**, a function $g \colon \mathbb{R}^n \to \mathbb{R}$, called the *aggregation function*, which gives, when applied to the input factors $\boldsymbol{X}$, the one-dimensional random *output* of interest $Y = g(\boldsymbol{X})$. Starting from a **baseline probability**, $P$, a probability measure describing the current beliefs regarding (or software implementation of) the model, we are interested in **stressed models** that fulfil probabilistic constraints and have minimal Kullback-Leibler divergence. Specifically, a **stressed probability** $Q$ is the solution to 
+\begin{equation} 
+\min_{ Q \in \mathcal{P}} D_\text{KL}(Q \| P), \quad
+\text{s.t. probabilistic constraints of the model under }Q \text{ hold},
+(\#eq:optimisation)
+\end{equation}
+where the Kullback-Leibler divergence is given by $D_\text{KL}(Q \| P)  = \int \frac{dQ}{dP} \log \big(\frac{dQ}{dP} \big)\mathrm{d}P$, if $Q$ is absolutely continuous with respect to $P$. The probabilistic constraints in \@ref(eq:optimisation) can be with respect to (one of) the inputs or the output. For simpilcity of notation, we henceforth stress the output of a model, however, the SWIM package allows to choose the input or output variable on which the stress is applied. 
+
+
+The subsequent table summarises the implemented functions and their corresponding stresses. 
+
+| R function             | Stress                                |  Reference  
+| :--------------------- | :------------------------------------ |:------------------ 
+| `stress()`             | a wrapper for the `stress_` functions | 
+| `stress_prob()`        | probabilities of intervals            | Proposition \@ref(prp:prop-prob-interval)
+| `stress_mean()`        | means                                 | Proposition \@ref(prp:prop-prob-moment)
+| `stress_mean_sd()`     | means and standard deviations         | Proposition \@ref(prp:prop-prob-moment)
+| `stress_moment()`      | moments, functions of moments         | Proposition \@ref(prp:prop-prob-moment)
+| `stress_VaR()`         | VaR risk measure, a quantile          | Proposition \@ref(prp:prop-risk-measure)
+| `stress_VaR_ES()`      | VaR and ES risk measures              | Proposition \@ref(prp:prop-risk-measure)
+| `stress_user()`        | user defined scenario weights         |
+
+
+
+
+
+### Stressing disjoint probability intervals 
+
+Optimisation \@ref(eq:optimisation) with constraints consisting of disjoint probability intervals, studied by @Csiszar1975 and @Cambou2017, allow to define stresses by altering regions or events of a model component. The scenario weights for a stress according to Proposition \@ref(prp:prop-prob-interval) is implemented via the function `stress_prob()`, or equivalently `stress(type = "prob", ...)`, and the stressed probability intervals are specified through the `lower` and `upper` endpoints of the intervals.
+
+
+```{proposition, name ="see also Proposition 3.1 in @Pesenti2019", label = "prop-prob-interval"}    
+
+Let $B_1, \ldots, B_I$ be disjoint sets with $P(Y \in B_i) >0$, for all $i = 1, \ldots, I$, and $\alpha_1, \ldots, \alpha_I > 0$ such that $\alpha_1 + \ldots  + \alpha_I < 1$. Then the solution to 
+\begin{equation} 
+\min_{Q} D_\text{KL}(Q \| P), \quad
+\text{s.t. } Q(Y \in B_i) = \alpha_i, ~i = 1, \ldots, I.
+\end{equation}
+is discribed by the change-of-measure (Radon-Nikodym-density) from $P$ to $Q$
+\begin{equation} 
+w  = \sum_{i = 0}^I \frac{\alpha_i}{P(Y \in B_i)}1_{ \{Y \in B_i
+\}},
+\end{equation}
+where $\alpha_0 = 1 - \alpha_1 + \ldots + \alpha_I$ and $B_0 = \Big( \bigcup_{i = 1}^I B_i \Big)^c$.        
+```
+
+Note that the scenario weights, $w$, are a function of the stressed model component, here $Y$, and thus given in analytical form. 
+
+
+### Stressing moments 
+
+
+
+The functions `stress_mean()`, `stress_mean_sd()` and `stress_moment()` can be applied to multiple model components and are the only `stress` functions that have scenrio weights not given in analytical form. Thus, there is no guarantee of existence of the stressed model. Specifically, `stress_mean()` solves optimisation in Proposition \@ref(prp:prop-prob-moment) via numerical optimisation using the [nleqslv](https://CRAN.R-project.org/package=nleqslv) package.
+
+
+```{proposition, label = "prop-prob-moment"}    
+For $i = 1, \ldots, I$, let $J_i \subset \{1, \ldots, n\}$ and $f_i \colon \mathbb{R}^{J_i} \to \mathbb{R}$ be functions and consider
+\begin{equation} 
+\min_{Q} D_\text{KL}(Q \| P), \quad
+\text{s.t. } E^Q(f_i(X_{J_i}) ) = m_i, ~i = 1, \ldots, I.
+\end{equation}
+where $E^Q(\cdot)$ denotes the expectation under the stressed model. 
+
+```
+
+
+
+### Stressing risk measures
+
+Recall that the $\text{VaR}$ at level $0 < \alpha < 1$ of a random variable $Z$ with distrbution $F$, is defined as the $\alpha-$quantile of $F$, that is $$\text{VaR}_\alpha(Z) = F^{-1}(\alpha).$$ The $\text{ES}$ at level $0 < \alpha < 1$ of a random variable $Z$ is given by $$\text{ES}_\alpha(Z) = \int_0^1 \text{VaR}_u(Z) \mathrm{d}u.$$
+
+
+```{proposition, name ="see also Propositions 3.2 and 3.3 in @Pesenti2019", label = "prop-risk-measure"}    
+Let $0< \alpha <1$ and $q, s \in \mathbb{R}$ such that $\text{VaR}_{\alpha}(Y)<q < s < \text{ES}_{\alpha}(Y)$, and consider the optimisations
+\begin{align}
+i) \quad & \min_{ Q \ll \mathcal{P}} D_\text{KL}(Q \| P), \quad
+\text{s.t. } \text{VaR}_{\alpha }^Q(Y) = q;\\
+ii) \quad & \min_{ Q \ll \mathcal{P}} D_\text{KL}(Q \| P), \quad
+\text{s.t. } \text{VaR}_{\alpha }^Q(Y) = q, \text{ES}_{\alpha }^Q(Y) = s,
+\end{align}
+where $\text{VaR}^Q$ and $\text{ES}^Q$ denote the $\text{VaR}$ and the $\text{ES}$ under the stressed model.
+The change-of-measure (Radon-Nikodym-density) of the solution is described by 
+\begin{align}
+i) \quad & 
+w  =    \frac{\alpha }{  P( Y < q)} 1_{\{ Y < q\}}  + \frac{1- \alpha }{ P(Y \geq q)} 1_{\{  Y \geq q\}};\\
+ii) \quad & 
+w  =    \frac{\alpha }{  P( Y < q)} 1_{\{ Y < q\}}  + \frac{1- \alpha }{E\left( e^{ \theta (Y - q) } Y \geq q \right)} 1_{\{  Y \geq q\}} e^{\theta (Y - q)}, \text{for a suitable }; \theta >0.\\
+\end{align}  
+```
+
+
+## Visual tools
+
+
+
+
+
+
+
+
+
+
+
