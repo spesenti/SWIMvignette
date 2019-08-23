@@ -23,7 +23,7 @@
 
 
 
-<meta name="date" content="2019-08-08" />
+<meta name="date" content="2019-08-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="index.html">
-<link rel="next" href="the-scope-of-the-swim-package.html">
+<link rel="next" href="scope-of-the-swim-package.html">
 <script src="assets/jquery-2.2.3/jquery.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -127,12 +127,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#installation"><i class="fa fa-check"></i><b>1.1</b> Installation</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a><ul>
-<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#a-first-example"><i class="fa fa-check"></i><b>2.1</b> A first example</a></li>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#an-example"><i class="fa fa-check"></i><b>2.1</b> An example</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#intro-ex-stress"><i class="fa fa-check"></i><b>2.1.1</b> Stressing the portfolio</a></li>
+<li class="chapter" data-level="2.1.2" data-path="introduction.html"><a href="introduction.html#the-scenario-weights"><i class="fa fa-check"></i><b>2.1.2</b> The scenario weights</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="the-scope-of-the-swim-package.html"><a href="the-scope-of-the-swim-package.html"><i class="fa fa-check"></i><b>3</b> The Scope of the SWIM package</a><ul>
-<li class="chapter" data-level="3.1" data-path="the-scope-of-the-swim-package.html"><a href="the-scope-of-the-swim-package.html#stressing-a-model"><i class="fa fa-check"></i><b>3.1</b> Stressing a model</a></li>
-<li class="chapter" data-level="3.2" data-path="the-scope-of-the-swim-package.html"><a href="the-scope-of-the-swim-package.html#stressed-models"><i class="fa fa-check"></i><b>3.2</b> Stressed models</a></li>
-<li class="chapter" data-level="3.3" data-path="the-scope-of-the-swim-package.html"><a href="the-scope-of-the-swim-package.html#visual-tools"><i class="fa fa-check"></i><b>3.3</b> Visual tools</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="scope-of-the-swim-package.html"><a href="scope-of-the-swim-package.html"><i class="fa fa-check"></i><b>3</b> Scope of the SWIM package</a><ul>
+<li class="chapter" data-level="3.1" data-path="scope-of-the-swim-package.html"><a href="scope-of-the-swim-package.html#Rfunctions"><i class="fa fa-check"></i><b>3.1</b> Stressing a model</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="scope-of-the-swim-package.html"><a href="scope-of-the-swim-package.html#stressing-disjoint-probability-intervals"><i class="fa fa-check"></i><b>3.1.1</b> Stressing disjoint probability intervals</a></li>
+<li class="chapter" data-level="3.1.2" data-path="scope-of-the-swim-package.html"><a href="scope-of-the-swim-package.html#stressing-moments"><i class="fa fa-check"></i><b>3.1.2</b> Stressing moments</a></li>
+<li class="chapter" data-level="3.1.3" data-path="scope-of-the-swim-package.html"><a href="scope-of-the-swim-package.html#stressing-risk-measures"><i class="fa fa-check"></i><b>3.1.3</b> Stressing risk measures</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="scope-of-the-swim-package.html"><a href="scope-of-the-swim-package.html#visual-tools"><i class="fa fa-check"></i><b>3.2</b> Visual tools</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="life-annuity-portfolio.html"><a href="life-annuity-portfolio.html"><i class="fa fa-check"></i><b>4</b> Life Annuity Portfolio</a><ul>
 <li class="chapter" data-level="4.1" data-path="life-annuity-portfolio.html"><a href="life-annuity-portfolio.html#assumptions"><i class="fa fa-check"></i><b>4.1</b> Assumptions</a></li>
@@ -157,49 +163,96 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="introduction" class="section level1">
 <h1><span class="header-section-number">2</span> Introduction</h1>
-<div id="a-first-example" class="section level2">
-<h2><span class="header-section-number">2.1</span> A first example</h2>
-<p>Consider a portfolio <span class="math inline">\(Y = \sum_{i = 1}^5 X_i\)</span>, where <span class="math inline">\(X_1, X_2, X_3, X_4, X_5\)</span> are correlated normally distributed with mean equal to 100 and standard deviations 70, 45, 50, 60, 75, respectively. The example is based on a simulated data set of size <span class="math inline">\(10^5\)</span> of the input risk factors <span class="math inline">\(\textbf{X} = (X_1, X_2, X_3, X_4, X_5)\)</span> and the corresponding output <span class="math inline">\(Y\)</span>.</p>
-<p>The function <code>stress()</code> allows to stress different probabilistic summaries of the inputs and outputs, for example stressing simultaneously the mean of <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span> by <span class="math inline">\(5\)</span>%. The distribution functions of the original (baseline) and stressed input factors, <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>, are displayed in Figure <a href="introduction.html#fig:working-example-mean">2.1</a></p>
+<p>The SWIM package is an efficient sensitivty analysis tool for stochastic models developped in <span class="citation">Pesenti, Millossovich, and Tsanakas (<a href="#ref-Pesenti2019">2019</a>)</span>. It provides a stressed version of a stochastic model, subject to model components (random variables) fulfilling given probabilistic constraints (stresses). Possible constraints include stressing moments, propability intervals and risk measures such as the Value-at-Risk and the Expected Shortfall. Provided with simulated scenarios from a stochastic model, the SWIM package returns scenario weights under which the stochastic model satisfies the stress and minimises the relative entropy with respect to the baseline model.</p>
+<div id="an-example" class="section level2">
+<h2><span class="header-section-number">2.1</span> An example</h2>
+<p>Consider a portfolio <span class="math inline">\(Y = \sum_{i = 1}^5 X_i\)</span>, consisting of five lines of business (LoB’s) <span class="math inline">\(X_1, \ldots, X_5\)</span> that are positively correlated and normally distributed with mean equal to 100 and standard deviations 70, 45, 50, 60, 75, respectively. Adopting the convention that positive realisations represent losses, a risk manager might be interested in the scenario, in which the mean of the first two LoB’s, <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>, increases by <span class="math inline">\(5\%\)</span>.</p>
+<div id="intro-ex-stress" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> Stressing the portfolio</h3>
+<p>The stressed porfolio, satisfying simulatneously a <span class="math inline">\(5\%\)</span> increse of the mean of <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>, is obtained via the <code>stress()</code> function. The function <code>stress()</code> applies for different stresses, see Section <a href="scope-of-the-swim-package.html#Rfunctions">3.1</a> for details, thus, for stressing the mean, <code>type = "mean"</code> needs to be supplied. The parameter <code>x</code> corresponds to the data.frame containting simulated values of the portfolio, <span class="math inline">\((Y, X_1, X_2, X_3, X_4, X_5)\)</span>, which, in this example, consists of a set of <span class="math inline">\(10^5\)</span> simulations. Further, the component of the dataframe, <code>x</code>, that is stressed (parameter <code>k</code>) as well as the stressed values of the means (parameter <code>new_means</code>) has to be provided.</p>
+<p>The subsequent table summarises each component of the baseline as well as the stressed model. We observe that the stress on <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span> result in a <span class="math inline">\(3\%\)</span> increase in the mean of the aggregated portfolio. Figure <a href="introduction.html#fig:working-example-mean">2.1</a> displays the distribution functions of the original (baseline) and stressed LoB <span class="math inline">\(X_1\)</span> (left) and <span class="math inline">\(X_2\)</span> (right).</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">res_mean &lt;-<span class="st"> </span>SWIM<span class="op">::</span><span class="kw">stress</span>(<span class="dt">type =</span> <span class="st">&quot;mean&quot;</span>, <span class="dt">x =</span> data, <span class="dt">k =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), <span class="dt">new_means =</span> <span class="kw">c</span>(<span class="dv">105</span>, <span class="dv">105</span>))</a>
 <a class="sourceLine" id="cb1-2" title="2">SWIM<span class="op">::</span><span class="kw">plot_cdf</span>(res_mean, <span class="dt">xCol =</span> <span class="st">&quot;X1&quot;</span>, <span class="dt">base =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb1-3" title="3">SWIM<span class="op">::</span><span class="kw">plot_cdf</span>(res_mean, <span class="dt">xCol =</span> <span class="st">&quot;X2&quot;</span>, <span class="dt">base =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="kw">summary</span>(res_mean)</a></code></pre></div>
-<pre><code>## $`stress 1`
-##                        Y            X1            X2            X3
-## mean        521.09739377 105.000000004 105.000000004 102.927749597
-## sd          232.10119840  69.776086801  44.926663306  49.842549561
-## skewness     -0.00264711  -0.007435592  -0.003288824   0.004933384
-## ex kurtosis  -0.04659107  -0.026512674  -0.015644824  -0.008876267
-## 1st Qu.     363.37480834  57.966384912  74.777631503  69.271429022
-## Median      521.29603295 104.993532503 105.064972944 103.054597867
-## 3rd Qu.     678.04261790 152.348973703 135.382095706 136.533529607
-##                        X4            X5
-## mean        103.570179270 104.599464898
-## sd           59.858947774  74.760465602
-## skewness     -0.008577155   0.006698854
-## ex kurtosis  -0.023624078  -0.002883102
-## 1st Qu.      63.095325313  54.350677728
-## Median      103.818919937 104.504696552
-## 3rd Qu.     143.996320907 155.372283693</code></pre>
+<a class="sourceLine" id="cb1-4" title="4"><span class="kw">summary</span>(res_mean, <span class="dt">base =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<pre><code>## $base
+##                         Y            X1            X2           X3
+## mean        500.140963904 100.153391319 100.001894021 9.989439e+01
+## sd          170.629908477  69.816188941  45.006193518 4.985756e+01
+## skewness      0.001117359  -0.009032437   0.003307464 5.183452e-03
+## ex kurtosis  -0.042226850  -0.021997845  -0.011892700 5.426254e-03
+## 1st Qu.     384.288443544  53.160755552  69.467814933 6.601193e+01
+## Median      500.343974456 100.339448343 100.078400277 9.997002e+01
+## 3rd Qu.     615.761255833 147.397749927 130.364288944 1.333727e+02
+##                       X4           X5
+## mean         99.95180106 1.001395e+02
+## sd           59.93220052 7.482609e+01
+## skewness     -0.01003337 7.883374e-03
+## ex kurtosis  -0.02119050 9.633904e-03
+## 1st Qu.      59.47491095 4.952329e+01
+## Median      100.17764467 1.002110e+02
+## 3rd Qu.     140.53542575 1.508228e+02
+## 
+## $`stress 1`
+##                         Y            X1            X2           X3
+## mean        514.276208446 104.999999999 104.999999999 1.010636e+02
+## sd          170.604046826  69.786219973  45.007521020 4.987771e+01
+## skewness     -0.002218353  -0.009813593   0.002431627 4.323877e-03
+## ex kurtosis  -0.046109295  -0.021026219  -0.004990100 8.840961e-03
+## 1st Qu.     398.286443862  58.106156315  74.572304166 6.714779e+01
+## Median      514.475346278 105.246547134 105.075375029 1.012110e+02
+## 3rd Qu.     629.672315928 152.133703812 135.356116763 1.345073e+02
+##                       X4           X5
+## mean        101.35089448 1.018618e+02
+## sd           59.94386189 7.483744e+01
+## skewness     -0.01099978 7.590156e-03
+## ex kurtosis  -0.02225951 9.802469e-03
+## 1st Qu.      60.90946269 5.127725e+01
+## Median      101.47364975 1.018677e+02
+## 3rd Qu.     141.96162802 1.525444e+02</code></pre>
 <div class="figure"><span id="fig:working-example-mean"></span>
-<img src="bookdown-SWIM_files/figure-html/working-example-mean-1.png" alt="Baseline and stressed empirical distribution fucntions of input factors $X_1$ (left) and $X_2$ (right)." width="50%" /><img src="bookdown-SWIM_files/figure-html/working-example-mean-2.png" alt="Baseline and stressed empirical distribution fucntions of input factors $X_1$ (left) and $X_2$ (right)." width="50%" />
+<img src="bookdown-SWIM_files/figure-html/working-example-mean-1.png" alt="Baseline and stressed empirical distribution functions of input factors $X_1$ (left) and $X_2$ (right)." width="50%" /><img src="bookdown-SWIM_files/figure-html/working-example-mean-2.png" alt="Baseline and stressed empirical distribution functions of input factors $X_1$ (left) and $X_2$ (right)." width="50%" />
 <p class="caption">
-Figure 2.1: Baseline and stressed empirical distribution fucntions of input factors <span class="math inline">\(X_1\)</span> (left) and <span class="math inline">\(X_2\)</span> (right).
+Figure 2.1: Baseline and stressed empirical distribution functions of input factors <span class="math inline">\(X_1\)</span> (left) and <span class="math inline">\(X_2\)</span> (right).
 </p>
 </div>
-<p>We can additionally to the <span class="math inline">\(5\)</span>% stress of the mean of inputs <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>, increase the standard deviation to <span class="math inline">\(80\)</span> and <span class="math inline">\(50\)</span>, respectively. Figures <a href="introduction.html#fig:working-example-mean-sd">2.2</a> display the baseline and the stressed histograms for input factors <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">res_mean_sd &lt;-<span class="st"> </span>SWIM<span class="op">::</span><span class="kw">stress</span>(<span class="dt">type =</span> <span class="st">&quot;mean sd&quot;</span>, <span class="dt">x =</span> data, <span class="dt">k =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), </a>
-<a class="sourceLine" id="cb3-2" title="2">                            <span class="dt">new_means =</span> <span class="kw">c</span>(<span class="dv">105</span>, <span class="dv">105</span>), <span class="dt">new_sd =</span> <span class="kw">c</span>(<span class="dv">80</span>, <span class="dv">50</span>))</a>
-<a class="sourceLine" id="cb3-3" title="3">SWIM<span class="op">::</span><span class="kw">plot_hist</span>(res_mean_sd, <span class="dt">xCol =</span> <span class="st">&quot;X1&quot;</span>, <span class="dt">base =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb3-4" title="4">SWIM<span class="op">::</span><span class="kw">plot_hist</span>(res_mean_sd, <span class="dt">xCol =</span> <span class="st">&quot;X2&quot;</span>, <span class="dt">base =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<div class="figure"><span id="fig:working-example-mean-sd"></span>
-<img src="bookdown-SWIM_files/figure-html/working-example-mean-sd-1.png" alt="Histogram of the baseline and stressed input factors $X_1$ (left) and $X_2$ (right)." width="50%" /><img src="bookdown-SWIM_files/figure-html/working-example-mean-sd-2.png" alt="Histogram of the baseline and stressed input factors $X_1$ (left) and $X_2$ (right)." width="50%" />
+<p>Another stressed portfolio, relevant for risk management, stems from a stress to the tail of the portfolio loss <span class="math inline">\(Y\)</span>, via, for example, an increasing in the Value-at-Risk (<span class="math inline">\(\text{VaR}\)</span>). The <span class="math inline">\(\text{VaR}\)</span> at level <span class="math inline">\(0 &lt; \alpha &lt; 1\)</span> of a random variable <span class="math inline">\(Z\)</span> with distribution function <span class="math inline">\(F_Z\)</span>, is defined by <span class="math display">\[\text{VaR}_\alpha(Z) = F_Z^{-1}(\alpha) = \inf \{z \in \mathbb{R} ~|~F_Z(y) \geq z \}.\]</span> Figure <a href="introduction.html#fig:working-example-var">2.2</a> display the histogram (left) and the empirical distribution function (right) of the baseline and the stressed output, stemming from a <span class="math inline">\(5\%\)</span> increase of <span class="math inline">\(\text{VaR}_{0.95}(Y)\)</span>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">res_var &lt;-<span class="st"> </span>SWIM<span class="op">::</span><span class="kw">stress</span>(<span class="dt">type =</span> <span class="st">&quot;VaR&quot;</span>, <span class="dt">x =</span> data, <span class="dt">alpha =</span> <span class="fl">0.95</span>, <span class="dt">q_ratio =</span> <span class="fl">1.05</span>) </a>
+<a class="sourceLine" id="cb3-2" title="2">SWIM<span class="op">::</span><span class="kw">plot_hist</span>(res_var, <span class="dt">xCol =</span> <span class="st">&quot;Y&quot;</span>, <span class="dt">base =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb3-3" title="3">SWIM<span class="op">::</span><span class="kw">plot_cdf</span>(res_var, <span class="dt">xCol =</span> <span class="st">&quot;Y&quot;</span>, <span class="dt">base =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="figure"><span id="fig:working-example-var"></span>
+<img src="bookdown-SWIM_files/figure-html/working-example-var-1.png" alt="Histogram (left) and empirical distribution function (right) of the baseline and stressed output $Y$." width="50%" /><img src="bookdown-SWIM_files/figure-html/working-example-var-2.png" alt="Histogram (left) and empirical distribution function (right) of the baseline and stressed output $Y$." width="50%" />
 <p class="caption">
-Figure 2.2: Histogram of the baseline and stressed input factors <span class="math inline">\(X_1\)</span> (left) and <span class="math inline">\(X_2\)</span> (right).
+Figure 2.2: Histogram (left) and empirical distribution function (right) of the baseline and stressed output <span class="math inline">\(Y\)</span>.
+</p>
+</div>
+</div>
+<div id="the-scenario-weights" class="section level3">
+<h3><span class="header-section-number">2.1.2</span> The scenario weights</h3>
+<p>In this section we compare the scenario weights of the two stressed models of Section <a href="introduction.html#intro-ex-stress">2.1.1</a>, that is <span class="math inline">\(i)\)</span> a <span class="math inline">\(5\%\)</span> increase in the means of <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span> and <span class="math inline">\(ii)\)</span> a <span class="math inline">\(5\%\)</span> increase in the <span class="math inline">\(\text{VaR}_{0.95}\)</span> of <span class="math inline">\(Y\)</span>. Secario weights of a stressed model can easily be extracted via <code>get_weights()</code>. Figure <a href="introduction.html#fig:working-example-weights-var">2.3</a> displays the scenario weights of the stressed models <span class="math inline">\(i)\)</span> (green) and of <span class="math inline">\(ii)\)</span> (blue) against the aggregated portfolio <span class="math inline">\(Y\)</span>. Stressing the tail of <span class="math inline">\(Y\)</span>, stressed model <span class="math inline">\(i)\)</span>, results in scenario weights comonotonic to <span class="math inline">\(Y\)</span>, inflating large realisations of the aggregated portfolio. Stressing the mean of portfolio components, stressed model <span class="math inline">\(ii)\)</span>, however, provides scenario weights that distort the body of the distribution of the aggregate portfolio.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">plot</span>(data[,<span class="st">&quot;Y&quot;</span>], SWIM<span class="op">::</span><span class="kw">get_weights</span>(res_var), <span class="dt">cex =</span> <span class="fl">0.4</span>, <span class="dt">col =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Y&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="kw">points</span>(data[,<span class="st">&quot;Y&quot;</span>], SWIM<span class="op">::</span><span class="kw">get_weights</span>(res_mean), <span class="dt">cex =</span> <span class="fl">0.2</span>, <span class="dt">col =</span> <span class="st">&quot;darkgreen&quot;</span>)</a></code></pre></div>
+<div class="figure"><span id="fig:working-example-weights-var"></span>
+<img src="bookdown-SWIM_files/figure-html/working-example-weights-var-1.png" alt="The scenario weights for the stressed models $i)$ a 5% increase in the means of $X_1$ and $X_2$ (green) and $ii)$ a 5% increase in the VaR of $Y$ (blue) against the output $Y$." width="672" />
+<p class="caption">
+Figure 2.3: The scenario weights for the stressed models <span class="math inline">\(i)\)</span> a 5% increase in the means of <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span> (green) and <span class="math inline">\(ii)\)</span> a 5% increase in the VaR of <span class="math inline">\(Y\)</span> (blue) against the output <span class="math inline">\(Y\)</span>.
+</p>
+</div>
+<p>Figure <a href="introduction.html#fig:working-example-weights-mean">2.4</a> displays the scenario weight of the stressed model <span class="math inline">\(ii)\)</span> against the portolio component <span class="math inline">\(X_1\)</span> (left) and <span class="math inline">\(X_2\)</span> (right).</p>
+<div class="figure"><span id="fig:working-example-weights-mean"></span>
+<img src="bookdown-SWIM_files/figure-html/working-example-weights-mean-1.png" alt="The scenario weights for the stress on the means of $X_1$ and $X_2$ against $X_1$ (left) and $X_2$ (right)." width="50%" /><img src="bookdown-SWIM_files/figure-html/working-example-weights-mean-2.png" alt="The scenario weights for the stress on the means of $X_1$ and $X_2$ against $X_1$ (left) and $X_2$ (right)." width="50%" />
+<p class="caption">
+Figure 2.4: The scenario weights for the stress on the means of <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span> against <span class="math inline">\(X_1\)</span> (left) and <span class="math inline">\(X_2\)</span> (right).
 </p>
 </div>
 
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-Pesenti2019">
+<p>Pesenti, Silvana M, Pietro Millossovich, and Andreas Tsanakas. 2019. “Reverse Sensitivity Testing: What Does It Take to Break the Model?” <em>European Journal of Operational Research</em> 274 (2): 654–70.</p>
 </div>
 </div>
             </section>
@@ -208,7 +261,7 @@ Figure 2.2: Histogram of the baseline and stressed input factors <span class="ma
         </div>
       </div>
 <a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="the-scope-of-the-swim-package.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="scope-of-the-swim-package.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>

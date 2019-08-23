@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 Scope of the SWIM package | SWIM: Scenario Weights for Importance Measurement</title>
+  <meta name="description" content="3 Scope of the SWIM package | SWIM: Scenario Weights for Importance Measurement" />
+  <meta name="generator" content="bookdown 0.12 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3 Scope of the SWIM package | SWIM: Scenario Weights for Importance Measurement" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  <meta name="github-repo" content="spesenti/SWIMvignette" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 Scope of the SWIM package | SWIM: Scenario Weights for Importance Measurement" />
+  
+  
+  
+
+
+
+<meta name="date" content="2019-08-23" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="introduction.html">
+<link rel="next" href="life-annuity-portfolio.html">
+<script src="assets/jquery-2.2.3/jquery.min.js"></script>
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Overview</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#installation"><i class="fa fa-check"></i><b>1.1</b> Installation</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a><ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#an-example"><i class="fa fa-check"></i><b>2.1</b> An example</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#intro-ex-stress"><i class="fa fa-check"></i><b>2.1.1</b> Stressing the portfolio</a></li>
+<li class="chapter" data-level="2.1.2" data-path="introduction.html"><a href="introduction.html#the-scenario-weights"><i class="fa fa-check"></i><b>2.1.2</b> The scenario weights</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="scope-of-the-swim-package.html"><a href="scope-of-the-swim-package.html"><i class="fa fa-check"></i><b>3</b> Scope of the SWIM package</a><ul>
+<li class="chapter" data-level="3.1" data-path="scope-of-the-swim-package.html"><a href="scope-of-the-swim-package.html#Rfunctions"><i class="fa fa-check"></i><b>3.1</b> Stressing a model</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="scope-of-the-swim-package.html"><a href="scope-of-the-swim-package.html#the-stress-function-and-the-swim-object"><i class="fa fa-check"></i><b>3.1.1</b> The <code>stress</code> function and the <code>SWIM</code> object</a></li>
+<li class="chapter" data-level="3.1.2" data-path="scope-of-the-swim-package.html"><a href="scope-of-the-swim-package.html#stressing-disjoint-probability-intervals"><i class="fa fa-check"></i><b>3.1.2</b> Stressing disjoint probability intervals</a></li>
+<li class="chapter" data-level="3.1.3" data-path="scope-of-the-swim-package.html"><a href="scope-of-the-swim-package.html#stressing-moments"><i class="fa fa-check"></i><b>3.1.3</b> Stressing moments</a></li>
+<li class="chapter" data-level="3.1.4" data-path="scope-of-the-swim-package.html"><a href="scope-of-the-swim-package.html#stressing-risk-measures"><i class="fa fa-check"></i><b>3.1.4</b> Stressing risk measures</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="scope-of-the-swim-package.html"><a href="scope-of-the-swim-package.html#visual-tools"><i class="fa fa-check"></i><b>3.2</b> Visual tools</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="life-annuity-portfolio.html"><a href="life-annuity-portfolio.html"><i class="fa fa-check"></i><b>4</b> Life Annuity Portfolio</a><ul>
+<li class="chapter" data-level="4.1" data-path="life-annuity-portfolio.html"><a href="life-annuity-portfolio.html#assumptions"><i class="fa fa-check"></i><b>4.1</b> Assumptions</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">SWIM: Scenario Weights for Importance Measurement</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="scope-of-the-swim-package" class="section level1">
+<h1><span class="header-section-number">3</span> Scope of the SWIM package</h1>
+<div id="Rfunctions" class="section level2">
+<h2><span class="header-section-number">3.1</span> Stressing a model</h2>
+<p>We define a <strong>model</strong> to consist of a random vector <span class="math inline">\(\boldsymbol{X} = (X_1, \ldots, X_n)\)</span>, the <strong>model components</strong> or <strong>input factors</strong>, a model function <span class="math inline">\(g \colon \mathbb{R}^n \to \mathbb{R}\)</span>, which gives, when applied to the input factors <span class="math inline">\(\boldsymbol{X}\)</span>, the one-dimensional random <strong>output</strong> of interest <span class="math inline">\(Y = g(\boldsymbol{X})\)</span>. Starting from a <strong>baseline probability</strong>, <span class="math inline">\(P\)</span>, a probability measure describing the current beliefs regarding (or software implementation of) the model, we are interested in <strong>stressed models</strong> that fulfil probabilistic constraints and have minimal Kullback-Leibler divergence. Specifically, a <strong>stressed probability</strong> <span class="math inline">\(Q\)</span> is the solution to
+<span class="math display" id="eq:optimisation">\[\begin{equation} 
+\min_{ Q \in \mathcal{P}} D_\text{KL}(Q \| P), \quad
+\text{s.t. probabilistic constraints of the model under }Q \text{ hold},
+\tag{3.1}
+\end{equation}\]</span>
+where the Kullback-Leibler divergence is given by <span class="math inline">\(D_\text{KL}(Q \| P) = \int \frac{dQ}{dP} \log \big(\frac{dQ}{dP} \big)\mathrm{d}P\)</span>, for <span class="math inline">\(Q\)</span> absolutely continuous with respect to <span class="math inline">\(P\)</span>. The probabilistic constraints in <a href="scope-of-the-swim-package.html#eq:optimisation">(3.1)</a> are with respect to (one of) the model inputs or the output and the implemented types of stresses are summarised in the subsequent table.</p>
+<table>
+<colgroup>
+<col width="25%" />
+<col width="42%" />
+<col width="10%" />
+<col width="21%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">R function</th>
+<th align="left">Stress</th>
+<th align="left"><code>type</code></th>
+<th align="left">Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>stress()</code></td>
+<td align="left">wrapper for the <code>stress_</code> functions</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left"><code>stress_user()</code></td>
+<td align="left">user defined scenario weights</td>
+<td align="left"><code>user</code></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>stress_prob()</code></td>
+<td align="left">probabilities of intervals</td>
+<td align="left"><code>prob</code></td>
+<td align="left">Proposition <a href="scope-of-the-swim-package.html#prp:prop-prob-interval">3.1</a></td>
+</tr>
+<tr class="even">
+<td align="left"><code>stress_mean()</code></td>
+<td align="left">means</td>
+<td align="left"><code>mean</code></td>
+<td align="left">Proposition <a href="scope-of-the-swim-package.html#prp:prop-prob-moment">3.2</a></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>stress_mean_sd()</code></td>
+<td align="left">means and standard deviations</td>
+<td align="left"><code>mean sd</code></td>
+<td align="left">Proposition <a href="scope-of-the-swim-package.html#prp:prop-prob-moment">3.2</a></td>
+</tr>
+<tr class="even">
+<td align="left"><code>stress_moment()</code></td>
+<td align="left">moments, functions of moments</td>
+<td align="left"><code>moment</code></td>
+<td align="left">Proposition <a href="scope-of-the-swim-package.html#prp:prop-prob-moment">3.2</a></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>stress_VaR()</code></td>
+<td align="left">VaR risk measure, a quantile</td>
+<td align="left"><code>VaR</code></td>
+<td align="left">Proposition <a href="scope-of-the-swim-package.html#prp:prop-risk-measure">3.3</a></td>
+</tr>
+<tr class="even">
+<td align="left"><code>stress_VaR_ES()</code></td>
+<td align="left">VaR and ES risk measures</td>
+<td align="left"><code>VaR ES</code></td>
+<td align="left">Proposition <a href="scope-of-the-swim-package.html#prp:prop-risk-measure">3.3</a></td>
+</tr>
+</tbody>
+</table>
+<div id="the-stress-function-and-the-swim-object" class="section level3">
+<h3><span class="header-section-number">3.1.1</span> The <code>stress</code> function and the <code>SWIM</code> object</h3>
+<p>The <code>stress()</code> function is a wapper for the <code>stress_</code> functions, with <code>stress(type = "type", ... )</code> and <code>stress_type(...)</code> being equivalent. The <code>stress()</code> function solves optimisation <a href="scope-of-the-swim-package.html#eq:optimisation">(3.1)</a> for constraints specified through <code>type</code>. For a data frame of realisations of the model inputs and corresponding output, provided via the parameter <code>x</code>, the <code>stress()</code> function calculates the scenario weights, such that under the new scenario weights, the constraints are fulfilled. The <code>stress()</code> functions returns a <code>SWIM</code> object containing a list of:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left"><code>x</code></td>
+<td align="left">the realistaions of the model input /output</td>
+</tr>
+<tr class="even">
+<td align="left"><code>new_weights</code></td>
+<td align="left">the scenario weights</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>type</code></td>
+<td align="left">the “type” of the stress</td>
+</tr>
+<tr class="even">
+<td align="left"><code>specs</code></td>
+<td align="left">the details about the stress</td>
+</tr>
+</tbody>
+</table>
+<p>The data frame containing the underlying realisations of the model input and corresponding output of a <code>SWIM</code> object (<code>x</code> in the above table), can be extracted using <code>get_data()</code>. Similarly, <code>get_weights()</code> and <code>get_weightsfun()</code> provide the scenario weights, respectively the functions, that when applied to the data generate the scenarion weights. The specification of the applied stress can be obtained using <code>get_specs()</code>.</p>
+</div>
+<div id="stressing-disjoint-probability-intervals" class="section level3">
+<h3><span class="header-section-number">3.1.2</span> Stressing disjoint probability intervals</h3>
+<p>Optimisation <a href="scope-of-the-swim-package.html#eq:optimisation">(3.1)</a> with constraints consisting of disjoint probability intervals, <span class="citation">Csiszár (<a href="#ref-Csiszar1975">1975</a>)</span>, <span class="citation">Cambou and Filipović (<a href="#ref-Cambou2017">2017</a>)</span>, allow to define stresses by altering regions or events of a model component. The scenario weights for a stress according to Proposition <a href="scope-of-the-swim-package.html#prp:prop-prob-interval">3.1</a> is implemented via the function <code>stress_prob()</code>, or equivalently <code>stress(type = "prob", ...)</code>, and the stressed probability intervals are specified through the <code>lower</code> and <code>upper</code> endpoints of the intervals.</p>
+
+<div class="proposition">
+<span id="prp:prop-prob-interval" class="proposition"><strong>Proposition 3.1  (see Proposition 3.1 in <span class="citation">Pesenti, Millossovich, and Tsanakas (<a href="#ref-Pesenti2019">2019</a>)</span>)  </strong></span>
+Let <span class="math inline">\(B_1, \ldots, B_I\)</span> be disjoint sets with <span class="math inline">\(P(Y \in B_i) &gt;0\)</span>, for all <span class="math inline">\(i = 1, \ldots, I\)</span>, and <span class="math inline">\(\alpha_1, \ldots, \alpha_I &gt; 0\)</span><a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> such that <span class="math inline">\(\alpha_1 + \ldots + \alpha_I &lt; 1\)</span>. Then the solution to
+<span class="math display">\[\begin{equation} 
+\min_{Q} D_\text{KL}(Q \| P), \quad
+\text{s.t. } Q(Y \in B_i) = \alpha_i, ~i = 1, \ldots, I.
+\end{equation}\]</span>
+is discribed by the change-of-measure (Radon-Nikodym-density) from <span class="math inline">\(P\)</span> to <span class="math inline">\(Q\)</span>
+<span class="math display">\[\begin{equation} 
+w  = \sum_{i = 0}^I \frac{\alpha_i}{P(Y \in B_i)}1_{ \{Y \in B_i
+\}},
+\end{equation}\]</span>
+where <span class="math inline">\(\alpha_0 = 1 - \alpha_1 + \ldots + \alpha_I\)</span> and <span class="math inline">\(B_0 = \Big( \bigcup_{i = 1}^I B_i \Big)^c\)</span>.
+</div>
+
+<p>Note that the scenario weights, <span class="math inline">\(w\)</span>, are a function of the stressed model component, <span class="math inline">\(Y\)</span>.</p>
+</div>
+<div id="stressing-moments" class="section level3">
+<h3><span class="header-section-number">3.1.3</span> Stressing moments</h3>
+<p>The functions <code>stress_mean()</code>, <code>stress_mean_sd()</code> and <code>stress_moment()</code> can be applied to multiple model components and are the only <code>stress</code> functions that have scenrio weights not given in analytical form. Thus, there is no guarantee of existence of the stressed model. Specifically, <code>stress_mean()</code> solves optimisation in Proposition <a href="scope-of-the-swim-package.html#prp:prop-prob-moment">3.2</a> via numerical optimisation using the <a href="https://CRAN.R-project.org/package=nleqslv">nleqslv</a> package.</p>
+
+<div class="proposition">
+<p><span id="prp:prop-prob-moment" class="proposition"><strong>Proposition 3.2  </strong></span>For <span class="math inline">\(i = 1, \ldots, I\)</span>, let <span class="math inline">\(J_i \subset \{1, \ldots, n\}\)</span> and <span class="math inline">\(f_i \colon \mathbb{R}^{J_i} \to \mathbb{R}\)</span> be functions and consider
+<span class="math display">\[\begin{equation} 
+\min_{Q} D_\text{KL}(Q \| P), \quad
+\text{s.t. } E^Q(f_i(X_{J_i}) ) = m_i, ~i = 1, \ldots, I.
+\end{equation}\]</span>
+where <span class="math inline">\(E^Q(\cdot)\)</span> denotes the expectation under the stressed model.</p>
+</div>
+
+</div>
+<div id="stressing-risk-measures" class="section level3">
+<h3><span class="header-section-number">3.1.4</span> Stressing risk measures</h3>
+<p>Recall that the <span class="math inline">\(\text{VaR}\)</span> at level <span class="math inline">\(0 &lt; \alpha &lt; 1\)</span> of a random variable <span class="math inline">\(Z\)</span> with distrbution <span class="math inline">\(F\)</span>, is defined as the <span class="math inline">\(\alpha-\)</span>quantile of <span class="math inline">\(F\)</span>, that is <span class="math display">\[\text{VaR}_\alpha(Z) = F^{-1}(\alpha).\]</span> The <span class="math inline">\(\text{ES}\)</span> at level <span class="math inline">\(0 &lt; \alpha &lt; 1\)</span> of a random variable <span class="math inline">\(Z\)</span> is given by <span class="math display">\[\text{ES}_\alpha(Z) = \int_0^1 \text{VaR}_u(Z) \mathrm{d}u.\]</span></p>
+
+<div class="proposition">
+<span id="prp:prop-risk-measure" class="proposition"><strong>Proposition 3.3  (see Propositions 3.2 and 3.3 in <span class="citation">Pesenti, Millossovich, and Tsanakas (<a href="#ref-Pesenti2019">2019</a>)</span>)  </strong></span>Let <span class="math inline">\(0&lt; \alpha &lt;1\)</span> and <span class="math inline">\(q, s \in \mathbb{R}\)</span> such that <span class="math inline">\(\text{VaR}_{\alpha}(Y)&lt;q &lt; s\)</span>, and consider the optimisations
+<span class="math display">\[\begin{align}
+i) \quad &amp; \min_{ Q \ll \mathcal{P}} D_\text{KL}(Q \| P), \quad
+\text{s.t. } \text{VaR}_{\alpha }^Q(Y) = q;\\
+ii) \quad &amp; \min_{ Q \ll \mathcal{P}} D_\text{KL}(Q \| P), \quad
+\text{s.t. } \text{VaR}_{\alpha }^Q(Y) = q, \text{ ES}_{\alpha }^Q(Y) = s,
+\end{align}\]</span>
+where <span class="math inline">\(\text{VaR}^Q\)</span> and <span class="math inline">\(\text{ES}^Q\)</span> denote the <span class="math inline">\(\text{VaR}\)</span> and the <span class="math inline">\(\text{ES}\)</span> under the stressed model.
+The change-of-measure (Radon-Nikodym-density) of the solution is then described by
+<span class="math display">\[\begin{align}
+i) \quad &amp; 
+w  =    \frac{\alpha }{  P( Y &lt; q)} 1_{\{ Y &lt; q\}}  + \frac{1- \alpha }{ P(Y \geq q)} 1_{\{  Y \geq q\}};\\
+ii) \quad &amp; 
+w  =    \frac{\alpha }{  P( Y &lt; q)} 1_{\{ Y &lt; q\}}  + \frac{1- \alpha }{E\left( e^{ \theta (Y - q) } Y \geq q \right)} 1_{\{  Y \geq q\}} e^{\theta (Y - q)}, \text{ for a suitable}; \, \theta &gt;0.\\
+\end{align}\]</span>
+</div>
+
+</div>
+</div>
+<div id="visual-tools" class="section level2">
+<h2><span class="header-section-number">3.2</span> Visual tools</h2>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-Cambou2017">
+<p>Cambou, Mathieu, and Damir Filipović. 2017. “Model Uncertainty and Scenario Aggregation.” <em>Mathematical Finance</em> 27 (2): 534–67.</p>
+</div>
+<div id="ref-Csiszar1975">
+<p>Csiszár, Imre. 1975. “I-Divergence Geometry of Probability Distributions and Minimization Problems.” <em>The Annals of Probability</em> 3 (1): 146–58.</p>
+</div>
+<div id="ref-Pesenti2019">
+<p>Pesenti, Silvana M, Pietro Millossovich, and Andreas Tsanakas. 2019. “Reverse Sensitivity Testing: What Does It Take to Break the Model?” <em>European Journal of Operational Research</em> 274 (2): 654–70.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>For simpilcity of presentation, we henceforth stress the output of a model, however, a stress can be applied to the model output as well as model components.<a href="scope-of-the-swim-package.html#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="life-annuity-portfolio.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/lunr.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+},
+"toolbar": {
+"position": "static"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
