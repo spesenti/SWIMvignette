@@ -12,7 +12,7 @@ author:
   name: Andreas Tsanakas
 date: "`r format(Sys.time(), '%d %B %Y')`"
 bibliography: bibliography.bib
-documentclass: book
+documentclass: article
 github-repo: spesenti/SWIMvignette
 link-citations: yes
 site: bookdown::bookdown_site

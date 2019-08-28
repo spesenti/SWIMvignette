@@ -4,9 +4,10 @@ bookdown::gitbook:
   config:
     toolbar:
       position: static
+    search: yes
 bookdown::pdf_book:
   keep_tex: yes
 bookdown::html_book:
   css: toc.css
-split_bib: no
+split_bib: FALSE
 citation_package: natbib
