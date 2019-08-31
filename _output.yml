@@ -1,3 +1,6 @@
+bookdown::pdf_book:
+  keep_tex: yes
+  citation_package: natbib
 bookdown::gitbook:
   lib_dir: assets
   split_by: chapter
@@ -5,9 +8,6 @@ bookdown::gitbook:
     toolbar:
       position: static
     search: yes
-bookdown::pdf_book:
-  keep_tex: yes
-bookdown::html_book:
-  css: toc.css
-split_bib: FALSE
-citation_package: natbib
+    css: toc.css
+  split_bib: no
+  citation_package: natbib

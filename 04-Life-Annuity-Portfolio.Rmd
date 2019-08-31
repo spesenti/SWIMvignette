@@ -18,7 +18,7 @@ Notation:
   - $N_t$  number of annuitants at time $t$    
   - $D_t = N_t - N_{t+1}$    
   - $I_t$ rate of return for the period ($t-1,t$)    
-  - $\omega -1 $ maximum attainable age    
+  - $\omega -1$ maximum attainable age    
   - $\Pi$ single premium   
   - $M$ (initial) solvency margin.   
 
