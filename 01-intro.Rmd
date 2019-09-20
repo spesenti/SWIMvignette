@@ -1,11 +1,7 @@
 
 
-# Introduction
+# An example
 
-The SWIM package is an efficient sensitivty analysis tool for stochastic models developped in @Pesenti2019. It provides a stressed version of a stochastic model, subject to model components (random variables) fulfilling given probabilistic constraints (stresses). Possible constraints include stressing moments, propability intervals and risk measures such as the Value-at-Risk and the Expected Shortfall. Provided with simulated scenarios from a stochastic model, the SWIM package returns scenario weights under which the stochastic model satisfies the stress and minimises the relative entropy with respect to the baseline model. 
-
-
-## An example
 
 ``` {r, cache = TRUE, include = FALSE}
 set.seed(0)
@@ -27,7 +23,7 @@ names(data) <- c("Y", "X1", "X2", "X3", "X4", "X5")
 
 Consider a portfolio $Y = \sum_{i = 1}^5 X_i$, consisting of five lines of business (LoB's) $X_1, \ldots, X_5$ that are positively correlated and normally distributed with mean equal to `r round(colMeans(data)[3],0)` and standard deviations `r SD`, respectively. Adopting the convention that positive realisations represent losses, a risk manager might be interested in the scenario, in which the mean of the first two LoB's, $X_1$ and $X_2$, increases by $5\%$.
 
-### Stressing the portfolio {#intro-ex-stress}
+## Stressing the portfolio {#intro-ex-stress}
 The stressed porfolio, satisfying simulatneously a $5\%$ increse of the mean of $X_1$ and $X_2$, is obtained via the `stress()` function. The function `stress()` applies for different stresses, see Section \@ref(Rfunctions) for details, thus, for stressing the mean, `type = "mean"` needs to be supplied. The parameter `x` corresponds to the data.frame containting simulated values of the portfolio, $(Y, X_1, X_2, X_3, X_4, X_5)$, which, in this example, consists of a set of $10^5$ simulations. Further, the component of the dataframe, `x`, that is stressed (parameter `k`) as well as the stressed values of the means (parameter `new_means`) has to be provided. 
 
 
@@ -51,7 +47,7 @@ SWIM::plot_cdf(res_var, xCol = "Y", base = TRUE)
 ```
 
 
-### The scenario weights
+## The scenario weights
 In this section we compare the scenario weights of the two stressed models of Section \@ref(intro-ex-stress), that is $i)$ a $5\%$ increase in the means of $X_1$ and $X_2$ and $ii)$ a $5\%$ increase in the $\text{VaR}_{0.95}$ of $Y$. Secario weights of a stressed model can easily be extracted via `get_weights()`. Figure \@ref(fig:working-example-weights-var) displays the scenario weights of the stressed models $i)$ (green) and of $ii)$ (blue) against the aggregated portfolio $Y$. Stressing the tail of $Y$, stressed model $i)$, results in scenario weights comonotonic to $Y$, inflating large realisations of the aggregated portfolio. Stressing the mean of portfolio components, stressed model $ii)$, however, provides scenario weights that distort the body of the distribution of the aggregate portfolio. 
 
 ``` {r, working-example-weights-var, cache = TRUE,fig.cap = "The scenario weights for the stressed models $i)$ a 5% increase in the means of $X_1$ and $X_2$ (green) and $ii)$ a 5% increase in the VaR of $Y$ (blue) against the output $Y$."}

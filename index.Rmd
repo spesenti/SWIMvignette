@@ -16,13 +16,20 @@ options(digits = 2) # auto round to 2 decimals when printed
 
 
 # Overview
+## Abstract
 
-The SWIM package provides weights on simulated scenarios from a
-stochastic model, such that stressed model components (random variables)
-fulfil given probabilistic constraints (e.g. specified values for risk
-measures), under the new scenario weights. Scenario weights are selected
-by constrained minimisation of the relative entropy to the baseline
-model. The SWIM package is based on @Pesenti2019.
+
+The SWIM package is an efficient sensitivty analysis tool for stochastic models developped in @Pesenti2019. It provides a stressed version of a stochastic model, subject to model components (random variables) fulfilling given probabilistic constraints (stresses). Possible constraints include stressing moments, propability intervals and risk measures such as the Value-at-Risk and the Expected Shortfall. Provided with simulated scenarios from a stochastic model, the SWIM package returns scenario weights under which the stochastic model satisfies the stress and minimises the relative entropy with respect to the baseline model. 
+
+
+
+## Background
+a short literature review
+
+
+
+## Concepts of the `SWIM` package
+
 
 
 ## Installation
