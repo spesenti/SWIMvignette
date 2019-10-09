@@ -3,120 +3,119 @@
 # Scope of the SWIM package
 
 
+This section contains the mathematical background and the description of the optimisation that underlies the implementation of the SWIM package. For readers interested in the application and usage of the SWIM package, this section should serve as a reference, as all implemented `R` functions, including stresses and graphical and analysis tools are described in detail. 
+
 
 ## Stressing a model {#Rfunctions}
 
-
-We define a **model** to consist of a random vector $\boldsymbol{X} = (X_1, \ldots, X_n)$, the **model components** or **input factors**, a model function $g \colon \mathbb{R}^n \to \mathbb{R}$, which gives, when applied to the input factors $\boldsymbol{X}$, the one-dimensional random **output** of interest $Y = g(\boldsymbol{X})$. Starting from a **baseline probability**, $P$, a probability measure describing the current beliefs regarding (or software implementation of) the model, we are interested in **stressed models** that fulfil probabilistic constraints and have minimal Kullback-Leibler divergence. Specifically, a **stressed probability** $Q$ is the solution to 
+While the SWIM package is based on Monte Carlo simulations, the scenario weights are derived in a general probabilistic framework. A baseline probability (representing the equiprobable Monte Carlo simulations) can be described by a probability measure $P$, and a stressed model by a different probabitlity measures $Q$. Scenario weights can therefore be viewed as the change from the baseline probability to a stressed probability, $W= \frac{dQ}{dP}$. A stressed model, under which the distribution of the model components fulfil specific stresses, is chosen such that the distortion to the baseline model is as small as possible in the Kullback-Leibler divergence (or relative entropy). Mathematically, a stressed model is the solutions to.
 \begin{equation} 
 \min_{ Q \in \mathcal{P}} D_\text{KL}(Q \| P), \quad
-\text{s.t. probabilistic constraints of the model under }Q \text{ hold},
+\text{subject to constraints of } X_1, \ldots, X_d \text{ under }Q,
 (\#eq:optimisation)
 \end{equation}
-where the Kullback-Leibler divergence is given by $D_\text{KL}(Q \| P)  = \int \frac{dQ}{dP} \log \big(\frac{dQ}{dP} \big)\mathrm{d}P$, for $Q$ absolutely continuous with respect to $P$. The probabilistic constraints (**stresses**) in \@ref(eq:optimisation) are with respect to (one of) the model inputs or the output. The subsequent table displays the implemented stresses.     
+where the Kullback-Leibler divergence is given by $D_\text{KL}(Q \| P)  = \int \frac{dQ}{dP} \log \big(\frac{dQ}{dP} \big)\mathrm{d}P$. We refer to @Pesenti2019 and references therein for further mathematical details and the derivations of solutions to \@ref(eq:optimisation).
 
-| R function             | Stress                                | `type`  |  Reference  
-| :--------------------- | :------------------------------------ |:--------|:------------------ 
-| `stress()`             | wrapper for the `stress_` functions   |         | Section \@ref(Rstress)
-| `stress_user()`        | user defined scenario weights         |`user`   |
-| `stress_prob()`        | probabilities of intervals            |`prob`   | Proposition \@ref(prp:prop-prob-interval)
-| `stress_mean()`        | means                                 |`mean`   | Proposition \@ref(prp:prop-prob-moment)
-| `stress_mean_sd()`     | means and standard deviations         |`mean sd`| Proposition \@ref(prp:prop-prob-moment)
-| `stress_moment()`      | moments, functions of moments         |`moment` | Proposition \@ref(prp:prop-prob-moment)
-| `stress_VaR()`         | VaR risk measure, a quantile          |`VaR`    | Proposition \@ref(prp:prop-risk-measure)
-| `stress_VaR_ES()`      | VaR and ES risk measures              |`VaR ES` | Proposition \@ref(prp:prop-risk-measure)
+
+The subsequent table is a collection of all implemented types of stresses. The pricise constraints of \@ref(eq:optimisation) are explained below.
+
+| R function         | Stress                                | `type`  |  Reference  
+| :------------------| :------------------------------------ |:--------|:------------------ 
+| `stress()`         | wrapper for the `stress_type` functions   |         | Section \@ref(Rstress)
+| `stress_user()`    | user defined scenario weights         |`user`   |
+| `stress_prob()`    | disjoint intervals                    |`prob`   | \@ref(eq:optimisationprob)
+| `stress_mean()`    | means                                 |`mean`   | \@ref(eq:optimisationmoment)
+| `stress_mean_sd()` | means and standard deviations         |`mean sd`| \@ref(eq:optimisationmoment)
+| `stress_moment()`  | moments, functions of moments         |`moment` | \@ref(eq:optimisationmoment)
+| `stress_VaR()`     | VaR risk measure, a quantile          |`VaR`    | \@ref(eq:optimisationVaR)
+| `stress_VaR_ES()`  | VaR and ES risk measures              |`VaR ES` | \@ref(eq:optimisationVaRES)
 
 
 ### The `stress` function and the `SWIM` object {#Rstress}
-The `stress()` function is a wapper for the `stress_` functions, with `stress(type = "type", ... )` and `stress_type(...)` being equivalent. The `stress()` function solves optimisation \@ref(eq:optimisation) for constraints specified through `type`. For a data frame of realisations of the model inputs and corresponding output, provided via the parameter `x`, the `stress()` function calculates the scenario weights, such that under the new scenario weights, the constraints are fulfilled and the stressed model has minimal Kullback-Leibler divergence. The `stress()` functions returns a `SWIM` object containing a list of:
+The `stress()` function is a wapper for the `stress_` functions, with `stress(type = "type", ... )` and `stress_type(...)` being equivalent. The `stress()` function solves optimisation \@ref(eq:optimisation) for constraints specified through `type`and returns a `SWIM` object containing a list of:
 
 | | |
 | :---           | :--- |       
-| `x`            | the realistaions of the model input / output |
-| `new_weights`  | the scenario weights |
-| `type`         | the "type" of the stress / constraints |
-| `specs`        | the details about the stress |
+| `x`            | realistaions of the model  |
+| `new_weights`  | scenario weights |
+| `type`         | "type" of stress |
+| `specs`        | details about the stress |
 
-The data frame, (`x` in the above table), containing the underlying realisations of the model input and corresponding output of a `SWIM` object, can be extracted using `get_data()`. Similarly, `get_weights()` and `get_weightsfun()` provide the scenario weights, respectively the functions, that when applied to the data (`x`) generate the scenarion weights. The specification of the applied stress can be obtained using `get_specs()`.
+The data frame, `x` in the above table, containing the realisations of the baseline model, can be extracted from a `SWIM` object using `get_data()`. Similarly, `get_weights()` and `get_weightsfun()` provide the scenario weights, respectively the functions, that when applied to `x` generate the scenarion weights. The specification of the applied stress can be obtained using `get_specs()`.
 
 ### Stressing disjoint probability intervals 
 
-Optimisation \@ref(eq:optimisation) with constraints consisting of disjoint probability intervals, see also @Csiszar1975, @Cambou2017, allow to define stresses by altering regions or events of a model component. The scenario weights for a stress according to Proposition \@ref(prp:prop-prob-interval) is implemented via the function `stress_prob()`, or equivalently `stress(type = "prob", ...)`, and the stressed probability intervals are specified through the `lower` and `upper` endpoints of the intervals.
+Stressing disjoint probability intervals, allows to define stresses by altering regions or events of a model component. The scenario weights are calculated via `stress_prob()`, or equivalently `stress(type = "prob", ...)`, and the stressed probability intervals are specified through the `lower` and `upper` endpoints of the intervals.
 
 
-```{proposition, name ="see Proposition 3.1 in @Pesenti2019", label = "prop-prob-interval"}    
-
-Let $B_1, \ldots, B_I$ be disjoint sets with $P(Y \in B_i) >0$, for all $i = 1, \ldots, I$, and $\alpha_1, \ldots, \alpha_I > 0$ such that $\alpha_1 + \ldots  + \alpha_I < 1$. Then the solution to 
+> For disjoint intervals $B_1, \ldots, B_I$ with $P(X \in B_i) >0$, for all $i = 1, \ldots, I$, and $\alpha_1, \ldots, \alpha_I > 0$ such that $\alpha_1 + \ldots  + \alpha_I < 1$, `stress_prob()` solves
 \begin{equation} 
 \min_{Q} D_\text{KL}(Q \| P), \quad
-\text{s.t. } Q(Y \in B_i) = \alpha_i, ~i = 1, \ldots, I.
+\text{s.t. } Q(X \in B_i) = \alpha_i, ~i = 1, \ldots, I. (\#eq:optimisationprob)
 \end{equation}
-is discribed by the change-of-measure (Radon-Nikodym density) from $P$ to $Q$
-\begin{equation} 
-w  = \sum_{i = 0}^I \frac{\alpha_i}{P(Y \in B_i)}1_{ \{Y \in B_i
-\}},
-\end{equation}
-where $\alpha_0 = 1 - \alpha_1 + \ldots + \alpha_I$ and $B_0 = \Big( \bigcup_{i = 1}^I B_i \Big)^c$.        
-```
 
-Note that the scenario weights, $w$, are a function of the stressed model component, here $Y$^[For simpilcity of presentation, we stress the output of a model, however, a stress can be applied to the model output as well as model components.]. 
 
 
 ### Stressing moments 
 
 
 
-The functions `stress_mean()`, `stress_mean_sd()` and `stress_moment()` can be applied to multiple model components and are the only `stress` functions that have scenrio weights not given in analytical form. Thus, there is no guarantee of existence of a stressed model. Specifically, `stress_mean()` solves optimisation in Proposition \@ref(prp:prop-prob-moment) via numerical optimisation using the [nleqslv](https://CRAN.R-project.org/package=nleqslv) package.
+The functions `stress_mean()`, `stress_mean_sd()` and `stress_moment()` can be applied to multiple model components and are the only `stress` functions that have scenrio weights calculated via numerical optimisation using the [nleqslv](https://CRAN.R-project.org/package=nleqslv) package. Thus, dependending on the choice of moment stresses, existence of a stressed model is not guaranteed. 
 
-
-```{proposition, label = "prop-prob-moment"}    
-For $i = 1, \ldots, I$, let $J_i \subset \{1, \ldots, n\}$ and $f_i \colon \mathbb{R}^{J_i} \to \mathbb{R}$ be functions and consider
+> For $i = 1, \ldots, I$ with $J_i \subset \{1, \ldots, n\}$ and functions $f_i \colon \mathbb{R}^{J_i} \to \mathbb{R}$, `stress_moment()` solves
 \begin{equation} 
 \min_{Q} D_\text{KL}(Q \| P), \quad
-\text{s.t. } E^Q(f_i(X_{J_i}) ) = m_i, ~i = 1, \ldots, I.
+\text{s.t. } E^Q(f_i(X_{J_i}) ) = m_i, ~i = 1, \ldots, I. (\#eq:optimisationmoment)
 \end{equation}
 where $E^Q(\cdot)$ denotes the expectation under the stressed model. 
-
-```
 
 
 
 ### Stressing risk measures
 
-Recall that the $\text{VaR}$ at level $0 < \alpha < 1$ of a random variable $Z$ with distrbution $F$, is defined as the $\alpha-$quantile of $F$, that is $$\text{VaR}_\alpha(Z) = F^{-1}(\alpha).$$ The $\text{ES}$ at level $0 < \alpha < 1$ of a random variable $Z$ is given by $$\text{ES}_\alpha(Z) = \int_0^1 \text{VaR}_u(Z) \mathrm{d}u.$$
-
-The functions `stress_VaR` and `stress_VaR_ES` provides stressed models, with a model components that fulfil a stress on the VaR risk measures, and VaR and ES risk measures, resepvtively. Specifically, `type = VaR` solves optimisation \@ref(eq:optimisationVaR) and `type = VaR ES` is the solution to \@ref(eq:optimisationVaRES) respectively. 
+The functions `stress_VaR` and `stress_VaR_ES` provides stressed models, under which a model components fulfils a stress on the Value-at-Risk ($\text{VaR}$) and/or Expected Shortfall ($\text{ES}$) risk measures. The $\text{VaR}$ at level $0 < \alpha < 1$ of a random variable $Z$ with distrbution $F$, is defined as the $\alpha-$quantile of $F$, that is $$\text{VaR}_\alpha(Z) = F^{-1}(\alpha).$$ The $\text{ES}$ at level $0 < \alpha < 1$ of a random variable $Z$ is given by $$\text{ES}_\alpha(Z) = \int_0^1 \text{VaR}_u(Z) \mathrm{d}u.$$
 
 
-
-```{proposition, name ="see Propositions 3.2 and 3.3 in @Pesenti2019", label = "prop-risk-measure"}    
-Let $0< \alpha <1$ and $q, s \in \mathbb{R}$ such that $\text{VaR}_{\alpha}(Y)<q < s$, and consider the optimisations
-\begin{align}
-i) \quad & \min_{ Q \ll \mathcal{P}} D_\text{KL}(Q \| P), \quad
-\text{s.t. } \text{VaR}_{\alpha }^Q(Y) = q;  (\#eq:optimisationVaR)\\
-ii) \quad & \min_{ Q \ll \mathcal{P}} D_\text{KL}(Q \| P), \quad
+> For $0< \alpha <1$ and $q, s \in \mathbb{R}$ such that $\text{VaR}_{\alpha}(Y)<q < s$, `stress_VaR()` solves 
+\begin{equation} 
+\min_{ Q \ll \mathcal{P}} D_\text{KL}(Q \| P), \quad
+\text{s.t. } \text{VaR}_{\alpha }^Q(Y) = q;  (\#eq:optimisationVaR)
+\end{equation}
+and `stress_VaR_ES()` solves 
+\begin{equation}                                                
+\min_{ Q \ll \mathcal{P}} D_\text{KL}(Q \| P),
 \text{s.t. } \text{VaR}_{\alpha }^Q(Y) = q, \text{ ES}_{\alpha }^Q(Y) = s,(\#eq:optimisationVaRES)
-\end{align}
+\end{equation}
 where $\text{VaR}^Q$ and $\text{ES}^Q$ denote the $\text{VaR}$ and the $\text{ES}$ under the stressed model.
-The change-of-measure (Radon-Nikodym-density) of the solution is then described by 
-\begin{align}
-i) \quad & 
-w  =    \frac{\alpha }{  P( Y < q)} 1_{\{ Y < q\}}  + \frac{1- \alpha }{ P(Y \geq q)} 1_{\{  Y \geq q\}};\\
-ii) \quad & 
-w  =    \frac{\alpha }{  P( Y < q)} 1_{\{ Y < q\}}  + \frac{1- \alpha }{E\left( e^{ \theta (Y - q) } Y \geq q \right)} 1_{\{  Y \geq q\}} e^{\theta (Y - q)}, \text{ for a suitable}; \, \theta >0.\\
-\end{align}  
-```
-
-
-## Visual tools
 
 
 
 
+## Analysis of stressed models
 
+The function `summary()` is a methods for an object of class SWIM and provides summary statistics of the baseline and stressed models. If the SWIM object contains more than one set of scenario weights, each corresponding to one stressed model, the `stress()` function returns for each set of scenarion weights a list containting:    
 
+|                | |
+| :---           | :--- |  
+|`mean`          |sample mean
+|`sd`            |sample standard deviation
+|`skewness`      |sample skewness
+|`ex kurtosis`   |sample excess kurtosis
+|`1st Qu.`       |25% quantile
+|`Median`        |median, 50% quantile
+|`3rd Qu.`       |75% quantile
 
+The empirical distribution functions of model components under a stressed model can be calculated by evaluation of `cdf()` on a SWIM object. It is important to note, that the standard empirical distribution function, `ecdf()` applied to a SWIM object will **not** return empirical distribution functions under a stressed model. Similarly, to calculate sample quantiles of stressed models components, the function `quantile_stressed()` should be used. Implemented visualisation of distribution functions are `plot_cdf()`, for plotting empirical distribution functions, and `plot_hist()`, for plotting histograms of model components under stressed models.
 
+Comparison of baseline and stressed models and how stressed model impact model components, can be done via the `sensitivity()` function. The implemented sensitivity measures are summarised in the table below. The Wasserstein and Kolmogorov, sensitivities are to compare stressed (and baseline) models, as these sensitivities only depend on the scenario weights, whereas the Gamma sensitivity is useful to compare the impact of a stress model on the model components.
+
+|                |                  |
+| :---           | :--- | :--- | 
+|Wasserstein   |$\int | F^Q_X (x) - F_X(x)| dx$ | comparing models
+|Kolmogorov    |$\sup_x |F^Q_X (x) - F_X(x)|$ | comparing models
+|Gamma         |$\frac{E^Q(X) - E(X)}{c}$, for a normalisation $c$ | comparing model components
+
+The normalisation for the Gamma sensitivity is such that Gamma takes values between -1 and 1, where positive values correspond to a larger impact on a larger impact. The sensitivities of model components can be plotted using `plot_sensitivity()`. The function `importance_rank()`, returns the effective rank of model component according ot the chosen sensitivity measures. 
 
 
 
