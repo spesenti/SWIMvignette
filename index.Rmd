@@ -15,7 +15,7 @@ options(digits = 2) # auto round to 2 decimals when printed
 ```
 
 
-# Overview
+# Introduction
 ## Abstract
 
 
@@ -32,7 +32,7 @@ a short literature review
 
 
 
-## Installation
+### Installation
 
 The SWIM package can be install from [CRAN](https://CRAN.R-project.org/package=SWIM) :
 
@@ -46,3 +46,12 @@ alternatively from [GitHub](https://github.com/spesenti/SWIM) in R studio:
 ``` r}
 install.packages("spesenti/SWIM")
 ```
+
+
+## Structure of the vignette
+
+Section \@ref(Sec:Scope) contains the mathematical background and the description of the optimisation that underlies the implementation of the SWIM package. For readers interested in the application and usage of the SWIM package, Section \@ref(Sec:Scope) can serve as a reference, as all implemented `R` functions, including stresses and graphical and analysis tools are described in detail. 
+
+
+
+
