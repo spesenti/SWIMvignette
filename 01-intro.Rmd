@@ -77,7 +77,7 @@ Y <- Z1 + Z2 + Z3
 ```
 
 
-Now we introduce a stress to our baseline model. For our first stress, we require that the mean of $Z_1$ is increased from 100 to 110. This is done using the `stress` function, which generates as output the SWIM object <tt> str.mean</tt>. This object stores the stressed model, i.e. the realisations of the model components and the scenario weights. In the function call, <tt> k=1 </tt> indicates that the stress is applied on the first column of <tt> dat</tt>, that is, on the realisations of the random variable $Z_1$.
+Now we introduce a stress to our baseline model. For our first stress, we require that the mean of $Z_1$ is increased from 100 to 110. This is done using the `stress` function, which generates as output the SWIM object `str.mean`. This object stores the stressed model, i.e. the realisations of the model components and the scenario weights. In the function call, `k=1` indicates that the stress is applied on the first column of `dat`, that is, on the realisations of the random variable $Z_1$.
 
 ``` {r, example1_first_stress, echo = -4, warning = FALSE, message = FALSE}
 library(SWIM)
@@ -89,7 +89,7 @@ summary(str.mean, base = TRUE)
 
 ```
 
-The summary function, applied on the SWIM object <tt> str.mean</tt>, shows how the distributional characteristics of all random variables of interest change from the baseline to the stressed model. In particular, we see that the mean of $Z_1$ changes to its required value, while the mean of $Y$ also increases. Furthermore there is a small impact on $Z_2$, due to its positive correlation to $Z_1$.
+The summary function, applied on the SWIM object `str.mean`, shows how the distributional characteristics of all random variables of interest change from the baseline to the stressed model. In particular, we see that the mean of $Z_1$ changes to its required value, while the mean of $Y$ also increases. Furthermore there is a small impact on $Z_2$, due to its positive correlation to $Z_1$.
 
 
 
@@ -103,7 +103,7 @@ plot_cdf(str.mean, xCol = 4, base = TRUE)
 
 ```
 
-The scenario weights, given their central role, can be extracted from a SWIM object. In Figure \@ref(fig:example1-weights-mean), the scenario weights from <tt> str.mean</tt> are plotted against realisations from $Z_1$ and $Y$ respectively. It is seen how the weights are increasing in the realisations from $Z_1$. This is a consequence of the weights' derivation via a stress on the model component $Z_1$. The increasingness shows that those scenarios for which $Z_1$ is largest are assigned a higher weight. The relation between scenario weights and $Y$ is still increasing (reflecting that high outcomes of $Y$ tend to receive higher weights), but no longer deterministic (showing that $Y$ is not completely driven by changes in $Z_1$).
+The scenario weights, given their central role, can be extracted from a SWIM object. In Figure \@ref(fig:example1-weights-mean), the scenario weights from `str.mean` are plotted against realisations from $Z_1$ and $Y$ respectively. It is seen how the weights are increasing in the realisations from $Z_1$. This is a consequence of the weights' derivation via a stress on the model component $Z_1$. The increasingness shows that those scenarios for which $Z_1$ is largest are assigned a higher weight. The relation between scenario weights and $Y$ is still increasing (reflecting that high outcomes of $Y$ tend to receive higher weights), but no longer deterministic (showing that $Y$ is not completely driven by changes in $Z_1$).
 
 
 ``` {r, example1-weights-mean, warning = FALSE, message = FALSE, fig.show='hold', out.width = '50%',fig.cap = "Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the mean of $Z_1$."}
@@ -116,7 +116,7 @@ plot(Y[1 : 5000], w.mean[1 : 5000], pch = 20, xlab = "Y", ylab = "scenario weigh
 
 
 
-Stress the mean of $Z_1$ did not impact the volatility of either $Z_1$ or $Y$, as can be seen by the practically unchanged standard deviations in the output of <tt>summary(str.mean)</tt>. Thus, we introduce an alternative stress that keeps the mean of $Z_1$ fixed at 100, but increases its standard deviation from 40 to 50. This new stress is seen to impact the standard deviation of the portfolio loss $Y$.
+Stress the mean of $Z_1$ did not impact the volatility of either $Z_1$ or $Y$, as can be seen by the practically unchanged standard deviations in the output of `summary(str.mean)`. Thus, we introduce an alternative stress that keeps the mean of $Z_1$ fixed at 100, but increases its standard deviation from 40 to 50. This new stress is seen to impact the standard deviation of the portfolio loss $Y$.
 
 ``` {r, example1_second_stress, echo = -2, warning = FALSE, message = FALSE}
 str.sd <- stress(type="mean sd", x = dat, k=1, new_means = 100, new_sd=50)
