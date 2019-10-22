@@ -1,33 +1,39 @@
 # (APPENDIX) Appendix {-}
 
-# Appendix Creidt
+# Appendix Credit Model
+
+This appendix discribes the credit model of Section \@ref(Sec:CreditModel) and provides the code for generating the data. 
+
+## Credit Model assumptions
+
+The credit model is based on the conditionally binomial credit model described in @Mcneil2015B which belongs to the family of mixture models. Specifically, we consider a portfolio that consists of three homogeneous sub-portfolios and denote the total aggregate loss of the portfolio by $L = L_1 + L_2+  L_2$, where $L_1, L_2, L_3$ are the aggregate loss of each sub-portgolio. Each subportfolio's aggregate loss is given by 
+\begin{equation}
+L_i=e_i\cdot\text{LGD}_i\cdot M_i,\quad i=1,2,3, 
+\end{equation}
+where $e_i$ and $M_i$ are the exposure and number of insolvencies of the $i^{\text{th}}$ sub-portfolio, respectively. The loss given default of sub-portfolio $i$, $\text{LGD}_i$ is 
+
+**Q** what is the formula for $LGD$?    
+
+The number of insolvencies $M_1, M_2, M_3$ are, conditionally given on $H_1, H_2, H_3$, independent and Binomially distributed with parameters $n_i$ and $H_i$.    
+
+**Q** What is $H_i$?   
+**Q** What is $n_i$?   
+
+$H_i$ follows a Beta distribution with shape and rate parameter $p_i$ and $\rho_i$, respectively, where $p_i$ is the default probability and $\rho_i$ the default correlation of sub-portfolio $i$. The dependence structure of $(H_1,H_2,H_3)$ is modelled via a Gaussian copula with correlation matrix +++
+
+**Q** where in the model is $m_i$, the portfolio size? 
 
 
-This appendix discribes the Credit Model in Section \@ref(#Sec:CreditModel) and provides the code for generating the data.
 
-The model considered is a simple variant of the conditionally binomial model described in +++Embrechts, Frey, Mc Neil+++ and belongs to the family of mixture models. The portfolio under study is split into three homogeneous subportfolios. For subportfolio $i$, $i=1,2,3$, we let
-
-  - $m_i=$ portfolio size
-  - $e_i=$ exposure
-  - $p_i=$ common default probability
-  - $\rho_i=$ common default correlation
-  - $M_i=$ number of insolvencies
-  - $L_i=$ aggregate loss
-  - $LGD_i=$ loss given default 
- 
-The leading assumption is that, conditionally on $(H_1,H_2,H_3)$, the numbers of losses $(M_1,M_2,M_3)$ are independent and with Binomial$(n_i,H_i)$ distribution. The aggregate losses in each subportfolio and the overall loss are then defined by
-\[L_i=e_i\cdot\text{LGD}_i\cdot M_i,\,i=1,2,3,\qquad L=L_1+L_2+L_3.\]
-
-For $i=1,2,3$, $H_i\sim \text{beta}(\alpha_i,\beta_i)$, where the parameters $\alpha_i,\beta_i$ are chose so as to match the default probabilty $p_i$ and correlation $\rho_i$ in each subportfolio. The dependence structure of $(H_1,H_2,H_3)$ is modelled via a Gaussian+++ copula with correlation matrix +++
-
-The following table resumes the parameter values adopted in the simulation
+The subsequent table sumamrises the parameter values used in the simulation.
 
 |$i$|$m_i$|$e_i$|$p_i$|$\rho_i$|$LGD_i$|
-|------|------|------|------|------|------|
+|:------|:------|:------|:------|:------|:------|
 |1|2500|80|0.0004|0.00040|0.250|
 |2|5000|25|0.0097|0.00440|0.375|
 |3|2500|10|0.0503|0.01328|0.500|
 
+## Code for generating the data of the credit model
 
 
 ```{r, eval=FALSE}

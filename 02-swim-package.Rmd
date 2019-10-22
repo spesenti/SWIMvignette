@@ -9,7 +9,7 @@
 While the SWIM package is designed to work on (Monte Carlo) realisations of model components, the scenario weights are derived in a general probabilistic framework. A baseline probability (representing the equiprobable Monte Carlo simulations) can be described by a probability measure $P$, and a stressed model by a different probabitlity measures $Q$. The stressed model is uniquely described by the change from the baseline to the stressed model, which can be seen as the scenario weights $W= \frac{dQ}{dP}$. A stressed model, under which the distribution of the model components fulfil specific stresses, is chosen such that the distortion to the baseline model is as small as possible in the Kullback-Leibler divergence (or relative entropy). Mathematically, a stressed model is the solutions to.
 \begin{equation} 
 \min_{ W } ~E(W \log (W)), \quad
-\text{subject to constraints of the model components under } P^W.
+\text{subject to constraints under } P^W.
 (\#eq:optimisation)
 \end{equation}
 Subsequently, we denote by a superscript $W$ the quantity of interest under the stressed model, such as $P^W, ~ E^W$ for the probabtility distribution and expectation under the stressed model, respectivley. We refer to @Pesenti2019 and references therein for further mathematical details and the derivations of solutions to \@ref(eq:optimisation).

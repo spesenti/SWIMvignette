@@ -1,7 +1,7 @@
 
 # Credit Risk Portfolio {#Sec:CreditModel}
 
-```{r, include = FALSE}
+```{r, CM-data, cache = TRUE, include = FALSE}
 #simulation of the credit model data (this will be removed)
 {
   library(SWIM)
@@ -96,28 +96,30 @@ contains 100,000 simulations of 7 variables $(L,L_1,L_2,L_3,H_1,H_2,H_3)$. The v
 
 In this example we introduce a stress to the Value at Risk of the overall loss $L$; in particular, we require that $\text{VaR}_{90\%}(L)$ be increased by $20\%$. This can be achieved in **SWIM** using the `stress` function with the argument `type = "VaR"`:
 
-```{r}
-stress.credit <- stress(type = "VaR", x = credit_data, k = "L", alpha = 0.9, q_ratio = 1.2)
+```{r, CM-stress-VaR, cache = TRUE}
+stress.credit <- stress(type = "VaR", x = credit_data, 
+                        k = "L", alpha = 0.9, q_ratio = 1.2)
 ```
 
 Further, we consider a second stress scenario under which, on top of the $20\%$ increase in $\text{VaR}_{90\%}(L)$, we add a $30\%$ increase in $\text{ES}_{90\%}(L)$. We decide to append this stress to the one already defined by setting `x = stress.credit`:
 
-```{r}
-stress.credit <- stress(type = "VaR ES", x = stress.credit, k = "L", alpha = 0.9, q_ratio = 1.2, s_ratio = 1.3)
+```{r, CM-stress-VaR-ES, cache = TRUE}
+stress.credit <- stress(type = "VaR ES", x = stress.credit, 
+                        k = "L", alpha = 0.9, q_ratio = 1.2, s_ratio = 1.3)
 ```
 
 ++++MAYBE CHANGE THE SECOND STRESS ACCORDING TO ANDREAS' SUGGESTION? IE LEAVE VAR UNCHANGED (CURRENTLY NOT POSSIBLE) AND STRESS ES ONLY?
 
 The `summary` function can be used to gather some information on a stressed object, and compare it to the original distribution (setting the option  `base = TRUE`):
 
-```{r}
+```{r, CM-summary, cache = TRUE}
 options(digits = 3)
 summary(stress.credit, base = TRUE)
 ```
 
 Note that information on the individual stresses can be recovered through the `get_specs` function, while `get_weight` allows to outsource the reweighting:
 
-```{r}
+```{r, CM-specs, cache = TRUE}
 options(digits = 3)
 get_specs(stress.credit)
 w <- get_weights(stress.credit)
@@ -127,7 +129,7 @@ colMeans(w)
 
 To better appreciate the impact of the stresses and compare their effects on the variables $L, M_1, M_2$ and $M_3$, the `plot_hist` and `plot_cdf` functions can be used. The option `xCol` specifies  which column of the data should be considered while `wCol` allows to precise the weights to be considered. Note that these graphical functions return an object compatible with the package **ggplot2**. As a consequence we can, for example, apply the function `grid.arrange` (of the package **gridExtra**) to compare the four histograms together:
 
-```{r}
+```{r, CM-plot}
 library(gridExtra)
 pL <- plot_hist(object = stress.credit, xCol = 1, wCol = 1, base = TRUE)
 class(pL)

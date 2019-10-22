@@ -118,7 +118,7 @@ plot(Y[1 : 5000], w.mean[1 : 5000], pch = 20, xlab = "Y", ylab = "scenario weigh
 
 Stress the mean of $Z_1$ did not impact the volatility of either $Z_1$ or $Y$, as can be seen by the practically unchanged standard deviations in the output of `summary(str.mean)`. Thus, we introduce an alternative stress that keeps the mean of $Z_1$ fixed at 100, but increases its standard deviation from 40 to 50. This new stress is seen to impact the standard deviation of the portfolio loss $Y$.
 
-``` {r, example1_second_stress, echo = -2, warning = FALSE, message = FALSE}
+``` {r, example1_second_stress, cache = TRUE, echo = -2, warning = FALSE, message = FALSE}
 str.sd <- stress(type="mean sd", x = dat, k=1, new_means = 100, new_sd=50)
 options(digits = 3)
 summary(str.sd, base = FALSE)
@@ -128,7 +128,7 @@ summary(str.sd, base = FALSE)
 Furthermore, in Figure \@ref(fig:example1-cdfs-sd), we compare the baseline and stressed cdfs of $Z_1$ and $Y$, under the new stress on $Z_1$. The crossing of probability distribution reflects the increase in volatility.
 
 
-``` {r, example1-cdfs-sd, warning = FALSE, message = FALSE, fig.show='hold', out.width = '50%', fig.cap = "Baseline and stressed empirical distribution functions of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$."}
+``` {r, example1-cdfs-sd, cache = TRUE, warning = FALSE, message = FALSE, fig.show='hold', out.width = '50%', fig.cap = "Baseline and stressed empirical distribution functions of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$."}
 plot_cdf(str.sd, xCol = "Z1", base = TRUE)
 plot_cdf(str.sd, xCol = 4, base = TRUE)
 
@@ -136,7 +136,7 @@ plot_cdf(str.sd, xCol = 4, base = TRUE)
 
 The different ways how a stress on the standard deviation of $Z_1$, compared to a stress on its mean, impact on the model, is reflected by the scenario weights. Figure \@ref(fig:example1-weights-sd) shows the pattern of the scenario weights and how, when stressing standard deviations, higher weight is placed on scenarios where $Z_1$ is extreme, either much lower or much higher than its mean of 100.
 
-``` {r, example1-weights-sd, warning = FALSE, message = FALSE, fig.show='hold', out.width = '50%',fig.cap = "Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$."}
+``` {r, example1-weights-sd, cache = TRUE, warning = FALSE, message = FALSE, fig.show='hold', out.width = '50%',fig.cap = "Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$."}
 
 w.sd <- get_weights(str.sd)
 plot(Z1[1:5000],w.sd[1:5000],pch=20,xlab="Z1",ylab="scenario weights")
@@ -148,7 +148,7 @@ plot(Y[1:5000],w.sd[1:5000],pch=20,xlab="Y",ylab="scenario weights")
 
 Finally we ought to note that not all stresses that one may wish to apply are feasible. Assume for example that we want to increase the mean of $Z_1$ from 100 to 300, which exceeds the maximum realisation of $Z_1$ in the baseline model. Then, clearly, no set of scenario weights can be found that produce a stress that yields the required mean for $Z_1$; consequently an error message is produced.
 
-``` {r, example1_third_stress,error=TRUE}
+``` {r, example1_third_stress, cache = TRUE, error=TRUE}
 str.sd <- stress(type="mean",x = dat, k=1, new_means = 300)
 max(Z1)
 
