@@ -1,6 +1,6 @@
 # (APPENDIX) Appendix {-}
 
-# Appendix Credit Model
+# Appendix Credit Model {#AppendixCM}
 
 This appendix discribes the credit model of Section \@ref(Sec:CreditModel) and provides the code for generating the data. 
 
