@@ -1,9 +1,12 @@
 
-# Credit Risk Portfolio {#Sec:CreditModel}
+# Simulation study {#Sec:CreditModel}
+
+## The credit risk portfolio 
 
 ```{r, loading-packages, cache = FALSE, include = FALSE}
-    library(SWIM)
-   library(copula)
+  library(SWIM)
+  library(copula)
+  options(digits = 3)
 ```
 
 
@@ -96,32 +99,38 @@ head(credit_data)
 
 ## Stressing the aggregate portfolio loss 
 
-First, we want to study the effect of stressing the (tail of) the aggregate portfolio on the sub-portfolios. Specifically, we stress the $VaR_{0.9}$ of the total loss of the aggregate portfolio by $20\%$. For this we use the `stress` function with the argument `type = "VaR"`. The input parameter `x` is the simulated data representing the three sub-portfolios and the three (conditional) default probabilites.  with `q_ratio = 1.2`  and `k = "L"`
+In this section, we study the effect of stressing the (tail of) the aggregate portfolio on the three sub-portfolios. First, we stress the $VaR_{0.9}$ of the total loss of the aggregate portfolio by $20\%$. For this we use the `stress` function with the argument `type = "VaR"`. The input parameter `x` is the simulated data, `k` corresponds to the name of the row `x` on which the stress is applied to, `alpha` determines the level of the stresses VaR and `q_ratio = 1.2` the percentage increase.
 
 ```{r, CM-stress-VaR, cache = TRUE}
-stress.credit <- stress(type = "VaR", x = credit_data, 
-                        k = "L", alpha = 0.9, q_ratio = 1.2)
+stress.credit <- stress(type = "VaR", x = credit_data, k = "L", 
+                        alpha = 0.9, q_ratio = 1.2)
 ```
 
-Further, we consider a second stress scenario under which, on top of the $20\%$ increase in $\text{VaR}_{90\%}(L)$, we add a $30\%$ increase in $\text{ES}_{90\%}(L)$. We decide to append this stress to the one already defined by setting `x = stress.credit`:
+Second, we consider, additionally to the $20\%$ increase in $\text{VaR}_{0.9}$, a $30\%$ increase in $\text{ES}_{0.9}$ of the aggregate portfolio $L$. Generating a stressed model, resulting from a simultaneous stress on the VaR and the ES can be acchieve using `type = "VaR ES"`. Note that both VaR and ES need be stressed at the same level `alpha = 0.9`. The additonal input parameter `s_ratio` determines the percentage increase in the ES. Instead of providing the percentage incease in the VaR and ES, the `stress` function allows for the actual stressed values using the parameters `s, q` instead of `s_ratio` and `q_ratio`, respectively. 
+
 
 ```{r, CM-stress-VaR-ES, cache = TRUE}
-stress.credit <- stress(type = "VaR ES", x = stress.credit, 
-                        k = "L", alpha = 0.9, q_ratio = 1.2, s_ratio = 1.3)
+stress.credit <- stress(type = "VaR ES", x = stress.credit, k = "L", 
+                        alpha = 0.9, q_ratio = 1.2, s_ratio = 1.3)
 ```
+
+Note, that as input `x` we used the above calucalted stressed model, resulting from a stress on the VaR. Using a stressed model as an input for the `stress` function is convenient for large data sets, as the `stress.credit` countains the original simualted data and the scenario weights. 
 
 ++++MAYBE CHANGE THE SECOND STRESS ACCORDING TO ANDREAS' SUGGESTION? IE LEAVE VAR UNCHANGED (CURRENTLY NOT POSSIBLE) AND STRESS ES ONLY?
 
-The `summary` function can be used to gather some information on a stressed object, and compare it to the original distribution (setting the option  `base = TRUE`):
 
-```{r, CM-summary, cache = TRUE}
+## Analysing the stressed model
+
+The `summary` function provides a statistical summary of the stressed models. Choosing   `base = TRUE`, compares the stressed models with the the simulated data - the baseline model.
+
+```{r, CM-summary, echo = -1, cache = TRUE}
 options(digits = 3)
 summary(stress.credit, base = TRUE)
 ```
 
-Note that information on the individual stresses can be recovered through the `get_specs` function, while `get_weight` allows to outsource the reweighting:
+The information on individual stresses can be recovered through the `get_specs` function and the actual scenario weitghts using `get_weight`.
 
-```{r, CM-specs, cache = TRUE}
+```{r, CM-specs, echo = -1, cache = TRUE}
 options(digits = 3)
 get_specs(stress.credit)
 w <- get_weights(stress.credit)
@@ -129,6 +138,9 @@ colMeans(w)
 ```
 +++HERE WE COULD USE THE "expected shortfall" FUNCTION (NOT AVAILABLE YET) TO CALCULATE THE EXPECTED SHORTFALL OF "stress.credit$stress1" 
 
+
+
+## Visual comparison
 To better appreciate the impact of the stresses and compare their effects on the variables $L, M_1, M_2$ and $M_3$, the `plot_hist` and `plot_cdf` functions can be used. The option `xCol` specifies  which column of the data should be considered while `wCol` allows to precise the weights to be considered. Note that these graphical functions return an object compatible with the package **ggplot2**. As a consequence we can, for example, apply the function `grid.arrange` (of the package **gridExtra**) to compare the four histograms together:
 
 ```{r, CM-plot1, cache = FALSE}
