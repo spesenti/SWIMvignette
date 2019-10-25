@@ -83,7 +83,7 @@ and `stress_VaR_ES()` solves for the constraints
 
 
 
-## Analysis of stressed models
+## Analysis of stressed models {#Sec:analysis}
 
 The function `summary()` is a methods for an object of class SWIM and provides summary statistics of the baseline and stressed models. If the SWIM object contains more than one set of scenario weights, each corresponding to one stressed model, the `stress()` function returns for each set of scenarion weights a list containting:    
 

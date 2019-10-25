@@ -89,9 +89,10 @@
 
 
 
-The credit model in this section is a conditionally binomial credit model and we refer to the Appendix \@ref(AppendixCM) for details and the generation of the simulated data. Of interest ist the total aggregate portfolio loss $L = L_1 + L_2 + L_3$, where $L_1, L_2, L_3$ are homogeneous subportfolios on comparable scale. The data set contains 100,000 simulations of the portfolio $L$, the sub-portfolios $L_1, L_2, L_3$ as well as the (conditional) default probability in each subportfolio $H_1, H_2, H_3$. A snipped of data set looks as follows:
+The credit model in this section is a conditionally binomial credit model and we refer to the Appendix \@ref(AppendixCM) for details and the generation of the simulated data. Of interest ist the total aggregate portfolio loss $L = L_1 + L_2 + L_3$, where $L_1, L_2, L_3$ are homogeneous subportfolios on comparable scale. The data set contains 100,000 simulations of the portfolio $L$, the sub-portfolios $L_1, L_2, L_3$ as well as the (conditional) default probability of each subportfolio $H_1, H_2, H_3$. A snipped of data set looks as follows:
 
 ```{r, CM-data-head, echo = FALSE, cache = TRUE}
+options(digits = 3)
 head(credit_data)
 ``` 
 
@@ -99,14 +100,14 @@ head(credit_data)
 
 ## Stressing the aggregate portfolio loss 
 
-In this section, we study the effect of stressing the (tail of) the aggregate portfolio on the three sub-portfolios. First, we stress the $VaR_{0.9}$ of the total loss of the aggregate portfolio by $20\%$. For this we use the `stress` function with the argument `type = "VaR"`. The input parameter `x` is the simulated data, `k` corresponds to the name of the row `x` on which the stress is applied to, `alpha` determines the level of the stresses VaR and `q_ratio = 1.2` the percentage increase.
+In this section, we study the effect of stresses on (the tail of) the aggregate portfolio on the three sub-portfolios. First, we stress the $VaR_{0.9}$ of the total loss of the aggregate portfolio by $20\%$. For this we use the `stress` function with the argument `type = "VaR"`. The input parameter `x` is the simulated data, `k` corresponds to the name of the row of `x` on which the stress is applied to, `alpha` determines the level of the stresses VaR and `q_ratio` the percentage increase.
 
 ```{r, CM-stress-VaR, cache = TRUE}
 stress.credit <- stress(type = "VaR", x = credit_data, k = "L", 
                         alpha = 0.9, q_ratio = 1.2)
 ```
 
-Second, we consider, additionally to the $20\%$ increase in $\text{VaR}_{0.9}$, a $30\%$ increase in $\text{ES}_{0.9}$ of the aggregate portfolio $L$. Generating a stressed model, resulting from a simultaneous stress on the VaR and the ES can be acchieve using `type = "VaR ES"`. Note that both VaR and ES need be stressed at the same level `alpha = 0.9`. The additonal input parameter `s_ratio` determines the percentage increase in the ES. Instead of providing the percentage incease in the VaR and ES, the `stress` function allows for the actual stressed values using the parameters `s, q` instead of `s_ratio` and `q_ratio`, respectively. 
+Second, we consider, additionally to the $20\%$ increase in $\text{VaR}_{0.9}$, a $30\%$ increase in $\text{ES}_{0.9}$ of the aggregate portfolio $L$. Generating a stressed model, resulting from a simultaneous stress on the VaR and the ES can be acchieve using `type = "VaR ES"`. Note that both VaR and ES need be stressed at the same level `alpha = 0.9`. The additonal input parameter `s_ratio` determines the percentage increase in the ES. Instead of providing the percentage inceases in the VaR and ES, the `stress` function allows for the actual stressed values of the VaR and ES using the parameters `s` and `q` instead of `s_ratio` and `q_ratio`, respectively. 
 
 
 ```{r, CM-stress-VaR-ES, cache = TRUE}
@@ -114,14 +115,14 @@ stress.credit <- stress(type = "VaR ES", x = stress.credit, k = "L",
                         alpha = 0.9, q_ratio = 1.2, s_ratio = 1.3)
 ```
 
-Note, that as input `x` we used the above calucalted stressed model, resulting from a stress on the VaR. Using a stressed model as an input for the `stress` function is convenient for large data sets, as the `stress.credit` countains the original simualted data and the scenario weights. 
+Note, that as input `x` we used the above calucalted stressed model, resulting from a stress on the $VaR_{0.9}$. Using a stressed model as an input for the `stress` function is convenient for large data sets, as the `stress` function returns an object (`stress.credit`) that countains the original simualted data and the scenario weights. 
 
 ++++MAYBE CHANGE THE SECOND STRESS ACCORDING TO ANDREAS' SUGGESTION? IE LEAVE VAR UNCHANGED (CURRENTLY NOT POSSIBLE) AND STRESS ES ONLY?
 
 
 ## Analysing the stressed model
 
-The `summary` function provides a statistical summary of the stressed models. Choosing   `base = TRUE`, compares the stressed models with the the simulated data - the baseline model.
+The `summary` function provides a statistical summary of the stressed models. Choosing  `base = TRUE`, compares the stressed models with the the simulated data - the baseline model.
 
 ```{r, CM-summary, echo = -1, cache = TRUE}
 options(digits = 3)
@@ -141,37 +142,43 @@ colMeans(w)
 
 
 ## Visual comparison
-To better appreciate the impact of the stresses and compare their effects on the variables $L, M_1, M_2$ and $M_3$, the `plot_hist` and `plot_cdf` functions can be used. The option `xCol` specifies  which column of the data should be considered while `wCol` allows to precise the weights to be considered. Note that these graphical functions return an object compatible with the package **ggplot2**. As a consequence we can, for example, apply the function `grid.arrange` (of the package **gridExtra**) to compare the four histograms together:
+The change of the distributions of the portfolio and subportfolios from the baseline to the stressed models can be visualised through `plot_hist` and `plot_cdf`. The following plot displays the empirical histogramm of the aggregate portfolio loss under the baseline and the two stressed models.
+
+```{r, CM-histL, cache = TRUE}
+plot_hist(object = stress.credit, xCol = "L", base = TRUE)
+```
+
+Both functions,`plot_hist` and `plot_cdf`, include the parameters `xCol` specifying the columns of the data and `wCol` determining the columns of the scenario weights. Thus, allowing to plot the impact of the stressed models on the subportfoios. The graphical functions `plot_hist` and `plot_cdf` functions return objects compatible with the package **ggplot2**. Thus, we can compare the histograms of the portfolio losses via the function `grid.arrange` (of the package **gridExtra**).
 
 ```{r, CM-plot1, cache = FALSE}
 library(gridExtra)
-pL <- plot_hist(object = stress.credit, xCol = 1, wCol = 1, base = TRUE)
-class(pL)
 pL1 <- plot_hist(object = stress.credit, xCol = 2, wCol = 1, base = TRUE)
 pL2 <- plot_hist(object = stress.credit, xCol = 3, wCol = 1, base = TRUE)
 pL3 <- plot_hist(object = stress.credit, xCol = 4, wCol = 1, base = TRUE)
-grid.arrange(pL, pL1, pL2, pL3, ncol = 2, nrow = 2)
+class(pL1)
+grid.arrange(pL1, pL2, pL3, ncol = 1, nrow = 3)
 ```
 
-It is also possible to compare more than one stress at a time in a single plot:
+From the plots we observe, that the subportfolios $L_2$ and $L_3$ are significanlty affected by the stress, while the distribution of $L_1$ is almost unchanged. 
 
-```{r, CM-plot2, cache = TRUE}
-plot_hist(object = stress.credit, xCol = 1, wCol = c(1,2),base = TRUE)
-```
 
-Both $L_2$ and $L_3$ are affected by the stress, while $L_1$'s distribution is almost unchanged. To obtain a more precise measure of the sensitivity of each factor to the stress can be obtained through the function `sensitivity`. In particular, with the default option `type = "Gamma", the function returns the ``Gamma'' sensitivity measure introduced in +++REVERSE SENSITIVITY?REPORT DEFINITION?+++.  Other available measures are based on the Kolmogorov and Wasserstein distances.
+## Sensitivity measures
+
+The impact of the stressed models on the model components can be quantified through sensitivity measures. The function `sensitivity` includes the *Kolmogorov*, the *Wasserstein* distance and the sensitivity measure *Gamma*, which can be specified through the optional parameter `type`. We refer to Section \@ref(Sec:analysis) for the definition. The Kolmogorov and the Wasserstein distance are useful to compare different stressed models, whereas the sensitivity measure Gamma ranks model components for one stressed model.
+
 
 ```{r, CM-sensitivity1, cache = TRUE}
 sensitivity(object = stress.credit, xCol = c(2 : 7), wCol = 1, type = "Gamma")
 ```
 
-Using the `sensitivity` function we can also analyse whether together the first and third tranches are able to exceed the riskiness of the second. This can be accomplished specifying, through the option `f`, a list of functions applicable to the columns `k` of the dataset. Finally, setting `xCol = NULL` allows to consider only the trasformed data:
+Using the `sensitivity` function we can analyse whether the first and third tranches are able to exceed the riskiness of the second. This can be accomplished specifying, through the option `f`, a list of functions applicable to the columns `k` of the dataset. Finally, setting `xCol = NULL` allows to consider only the transformed data:
 
 ```{r, CM-sensitivity2, cache = TRUE}
-sensitivity(object = stress.credit,type = "Gamma", f = list(function(x)x[1] + x[2]), k = list(c(2,4)), xCol = NULL, wCol = 1)
+sensitivity(object = stress.credit,type = "Gamma", f = list(function(x)x[1] + x[2]), 
+            k = list(c(2,4)), xCol = NULL, wCol = 1)
 ```
 
-The `importance_rank` function has the same structure of `sensitivity` but it will return the ranks, according to the absolute values, of the sensitivity measures. This function is particularly useful when there are several risk factors involved.
+The `importance_rank` function, having the same structure as the `sensitivity` function, return the ranks of the sensitivity measures. This function is particularly useful when there are several risk factors involved.
 
 ```{r, CM-rank, cache = TRUE}
 importance_rank(object = stress.credit, xCol = c(2 : 7), wCol = 1, type = "Gamma")  

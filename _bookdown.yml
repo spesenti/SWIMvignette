@@ -3,4 +3,4 @@ repo: https://github.com/spesenti/SWIMvignette
 output_dir: docs
 clean: [packages.bib, bookdown.bbl]
 new_session: yes
-# rmd_files: ["01-intro.Rmd"]
+# rmd_files: ["04-Credit-Model.Rmd"]
