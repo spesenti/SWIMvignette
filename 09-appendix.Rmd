@@ -2,7 +2,6 @@
 
 # Appendix Credit Model {#AppendixCM}
 
-
 ## Credit Model assumptions
 
 The credit model is based on the conditionally binomial credit model described in @Mcneil2015B which belongs to the family of mixture models. Specifically, we consider a portfolio that consists of three homogeneous sub-portfolios and denote the total aggregate loss of the portfolio by $L = L_1 + L_2+  L_2$, where $L_1, L_2, L_3$ are the aggregate losses of each sub-portfolio, given by 

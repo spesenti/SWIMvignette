@@ -1,3 +1,11 @@
+bookdown::pdf_book:
+  toc: true
+  documentclass: article
+  geometry: margin=1in
+  fontsize: 12pt
+  keep_tex: yes
+  citation_package: natbib
+
 bookdown::gitbook:
   lib_dir: assets
   split_by: chapter
@@ -7,7 +15,4 @@ bookdown::gitbook:
     search: yes
     css: toc.css
   split_bib: no
-  citation_package: natbib
-bookdown::pdf_book:
-  keep_tex: yes
   citation_package: natbib
