@@ -1,15 +1,7 @@
-# author: Silvana M. Pesenti
-# date: November 15, 2019
-output: github_document
----
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-
-# Vignette for the `R` package SWIM -- Scenario Weights for Importance Measurement (SWIM) 
+# Vignette for the `R` package SWIM -- Scenario Weights for Importance Measurement
  
-The SWIM package implements a flexible sensitivity analysis framework,
-  based primarily on results and tools developed by @Pesenti2019. SWIM provides a
+The [SWIM](https://CRAN.R-project.org/package=SWIM) package provides a
   stressed version of a stochastic model, subject to model components (random variables)
   fulfilling given probabilistic constraints (stresses). Possible stresses can be
   on  moments, probabilities of given events, and risk measures such as Value-at-Risk
