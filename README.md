@@ -1,8 +1,7 @@
 
 # Vignette for the `R` package SWIM -- Scenario Weights for Importance Measurement
  
-The [SWIM](https://CRAN.R-project.org/package=SWIM) package provides a
-  stressed version of a stochastic model, subject to model components (random variables)
+The `SWIM` ([CRAN](https://CRAN.R-project.org/package=SWIM; [GitHub](https://github.com/spesenti/SWIM)) package provides a stressed version of a stochastic model, subject to model components (random variables)
   fulfilling given probabilistic constraints (stresses). Possible stresses can be
   on  moments, probabilities of given events, and risk measures such as Value-at-Risk
   and Expected Shortfall. SWIM oparates upon a single set of simulated scenarios from
