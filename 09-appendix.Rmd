@@ -27,7 +27,6 @@ The subsequent table summarises the parameter values used in the simulation.
 
 
 ```{r, eval=FALSE}
-  library(SWIM)
   set.seed(1)
   library(copula)
   nsim <- 100000
