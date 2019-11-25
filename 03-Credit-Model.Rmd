@@ -70,7 +70,7 @@ w <- get_weights(stress.credit)
 par(mfrow = c(1, 2))
 plot(x = credit_data[, "L"], y = w[, 1], xlab = "L", ylab = "weights", main ="stressing VaR")
 plot(x = credit_data[, "L"], y = w[, 1], xlab = "L", ylab = "weights", main = "stressing VaR and ES")
-``
+```
 
 ## Visual comparison
 The change in the distributions of the portfolio and subportfolios from the baseline to the stressed models can be visualised through the functions `plot_hist` and `plot_cdf`. The following figure displays the histogram of the aggregate portfolio loss under the baseline and the two stressed models.
@@ -124,17 +124,17 @@ It transpires that subportfolios $2$ and $3$ are, in this order, most responsibl
 ```{r, CM-stress-fixed-VaR}
 VaR.L <- quantile(x = credit_data[, "L"], prob = 0.9, type = 1)
 q.H2 <- quantile(x = credit_data[, "H2"], prob = 0.75, type = 1)
-# str.var.credit2 <- stress_moment(x = credit_data,
-#                                 f = list(function(x)1 * (x <= VaR.L * 1.2),
-#                                          function(x)x,
-#                                          function(x)1 * (x <= q.H2)),
-#                                 m = c(0.9, mean(credit_data[, "H2"]), 0.75),
-#                                 k = c(1, 6, 6), show = TRUE)
-# stress.credit <- stress_moment(x = stress.credit, f =  list(function(x)1 * (x <= VaR.L * 1.2), function(x)x, function(x)1 * (x <= q.H2)), m = c(0.9, mean(credit_data[, "H2"]), 0.75), k = c(1, 6, 6))
+str.var.credit2 <- stress_moment(x = credit_data,
+                                 f = list(function(x)1 * (x <= VaR.L * 1.2),
+                                          function(x)x,
+                                          function(x)1 * (x <= q.H2)),
+                                 m = c(0.9, mean(credit_data[, "H2"]), 0.75),
+                                 k = c(1, 6, 6), show = TRUE)
+ stress.credit <- stress_moment(x = stress.credit, f =  list(function(x)1 * (x <= VaR.L * 1.2), function(x)x, function(x)1 * (x <= q.H2)), m = c(0.9, mean(credit_data[, "H2"]), 0.75), k = c(1, 6, 6))
 summary(str.var.credit2)
-# summary(stress.credit)
+ summary(stress.credit)
 sensitivity(object = str.var.credit2, xCol = c(2 : 7), type = "Gamma")
-# sensitivity(object = stress.credit, xCol = c(2 : 7), type = "Gamma")
+ sensitivity(object = stress.credit, xCol = c(2 : 7), type = "Gamma")
 ```
 
 +++THIS SHOULD BE APPENDED TO "stress.credit" WHEN "stress_moment" IS FIXED
