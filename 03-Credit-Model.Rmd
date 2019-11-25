@@ -21,6 +21,7 @@ The credit model in this section is a conditionally binomial loan portfolio mode
 
 ```{r, CM-data-head, echo = FALSE, cache = TRUE}
 options(digits = 3)
+data(credit_data)
 head(credit_data)
 ``` 
 
