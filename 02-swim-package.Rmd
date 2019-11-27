@@ -29,6 +29,8 @@ The subsequent table is a collection of all implemented types of stresses in the
 | `stress_VaR_ES()`  | VaR and ES risk measures              |`VaR ES` | Equation \@ref(eq:optimisationVaRES)
 
 
+
+
 ### The `stress` function and the `SWIM` object {#Rstress}
 The `stress()` function is a wrapper for the `stress_type` functions, where `stress(type = "type", )` and `stress_type()` are equivalent. The `stress()` function solves optimisation \@ref(eq:optimisation) for constraints specified through `type`and returns a `SWIM` object containing a list of:
 
