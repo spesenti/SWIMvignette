@@ -24,11 +24,9 @@ The subsequent table is a collection of all implemented types of stresses in the
 | `stress_prob()`    | disjoint intervals                    |`prob`   | Equation \@ref(eq:optimisationprob)
 | `stress_mean()`    | means                                 |`mean`   | Equation \@ref(eq:optimisationmoment)
 | `stress_mean_sd()` | means and standard deviations         |`mean sd`| Equation \@ref(eq:optimisationmoment)
-| `stress_moment()`  | moments, functions of moments         |`moment` | Equation \@ref(eq:optimisationmoment)
+| `stress_moment()`  | moments, moments of functions         |`moment` | Equation \@ref(eq:optimisationmoment)
 | `stress_VaR()`     | VaR risk measure, a quantile          |`VaR`    | Equation \@ref(eq:optimisationVaR)
 | `stress_VaR_ES()`  | VaR and ES risk measures              |`VaR ES` | Equation \@ref(eq:optimisationVaRES)
-
-
 
 
 ### The `stress` function and the `SWIM` object {#Rstress}
