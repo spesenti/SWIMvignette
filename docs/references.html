@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | SWIM: Scenario Weights for Importance Measurement</title>
-  <meta name="description" content="References | SWIM: Scenario Weights for Importance Measurement" />
-  <meta name="generator" content="bookdown 0.12 and GitBook 2.6.7" />
+  <title>References | Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis</title>
+  <meta name="description" content="References | Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis" />
+  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | SWIM: Scenario Weights for Importance Measurement" />
+  <meta property="og:title" content="References | Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis" />
   <meta property="og:type" content="book" />
   
   
@@ -16,22 +16,32 @@
   <meta name="github-repo" content="spesenti/SWIMvignette" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | SWIM: Scenario Weights for Importance Measurement" />
+  <meta name="twitter:title" content="References | Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis" />
   
   
   
 
+<meta name="author" content="Silvana M. Pesenti ,2, Alberto Bettini3, Pietro Millossovich4,5, Andreas Tsanakas5" />
 
 
-<meta name="date" content="2019-08-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="life-annuity-portfolio.html">
-
+<link rel="prev" href="Sec-CreditModel.html"/>
+<link rel="next" href="AppendixCM.html"/>
+<style type="text/css">
+p.abstract{
+  text-align: center;
+  font-weight: bold;
+}
+div.abstract{
+  margin: auto;
+  width: 90%;
+}
+</style>
 <script src="assets/jquery-2.2.3/jquery.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -39,6 +49,9 @@
 <link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
 
 
 
@@ -123,27 +136,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Overview</a><ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#installation"><i class="fa fa-check"></i><b>1.1</b> Installation</a></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#background-and-contribution"><i class="fa fa-check"></i><b>1.1</b> Background and contribution</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#installation"><i class="fa fa-check"></i><b>1.2</b> Installation</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#structure-of-the-paper"><i class="fa fa-check"></i><b>1.3</b> Structure of the paper</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a><ul>
-<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#an-example"><i class="fa fa-check"></i><b>2.1</b> An example</a><ul>
-<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#intro-ex-stress"><i class="fa fa-check"></i><b>2.1.1</b> Stressing the portfolio</a></li>
-<li class="chapter" data-level="2.1.2" data-path="introduction.html"><a href="introduction.html#the-scenario-weights"><i class="fa fa-check"></i><b>2.1.2</b> The scenario weights</a></li>
+<li class="chapter" data-level="2" data-path="Sec-Intro.html"><a href="Sec-Intro.html"><i class="fa fa-check"></i><b>2</b> What is SWIM?</a><ul>
+<li class="chapter" data-level="2.1" data-path="Sec-Intro.html"><a href="Sec-Intro.html#sensitivity-testing-and-scenario-weights"><i class="fa fa-check"></i><b>2.1</b> Sensitivity testing and scenario weights</a></li>
+<li class="chapter" data-level="2.2" data-path="Sec-Intro.html"><a href="Sec-Intro.html#an-introductory-example"><i class="fa fa-check"></i><b>2.2</b> An introductory example</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="Sec-Scope.html"><a href="Sec-Scope.html"><i class="fa fa-check"></i><b>3</b> Scope of the SWIM package</a><ul>
+<li class="chapter" data-level="3.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Rfunctions"><i class="fa fa-check"></i><b>3.1</b> Stressing a model</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Rstress"><i class="fa fa-check"></i><b>3.1.1</b> The <code>stress</code> function and the <code>SWIM</code> object</a></li>
+<li class="chapter" data-level="3.1.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#stressing-disjoint-probability-intervals"><i class="fa fa-check"></i><b>3.1.2</b> Stressing disjoint probability intervals</a></li>
+<li class="chapter" data-level="3.1.3" data-path="Sec-Scope.html"><a href="Sec-Scope.html#stressing-moments"><i class="fa fa-check"></i><b>3.1.3</b> Stressing moments</a></li>
+<li class="chapter" data-level="3.1.4" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Sec:RiskMeasures"><i class="fa fa-check"></i><b>3.1.4</b> Stressing risk measures</a></li>
+<li class="chapter" data-level="3.1.5" data-path="Sec-Scope.html"><a href="Sec-Scope.html#user-defined-scenario-weights"><i class="fa fa-check"></i><b>3.1.5</b> User defined scenario weights</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Sec:analysis"><i class="fa fa-check"></i><b>3.2</b> Analysis of stressed models</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#distributional-comparison"><i class="fa fa-check"></i><b>3.2.1</b> Distributional comparison</a></li>
+<li class="chapter" data-level="3.2.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#sensitivity-measures"><i class="fa fa-check"></i><b>3.2.2</b> Sensitivity measures</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="scope-of-the-swim-package.html"><a href="scope-of-the-swim-package.html"><i class="fa fa-check"></i><b>3</b> Scope of the SWIM package</a><ul>
-<li class="chapter" data-level="3.1" data-path="scope-of-the-swim-package.html"><a href="scope-of-the-swim-package.html#Rfunctions"><i class="fa fa-check"></i><b>3.1</b> Stressing a model</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="scope-of-the-swim-package.html"><a href="scope-of-the-swim-package.html#stressing-disjoint-probability-intervals"><i class="fa fa-check"></i><b>3.1.1</b> Stressing disjoint probability intervals</a></li>
-<li class="chapter" data-level="3.1.2" data-path="scope-of-the-swim-package.html"><a href="scope-of-the-swim-package.html#stressing-moments"><i class="fa fa-check"></i><b>3.1.2</b> Stressing moments</a></li>
-<li class="chapter" data-level="3.1.3" data-path="scope-of-the-swim-package.html"><a href="scope-of-the-swim-package.html#stressing-risk-measures"><i class="fa fa-check"></i><b>3.1.3</b> Stressing risk measures</a></li>
-</ul></li>
-<li class="chapter" data-level="3.2" data-path="scope-of-the-swim-package.html"><a href="scope-of-the-swim-package.html#visual-tools"><i class="fa fa-check"></i><b>3.2</b> Visual tools</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="life-annuity-portfolio.html"><a href="life-annuity-portfolio.html"><i class="fa fa-check"></i><b>4</b> Life Annuity Portfolio</a><ul>
-<li class="chapter" data-level="4.1" data-path="life-annuity-portfolio.html"><a href="life-annuity-portfolio.html#assumptions"><i class="fa fa-check"></i><b>4.1</b> Assumptions</a></li>
+<li class="chapter" data-level="4" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html"><i class="fa fa-check"></i><b>4</b> Simulation study</a><ul>
+<li class="chapter" data-level="4.1" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#a-credit-risk-portfolio"><i class="fa fa-check"></i><b>4.1</b> A credit risk portfolio</a></li>
+<li class="chapter" data-level="4.2" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#stressing-the-aggregate-portfolio-loss"><i class="fa fa-check"></i><b>4.2</b> Stressing the aggregate portfolio loss</a></li>
+<li class="chapter" data-level="4.3" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#analysing-the-stressed-model"><i class="fa fa-check"></i><b>4.3</b> Analysing the stressed model</a></li>
+<li class="chapter" data-level="4.4" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#visual-comparison"><i class="fa fa-check"></i><b>4.4</b> Visual comparison</a></li>
+<li class="chapter" data-level="4.5" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#sensitivity-measures-1"><i class="fa fa-check"></i><b>4.5</b> Sensitivity measures</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="AppendixCM.html"><a href="AppendixCM.html"><i class="fa fa-check"></i><b>A</b> Appendix Credit Model</a><ul>
+<li class="chapter" data-level="A.1" data-path="AppendixCM.html"><a href="AppendixCM.html#credit-model-assumptions"><i class="fa fa-check"></i><b>A.1</b> Credit Model assumptions</a></li>
+<li class="chapter" data-level="A.2" data-path="AppendixCM.html"><a href="AppendixCM.html#code-for-generating-the-data"><i class="fa fa-check"></i><b>A.2</b> Code for generating the data</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -153,7 +180,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">SWIM: Scenario Weights for Importance Measurement</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Scenario Weights for Importance Measurement (SWIM) – an <code>R</code> package for sensitivity analysis</a>
           </h1>
         </div>
 
@@ -163,38 +190,61 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>
-
-<div id="refs" class="references">
-<div>
+<div id="refs">
+<div id="ref-Beckman1987">
+<p>Beckman, Richard J, and Michael D McKay. 1987. “Monte Carlo Estimation Under Different Distributions Using the Same Simulation.” <em>Technometrics</em> 29 (2): 153–60.</p>
+</div>
+<div id="ref-Borgonovo2016">
+<p>Borgonovo, Emanuele, and Elmar Plischke. 2016. “Sensitivity Analysis: A Review of Recent Advances.” <em>European Journal of Operational Research</em> 248 (3): 869–87.</p>
+</div>
+<div id="ref-Breuer2013">
+<p>Breuer, Thomas, and Imre Csiszár. 2013. “Systematic Stress Tests with Entropic Plausibility Constraints.” <em>Journal of Banking &amp; Finance</em> 37 (5): 1552–9.</p>
+</div>
+<div id="ref-Cambou2017">
 <p>Cambou, Mathieu, and Damir Filipović. 2017. “Model Uncertainty and Scenario Aggregation.” <em>Mathematical Finance</em> 27 (2): 534–67.</p>
 </div>
-<div>
-<p>Csiszár, Imre. 1975. “I-Divergence Geometry of Probability Distributions and Minimization Problems.” <em>The Annals of Probability</em> 3 (1): 146–58.</p>
+<div id="ref-Rsensitivity">
+<p>Iooss, Bertrand, Alexandre Janon, and Gilles Pujol. 2019. <em>Sensitivity: Global Sensitivity Analysis of Model Outputs</em>. <a href="https://CRAN.R-project.org/package=sensitivity">https://CRAN.R-project.org/package=sensitivity</a>.</p>
 </div>
-<div>
-<p>Olivieri, Annamaria, and Ermanno Pitacco. 2003. “Solvency Requirements for Pension Annuities.” <em>Journal of Pension Economics &amp; Finance</em> 2 (2): 127–57.</p>
+<div id="ref-Mcneil2015B">
+<p>McNeil, Alexander J, Rüdiger Frey, and Paul Embrechts. 2015. <em>Quantitative Risk Management: Concepts, Techniques and Tools-Revised Edition</em>. Princeton university press.</p>
 </div>
-<div>
+<div id="ref-Pesenti2019">
 <p>Pesenti, Silvana M, Pietro Millossovich, and Andreas Tsanakas. 2019. “Reverse Sensitivity Testing: What Does It Take to Break the Model?” <em>European Journal of Operational Research</em> 274 (2): 654–70.</p>
 </div>
+<div id="ref-Saltelli2008">
+<p>Saltelli, Andrea, Marco Ratto, Terry Andres, Francesca Campolongo, Jessica Cariboni, Debora Gatelli, Michaela Saisana, and Stefano Tarantola. 2008. <em>Global Sensitivity Analysis: The Primer</em>. John Wiley &amp; Sons.</p>
+</div>
+<div id="ref-Tsanakas2016b">
+<p>Tsanakas, Andreas, and Pietro Millossovich. 2016. “Sensitivity Analysis Using Risk Measures.” <em>Risk Analysis</em> 36 (1): 30–48.</p>
+</div>
+<div id="ref-Weber2007">
+<p>Weber, Stefan. 2007. “Distribution-Invariant Risk Measures, Entropy, and Large Deviations.” <em>Journal of Applied Probability</em> 44 (1): 16–40.</p>
 </div>
 </div>
+
+</div>
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="life-annuity-portfolio.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="Sec-CreditModel.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="AppendixCM.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>
 <script src="assets/gitbook-2.6.7/js/lunr.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
@@ -202,12 +252,11 @@ gitbook.start({
 "github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -222,13 +271,19 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": null,
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-SWIM.pdf"],
 "toc": {
 "collapse": "subsection"
 },
 "toolbar": {
 "position": "static"
-}
+},
+"search": true,
+"css": "toc.css"
 });
 });
 </script>
@@ -240,8 +295,9 @@ gitbook.start({
     script.type = "text/javascript";
     var src = "true";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();

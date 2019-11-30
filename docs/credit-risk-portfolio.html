@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4 Credit Risk Portfolio | SWIM: Scenario Weights for Importance Measurement</title>
+  <meta name="description" content="4 Credit Risk Portfolio | SWIM: Scenario Weights for Importance Measurement" />
+  <meta name="generator" content="bookdown 0.12 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="4 Credit Risk Portfolio | SWIM: Scenario Weights for Importance Measurement" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  <meta name="github-repo" content="spesenti/SWIMvignette" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4 Credit Risk Portfolio | SWIM: Scenario Weights for Importance Measurement" />
+  
+  
+  
+
+<meta name="author" content="Silvana M. Pesenti ,2, Alberto Bettini, Pietro Millossovich3,4, Andreas Tsanakas4" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="Sec-Scope.html">
+<link rel="next" href="references.html">
+<script src="assets/jquery-2.2.3/jquery.min.js"></script>
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#abstract"><i class="fa fa-check"></i><b>1.1</b> Abstract</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#background"><i class="fa fa-check"></i><b>1.2</b> Background</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#concepts-of-the-swim-package"><i class="fa fa-check"></i><b>1.3</b> Concepts of the <code>SWIM</code> package</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#installation"><i class="fa fa-check"></i><b>1.3.1</b> Installation</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#structure-of-the-vignette"><i class="fa fa-check"></i><b>1.4</b> Structure of the vignette</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="what-is-swim.html"><a href="what-is-swim.html"><i class="fa fa-check"></i><b>2</b> What is SWIM?</a><ul>
+<li class="chapter" data-level="2.1" data-path="what-is-swim.html"><a href="what-is-swim.html#sensitivity-testing-and-scenario-weights"><i class="fa fa-check"></i><b>2.1</b> Sensitivity testing and scenario weights</a></li>
+<li class="chapter" data-level="2.2" data-path="what-is-swim.html"><a href="what-is-swim.html#an-introductory-example"><i class="fa fa-check"></i><b>2.2</b> An introductory example</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="Sec-Scope.html"><a href="Sec-Scope.html"><i class="fa fa-check"></i><b>3</b> Scope of the SWIM package</a><ul>
+<li class="chapter" data-level="3.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Rfunctions"><i class="fa fa-check"></i><b>3.1</b> Stressing a model</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Rstress"><i class="fa fa-check"></i><b>3.1.1</b> The <code>stress</code> function and the <code>SWIM</code> object</a></li>
+<li class="chapter" data-level="3.1.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#stressing-disjoint-probability-intervals"><i class="fa fa-check"></i><b>3.1.2</b> Stressing disjoint probability intervals</a></li>
+<li class="chapter" data-level="3.1.3" data-path="Sec-Scope.html"><a href="Sec-Scope.html#stressing-moments"><i class="fa fa-check"></i><b>3.1.3</b> Stressing moments</a></li>
+<li class="chapter" data-level="3.1.4" data-path="Sec-Scope.html"><a href="Sec-Scope.html#stressing-risk-measures"><i class="fa fa-check"></i><b>3.1.4</b> Stressing risk measures</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#analysis-of-stressed-models"><i class="fa fa-check"></i><b>3.2</b> Analysis of stressed models</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="credit-risk-portfolio.html"><a href="credit-risk-portfolio.html"><i class="fa fa-check"></i><b>4</b> Credit Risk Portfolio</a><ul>
+<li class="chapter" data-level="4.1" data-path="credit-risk-portfolio.html"><a href="credit-risk-portfolio.html#credit-model-example-seccreditmodel"><i class="fa fa-check"></i><b>4.1</b> Credit model example (#Sec:CreditModel)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="chapter" data-level="5" data-path="appendix-appendix.html"><a href="appendix-appendix.html"><i class="fa fa-check"></i><b>5</b> (APPENDIX) Appendix</a></li>
+<li class="chapter" data-level="6" data-path="credit-model.html"><a href="credit-model.html"><i class="fa fa-check"></i><b>6</b> Credit Model</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">SWIM: Scenario Weights for Importance Measurement</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="credit-risk-portfolio" class="section level1">
+<h1><span class="header-section-number">4</span> Credit Risk Portfolio</h1>
+<p>The data set</p>
+<p><strong>insert</strong>
+data(creditportfolio)
+<strong>here</strong></p>
+<p>contains 100,000 simulations of 7 variables <span class="math inline">\((L,L_1,L_2,L_3,H_1,H_2,H_3)\)</span>. The variables <span class="math inline">\(L_1,L_2,L_3\)</span> represent losses generated by three homogeneous subportfolios ranked according to their risk profile. Each subportfolio is homogeneous as of exposure, loss given default, default probability and correlation. The three dependent variables <span class="math inline">\(H_1,H_2,H_3\)</span> represent the common (conditional) default probability in each subportfolio. The total portfolio loss is <span class="math inline">\(L=L_1+L_2+L_3\)</span>. The precise assumptions and parameter values defining this data set are in Appendix.</p>
+<div id="credit-model-example-seccreditmodel" class="section level2">
+<h2><span class="header-section-number">4.1</span> Credit model example (#Sec:CreditModel)</h2>
+<p>In this example we introduce a stress to the Value at Risk of the overall loss <span class="math inline">\(L\)</span>; in particular, we require that <span class="math inline">\(\text{VaR}_{90\%}(L)\)</span> be increased by <span class="math inline">\(20\%\)</span>. This can be achieved in <strong>SWIM</strong> using the <code>stress</code> function with the argument <code>type = "VaR"</code>:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">stress.credit &lt;-<span class="st"> </span><span class="kw">stress</span>(<span class="dt">type =</span> <span class="st">&quot;VaR&quot;</span>, <span class="dt">x =</span> credit_data, <span class="dt">k =</span> <span class="st">&quot;L&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.9</span>, <span class="dt">q_ratio =</span> <span class="fl">1.2</span>)</a></code></pre></div>
+<p>Further, we consider a second stress scenario under which, on top of the <span class="math inline">\(20\%\)</span> increase in <span class="math inline">\(\text{VaR}_{90\%}(L)\)</span>, we add a <span class="math inline">\(30\%\)</span> increase in <span class="math inline">\(\text{ES}_{90\%}(L)\)</span>. We decide to append this stress to the one already defined by setting <code>x = stress.credit</code>:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1">stress.credit &lt;-<span class="st"> </span><span class="kw">stress</span>(<span class="dt">type =</span> <span class="st">&quot;VaR ES&quot;</span>, <span class="dt">x =</span> stress.credit, <span class="dt">k =</span> <span class="st">&quot;L&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.9</span>, <span class="dt">q_ratio =</span> <span class="fl">1.2</span>, <span class="dt">s_ratio =</span> <span class="fl">1.3</span>)</a></code></pre></div>
+<p>++++MAYBE CHANGE THE SECOND STRESS ACCORDING TO ANDREAS’ SUGGESTION? IE LEAVE VAR UNCHANGED (CURRENTLY NOT POSSIBLE) AND STRESS ES ONLY?</p>
+<p>The <code>summary</code> function can be used to gather some information on a stressed object, and compare it to the original distribution (setting the option <code>base = TRUE</code>):</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw">options</span>(<span class="dt">digits =</span> <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb17-2" title="2"><span class="kw">summary</span>(stress.credit, <span class="dt">base =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<pre><code>## $base
+##                    L    L1     L2      L3       H1      H2     H3
+## mean        1102.914 19.96 454.04 628.912 0.000401 0.00968 0.0503
+## sd           526.538 28.19 310.99 319.715 0.000400 0.00649 0.0252
+## skewness       0.942  2.10   1.31   0.945 1.969539 1.30834 0.9501
+## ex kurtosis    1.326  6.21   2.52   1.256 5.615908 2.49792 1.2708
+## 1st Qu.      718.750  0.00 225.00 395.000 0.000115 0.00490 0.0318
+## Median      1020.625  0.00 384.38 580.000 0.000279 0.00829 0.0464
+## 3rd Qu.     1398.750 20.00 609.38 810.000 0.000555 0.01296 0.0643
+## 
+## $`stress 1`
+##                   L    L1     L2     L3       H1      H2     H3
+## mean        1193.39 20.83 501.10 671.46 0.000417 0.01066 0.0536
+## sd           623.48 29.09 363.57 361.21 0.000415 0.00756 0.0285
+## skewness       1.01  2.09   1.36   1.02 1.973337 1.35075 1.0283
+## ex kurtosis    0.94  6.14   2.23   1.22 5.630153 2.23353 1.2382
+## 1st Qu.      739.38  0.00 234.38 405.00 0.000120 0.00512 0.0328
+## Median      1065.62 20.00 412.50 605.00 0.000290 0.00878 0.0483
+## 3rd Qu.     1505.62 40.00 675.00 865.00 0.000578 0.01422 0.0688
+## 
+## $`stress 2`
+##                   L    L1     L2     L3       H1      H2     H3
+## mean        1224.76 21.13 519.17 684.46 0.000423 0.01102 0.0547
+## sd           707.59 29.61 410.43 390.67 0.000427 0.00851 0.0308
+## skewness       1.48  2.13   1.77   1.28 2.034985 1.76908 1.2802
+## ex kurtosis    2.69  6.49   4.18   2.15 6.009169 4.26790 2.1077
+## 1st Qu.      739.38  0.00 234.38 405.00 0.000121 0.00512 0.0328
+## Median      1065.62 20.00 412.50 605.00 0.000293 0.00878 0.0484
+## 3rd Qu.     1505.62 40.00 675.00 870.00 0.000584 0.01430 0.0692</code></pre>
+<p>Note that information on the individual stresses can be recovered through the <code>get_specs</code> function, while <code>get_weight</code> allows to outsource the reweighting:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="kw">options</span>(<span class="dt">digits =</span> <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb19-2" title="2"><span class="kw">get_specs</span>(stress.credit)</a></code></pre></div>
+<pre><code>##            type k alpha       q            s
+## stress 1    VaR L   0.9 2174.25         &lt;NA&gt;
+## stress 2 VaR ES L   0.9 2174.25 2848.5562625</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">w &lt;-<span class="st"> </span><span class="kw">get_weights</span>(stress.credit)</a>
+<a class="sourceLine" id="cb21-2" title="2"><span class="kw">colMeans</span>(w)</a></code></pre></div>
+<pre><code>## stress 1 stress 2 
+##        1        1</code></pre>
+<p>+++HERE WE COULD USE THE “expected shortfall” FUNCTION (NOT AVAILABLE YET) TO CALCULATE THE EXPECTED SHORTFALL OF “stress.credit$stress1”</p>
+<p>To better appreciate the impact of the stresses and compare their effects on the variables <span class="math inline">\(L, M_1, M_2\)</span> and <span class="math inline">\(M_3\)</span>, the <code>plot_hist</code> and <code>plot_cdf</code> functions can be used. The option <code>xCol</code> specifies which column of the data should be considered while <code>wCol</code> allows to precise the weights to be considered. Note that these graphical functions return an object compatible with the package <strong>ggplot2</strong>. As a consequence we can, for example, apply the function <code>grid.arrange</code> (of the package <strong>gridExtra</strong>) to compare the four histograms together:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="kw">library</span>(gridExtra)</a>
+<a class="sourceLine" id="cb23-2" title="2">pL &lt;-<span class="st"> </span><span class="kw">plot_hist</span>(<span class="dt">object =</span> stress.credit, <span class="dt">xCol =</span> <span class="dv">1</span>, <span class="dt">wCol =</span> <span class="dv">1</span>, <span class="dt">base =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb23-3" title="3"><span class="kw">class</span>(pL)</a></code></pre></div>
+<pre><code>## [1] &quot;gg&quot;     &quot;ggplot&quot;</code></pre>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1">pL1 &lt;-<span class="st"> </span><span class="kw">plot_hist</span>(<span class="dt">object =</span> stress.credit, <span class="dt">xCol =</span> <span class="dv">2</span>, <span class="dt">wCol =</span> <span class="dv">1</span>, <span class="dt">base =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb25-2" title="2">pL2 &lt;-<span class="st"> </span><span class="kw">plot_hist</span>(<span class="dt">object =</span> stress.credit, <span class="dt">xCol =</span> <span class="dv">3</span>, <span class="dt">wCol =</span> <span class="dv">1</span>, <span class="dt">base =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb25-3" title="3">pL3 &lt;-<span class="st"> </span><span class="kw">plot_hist</span>(<span class="dt">object =</span> stress.credit, <span class="dt">xCol =</span> <span class="dv">4</span>, <span class="dt">wCol =</span> <span class="dv">1</span>, <span class="dt">base =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb25-4" title="4"><span class="kw">grid.arrange</span>(pL, pL1, pL2, pL3, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">nrow =</span> <span class="dv">2</span>)</a></code></pre></div>
+<p><img src="04-Credit-Model_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>It is also possible to compare more than one stress at a time in a single plot:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="kw">plot_hist</span>(<span class="dt">object =</span> stress.credit, <span class="dt">xCol =</span> <span class="dv">1</span>, <span class="dt">wCol =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),<span class="dt">base =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p><img src="04-Credit-Model_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>Both <span class="math inline">\(L_2\)</span> and <span class="math inline">\(L_3\)</span> are affected by the stress, while <span class="math inline">\(L_1\)</span>’s distribution is almost unchanged. To obtain a more precise measure of the sensitivity of each factor to the stress can be obtained through the function <code>sensitivity</code>. In particular, with the default option `type = “Gamma”, the function returns the ``Gamma’’ sensitivity measure introduced in +++REVERSE SENSITIVITY?REPORT DEFINITION?+++. Other available measures are based on the Kolmogorov and Wasserstein distances.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="kw">sensitivity</span>(<span class="dt">object =</span> stress.credit, <span class="dt">xCol =</span> <span class="kw">c</span>(<span class="dv">2</span> <span class="op">:</span><span class="st"> </span><span class="dv">7</span>), <span class="dt">wCol =</span> <span class="dv">1</span>, <span class="dt">type =</span> <span class="st">&quot;Gamma&quot;</span>)</a></code></pre></div>
+<pre><code>##     stress  type   L1    L2    L3    H1    H2    H3
+## 1 stress 1 Gamma 0.15 0.819 0.772 0.196 0.811 0.767</code></pre>
+<p>Using the <code>sensitivity</code> function we can also analyse whether together the first and third tranches are able to exceed the riskiness of the second. This can be accomplished specifying, through the option <code>f</code>, a list of functions applicable to the columns <code>k</code> of the dataset. Finally, setting <code>xCol = NULL</code> allows to consider only the trasformed data:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="kw">sensitivity</span>(<span class="dt">object =</span> stress.credit,<span class="dt">type =</span> <span class="st">&quot;Gamma&quot;</span>, <span class="dt">f =</span> <span class="kw">list</span>(<span class="cf">function</span>(x)x[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>x[<span class="dv">2</span>]), <span class="dt">k =</span> <span class="kw">list</span>(<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>)), <span class="dt">xCol =</span> <span class="ot">NULL</span>, <span class="dt">wCol =</span> <span class="dv">1</span>)</a></code></pre></div>
+<pre><code>##     stress  type    f1
+## 1 stress 1 Gamma 0.783</code></pre>
+<p>The <code>importance_rank</code> function has the same structure of <code>sensitivity</code> but it will return the ranks, according to the absolute values, of the sensitivity measures. This function is particularly useful when there are several risk factors involved.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="kw">importance_rank</span>(<span class="dt">object =</span> stress.credit, <span class="dt">xCol =</span> <span class="kw">c</span>(<span class="dv">2</span> <span class="op">:</span><span class="st"> </span><span class="dv">7</span>), <span class="dt">wCol =</span> <span class="dv">1</span>, <span class="dt">type =</span> <span class="st">&quot;Gamma&quot;</span>)  </a></code></pre></div>
+<pre><code>##     stress  type L1 L2 L3 H1 H2 H3
+## 1 stress 1 Gamma  6  1  3  5  2  4</code></pre>
+<p>It transpires that subportfolios <span class="math inline">\(2\)</span> and <span class="math inline">\(3\)</span> are, in this order, most responsible for the stress in the global loss. Also, most of the sensitivity seems to be due to the systematic risk components <span class="math inline">\(H_2\)</span> and <span class="math inline">\(H_3\)</span>. To confirm this, another stress resulting in the same <span class="math inline">\(\text{VaR}_{90\%}(L)\)</span>, but controlling the distribution of <span class="math inline">\(H_2\)</span>, can be imposed using the function <code>stress_moment</code>. More precisely, we impose that <span class="math inline">\(E[H_2]\)</span> and the <span class="math inline">\(75\%\)</span> quantile of <span class="math inline">\(H_2\)</span> are fixed as in the base model.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1">VaR.L &lt;-<span class="st"> </span><span class="kw">quantile</span>(<span class="dt">x =</span> credit_data[, <span class="st">&quot;L&quot;</span>], <span class="dt">prob =</span> <span class="fl">0.9</span>, <span class="dt">type =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb33-2" title="2">q.H2 &lt;-<span class="st"> </span><span class="kw">quantile</span>(<span class="dt">x =</span> credit_data[, <span class="st">&quot;H2&quot;</span>], <span class="dt">prob =</span> <span class="fl">0.75</span>, <span class="dt">type =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb33-3" title="3">str.var.credit2 &lt;-<span class="st"> </span><span class="kw">stress_moment</span>(<span class="dt">x =</span> credit_data,</a>
+<a class="sourceLine" id="cb33-4" title="4">                                <span class="dt">f =</span> <span class="kw">list</span>(<span class="cf">function</span>(x)<span class="dv">1</span> <span class="op">*</span><span class="st"> </span>(x <span class="op">&lt;=</span><span class="st"> </span>VaR.L <span class="op">*</span><span class="st"> </span><span class="fl">1.2</span>),</a>
+<a class="sourceLine" id="cb33-5" title="5">                                         <span class="cf">function</span>(x)x,</a>
+<a class="sourceLine" id="cb33-6" title="6">                                         <span class="cf">function</span>(x)<span class="dv">1</span> <span class="op">*</span><span class="st"> </span>(x <span class="op">&lt;=</span><span class="st"> </span>q.H2)),</a>
+<a class="sourceLine" id="cb33-7" title="7">                                <span class="dt">m =</span> <span class="kw">c</span>(<span class="fl">0.9</span>, <span class="kw">mean</span>(credit_data[, <span class="st">&quot;H2&quot;</span>]), <span class="fl">0.75</span>),</a>
+<a class="sourceLine" id="cb33-8" title="8">                                <span class="dt">k =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">6</span>))</a>
+<a class="sourceLine" id="cb33-9" title="9"><span class="co"># stress.credit &lt;- stress_moment(x = stress.credit,</span></a>
+<a class="sourceLine" id="cb33-10" title="10"><span class="co">#                                f = list(function(x)1 * (x &lt;= VaR.L * 1.2),</span></a>
+<a class="sourceLine" id="cb33-11" title="11"><span class="co">#                                         function(x)x,</span></a>
+<a class="sourceLine" id="cb33-12" title="12"><span class="co">#                                         function(x)1 * (x &lt;= q.H2)),</span></a>
+<a class="sourceLine" id="cb33-13" title="13"><span class="co">#                                m = c(0.9, mean(credit_data[, &quot;H2&quot;]), 0.75), k = c(1, 6, 6))</span></a>
+<a class="sourceLine" id="cb33-14" title="14"><span class="kw">summary</span>(str.var.credit2)</a></code></pre></div>
+<pre><code>## $`stress 1`
+##                    L    L1    L2     L3       H1      H2     H3
+## mean        1140.535 20.06 456.0 664.47 0.000400 0.00968 0.0530
+## sd           616.930 28.48 340.9 371.14 0.000405 0.00706 0.0292
+## skewness       1.059  2.13   1.4   1.09 2.013196 1.39135 1.0949
+## ex kurtosis    0.895  6.40   2.3   1.31 5.899634 2.26506 1.3371
+## 1st Qu.      695.000  0.00 206.2 395.00 0.000113 0.00453 0.0318
+## Median      1001.875  0.00 365.6 590.00 0.000276 0.00786 0.0472
+## 3rd Qu.     1430.625 20.00 609.4 855.00 0.000554 0.01296 0.0679</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1"><span class="co"># summary(stress.credit)</span></a>
+<a class="sourceLine" id="cb35-2" title="2"><span class="kw">sensitivity</span>(<span class="dt">object =</span> str.var.credit2, <span class="dt">xCol =</span> <span class="kw">c</span>(<span class="dv">2</span> <span class="op">:</span><span class="st"> </span><span class="dv">7</span>), <span class="dt">type =</span> <span class="st">&quot;Gamma&quot;</span>)</a></code></pre></div>
+<pre><code>##     stress  type     L1     L2    L3        H1       H2    H3
+## 1 stress 1 Gamma 0.0102 0.0203 0.366 -0.000521 1.17e-08 0.359</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1"><span class="co"># sensitivity(object = stress.credit, xCol = c(2 : 7), type = &quot;Gamma&quot;)</span></a></code></pre></div>
+<p>+++THIS SHOULD BE APPENDED TO “stress.credit” WHEN “stress_moment” IS FIXED
+It is then clear that systematic risk prevails on binomial (event) risk.</p>
+<p>The <code>stress_moment</code> function is flexible and allows different type of stresses to be imposed on a model. The following example forces a <span class="math inline">\(50\%\)</span> increase in correlation between the losses in the second and third portfolios, while keeping the means und standard deviations unchanged.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1">m.L2 &lt;-<span class="st"> </span><span class="kw">mean</span>(credit_data[, <span class="st">&quot;L2&quot;</span>])</a>
+<a class="sourceLine" id="cb38-2" title="2">m.L3 &lt;-<span class="st"> </span><span class="kw">mean</span>(credit_data[, <span class="st">&quot;L3&quot;</span>])</a>
+<a class="sourceLine" id="cb38-3" title="3">m2.L2 &lt;-<span class="st"> </span><span class="kw">mean</span>(credit_data[, <span class="st">&quot;L2&quot;</span>] <span class="op">^</span><span class="st"> </span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb38-4" title="4">m2.L3 &lt;-<span class="st"> </span><span class="kw">mean</span>(credit_data[, <span class="st">&quot;L3&quot;</span>] <span class="op">^</span><span class="st"> </span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb38-5" title="5">cov.L2.L3 &lt;-<span class="st"> </span><span class="kw">cov</span>(credit_data[, <span class="st">&quot;L2&quot;</span>], credit_data[, <span class="st">&quot;L3&quot;</span>])</a>
+<a class="sourceLine" id="cb38-6" title="6"><span class="co"># str.var.credit2 &lt;- stress_moment(x = credit_data,</span></a>
+<a class="sourceLine" id="cb38-7" title="7"><span class="co">#                                 f = list(function(x)x,</span></a>
+<a class="sourceLine" id="cb38-8" title="8"><span class="co">#                                          function(x)x,</span></a>
+<a class="sourceLine" id="cb38-9" title="9"><span class="co">#                                          function(x)x ^ 2,</span></a>
+<a class="sourceLine" id="cb38-10" title="10"><span class="co">#                                          function(x)x ^ 2,</span></a>
+<a class="sourceLine" id="cb38-11" title="11"><span class="co">#                                          function(x)x[1] * x[2] - m.L2 * m.L3),</span></a>
+<a class="sourceLine" id="cb38-12" title="12"><span class="co">#                                 k = list(3, 4, 3, 4, c(3, 4)),</span></a>
+<a class="sourceLine" id="cb38-13" title="13"><span class="co">#                                 m = c(m.L2, m.L3, m2.L2, m2.L3, cov.L2.L3 * 1.5)</span></a></code></pre></div>
+<p>+++CURRENTLY DOES NOT RUN - NEEDS TO BE FIXED OR REPLACED</p>
+<p>+++FINAL COMMENTS?</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="Sec-Scope.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/lunr.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-SWIM.pdf"],
+"toc": {
+"collapse": "subsection"
+},
+"toolbar": {
+"position": "static"
+},
+"search": true,
+"css": "toc.css"
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

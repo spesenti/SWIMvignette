@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 Scope of the SWIM package | Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis</title>
+  <meta name="description" content="3 Scope of the SWIM package | Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis" />
+  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3 Scope of the SWIM package | Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  <meta name="github-repo" content="spesenti/SWIMvignette" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 Scope of the SWIM package | Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis" />
+  
+  
+  
+
+<meta name="author" content="Silvana M. Pesenti ,2, Alberto Bettini3, Pietro Millossovich4,5, Andreas Tsanakas5" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="Sec-Intro.html"/>
+<link rel="next" href="Sec-CreditModel.html"/>
+<style type="text/css">
+p.abstract{
+  text-align: center;
+  font-weight: bold;
+}
+div.abstract{
+  margin: auto;
+  width: 90%;
+}
+</style>
+<script src="assets/jquery-2.2.3/jquery.min.js"></script>
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#background-and-contribution"><i class="fa fa-check"></i><b>1.1</b> Background and contribution</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#installation"><i class="fa fa-check"></i><b>1.2</b> Installation</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#structure-of-the-paper"><i class="fa fa-check"></i><b>1.3</b> Structure of the paper</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="Sec-Intro.html"><a href="Sec-Intro.html"><i class="fa fa-check"></i><b>2</b> What is SWIM?</a><ul>
+<li class="chapter" data-level="2.1" data-path="Sec-Intro.html"><a href="Sec-Intro.html#sensitivity-testing-and-scenario-weights"><i class="fa fa-check"></i><b>2.1</b> Sensitivity testing and scenario weights</a></li>
+<li class="chapter" data-level="2.2" data-path="Sec-Intro.html"><a href="Sec-Intro.html#an-introductory-example"><i class="fa fa-check"></i><b>2.2</b> An introductory example</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="Sec-Scope.html"><a href="Sec-Scope.html"><i class="fa fa-check"></i><b>3</b> Scope of the SWIM package</a><ul>
+<li class="chapter" data-level="3.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Rfunctions"><i class="fa fa-check"></i><b>3.1</b> Stressing a model</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Rstress"><i class="fa fa-check"></i><b>3.1.1</b> The <code>stress</code> function and the <code>SWIM</code> object</a></li>
+<li class="chapter" data-level="3.1.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#stressing-disjoint-probability-intervals"><i class="fa fa-check"></i><b>3.1.2</b> Stressing disjoint probability intervals</a></li>
+<li class="chapter" data-level="3.1.3" data-path="Sec-Scope.html"><a href="Sec-Scope.html#stressing-moments"><i class="fa fa-check"></i><b>3.1.3</b> Stressing moments</a></li>
+<li class="chapter" data-level="3.1.4" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Sec:RiskMeasures"><i class="fa fa-check"></i><b>3.1.4</b> Stressing risk measures</a></li>
+<li class="chapter" data-level="3.1.5" data-path="Sec-Scope.html"><a href="Sec-Scope.html#user-defined-scenario-weights"><i class="fa fa-check"></i><b>3.1.5</b> User defined scenario weights</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Sec:analysis"><i class="fa fa-check"></i><b>3.2</b> Analysis of stressed models</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#distributional-comparison"><i class="fa fa-check"></i><b>3.2.1</b> Distributional comparison</a></li>
+<li class="chapter" data-level="3.2.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#sensitivity-measures"><i class="fa fa-check"></i><b>3.2.2</b> Sensitivity measures</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html"><i class="fa fa-check"></i><b>4</b> Simulation study</a><ul>
+<li class="chapter" data-level="4.1" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#a-credit-risk-portfolio"><i class="fa fa-check"></i><b>4.1</b> A credit risk portfolio</a></li>
+<li class="chapter" data-level="4.2" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#stressing-the-aggregate-portfolio-loss"><i class="fa fa-check"></i><b>4.2</b> Stressing the aggregate portfolio loss</a></li>
+<li class="chapter" data-level="4.3" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#analysing-the-stressed-model"><i class="fa fa-check"></i><b>4.3</b> Analysing the stressed model</a></li>
+<li class="chapter" data-level="4.4" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#visual-comparison"><i class="fa fa-check"></i><b>4.4</b> Visual comparison</a></li>
+<li class="chapter" data-level="4.5" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#sensitivity-measures-1"><i class="fa fa-check"></i><b>4.5</b> Sensitivity measures</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="AppendixCM.html"><a href="AppendixCM.html"><i class="fa fa-check"></i><b>A</b> Appendix Credit Model</a><ul>
+<li class="chapter" data-level="A.1" data-path="AppendixCM.html"><a href="AppendixCM.html#credit-model-assumptions"><i class="fa fa-check"></i><b>A.1</b> Credit Model assumptions</a></li>
+<li class="chapter" data-level="A.2" data-path="AppendixCM.html"><a href="AppendixCM.html#code-for-generating-the-data"><i class="fa fa-check"></i><b>A.2</b> Code for generating the data</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Scenario Weights for Importance Measurement (SWIM) – an <code>R</code> package for sensitivity analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="Sec:Scope" class="section level1">
+<h1><span class="header-section-number">3</span> Scope of the SWIM package</h1>
+<div id="Rfunctions" class="section level2">
+<h2><span class="header-section-number">3.1</span> Stressing a model</h2>
+<p>While the SWIM package is designed to work on (Monte Carlo) realisations of model components, the scenario weights are derived in a general probabilistic framework. A baseline probability (representing the equiprobable Monte Carlo simulations) can be described by a probability measure <span class="math inline">\(P\)</span>, and a stressed model by a different probability measures <span class="math inline">\(P^W\)</span>. The stressed model is then uniquely described by the change of measure from the baseline to the stressed model, which can be seen as the scenario weights <span class="math inline">\(W= \frac{dP^W}{dP}\)</span>. The stressed model, under which model components fulfil specific stresses, is chosen such that the distortion to the baseline model is as small as possible in the Kullback-Leibler divergence (or relative entropy). Mathematically, a stressed model is the solutions to
+<span class="math display" id="eq:optimisation">\[\begin{equation} 
+\min_{ W } ~E(W \log (W)), \quad
+\text{subject to constraints under } P^W.
+\tag{3.1}
+\end{equation}\]</span>
+Subsequently, we denote by a superscript <span class="math inline">\(W\)</span> the quantity of interest under the stressed model, such as <span class="math inline">\(F^W, ~ E^W\)</span> for the probability distribution and expectation under the stressed model, respectively. We refer to <span class="citation">Pesenti, Millossovich, and Tsanakas (<a href="references.html#ref-Pesenti2019">2019</a>)</span> and references therein for further mathematical details and derivations of solutions to <a href="Sec-Scope.html#eq:optimisation">(3.1)</a>.</p>
+<p>The subsequent table is a collection of all implemented types of stresses in the <code>SWIM</code> package. The precise constraints of <a href="Sec-Scope.html#eq:optimisation">(3.1)</a> are explained below.</p>
+<table style="width:100%;">
+<colgroup>
+<col width="22%" />
+<col width="44%" />
+<col width="10%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">R function</th>
+<th align="left">Stress</th>
+<th align="left"><code>type</code></th>
+<th align="left">Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>stress()</code></td>
+<td align="left">wrapper for the <code>stress_type</code> functions</td>
+<td align="left"></td>
+<td align="left">Section <a href="Sec-Scope.html#Rstress">3.1.1</a></td>
+</tr>
+<tr class="even">
+<td align="left"><code>stress_user()</code></td>
+<td align="left">user defined scenario weights</td>
+<td align="left"><code>user</code></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>stress_prob()</code></td>
+<td align="left">disjoint intervals</td>
+<td align="left"><code>prob</code></td>
+<td align="left">Equation <a href="Sec-Scope.html#eq:optimisationprob">(3.2)</a></td>
+</tr>
+<tr class="even">
+<td align="left"><code>stress_mean()</code></td>
+<td align="left">means</td>
+<td align="left"><code>mean</code></td>
+<td align="left">Equation <a href="Sec-Scope.html#eq:optimisationmoment">(3.3)</a></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>stress_mean_sd()</code></td>
+<td align="left">means and standard deviations</td>
+<td align="left"><code>mean sd</code></td>
+<td align="left">Equation <a href="Sec-Scope.html#eq:optimisationmoment">(3.3)</a></td>
+</tr>
+<tr class="even">
+<td align="left"><code>stress_moment()</code></td>
+<td align="left">moments, functions of moments</td>
+<td align="left"><code>moment</code></td>
+<td align="left">Equation <a href="Sec-Scope.html#eq:optimisationmoment">(3.3)</a></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>stress_VaR()</code></td>
+<td align="left">VaR risk measure, a quantile</td>
+<td align="left"><code>VaR</code></td>
+<td align="left">Equation <a href="Sec-Scope.html#eq:optimisationVaR">(3.4)</a></td>
+</tr>
+<tr class="even">
+<td align="left"><code>stress_VaR_ES()</code></td>
+<td align="left">VaR and ES risk measures</td>
+<td align="left"><code>VaR ES</code></td>
+<td align="left">Equation <a href="Sec-Scope.html#eq:optimisationVaRES">(3.5)</a></td>
+</tr>
+</tbody>
+</table>
+<div id="Rstress" class="section level3">
+<h3><span class="header-section-number">3.1.1</span> The <code>stress</code> function and the <code>SWIM</code> object</h3>
+<p>The <code>stress()</code> function is a wrapper for the <code>stress_type</code> functions, where <code>stress(type = "type", )</code> and <code>stress_type()</code> are equivalent. The <code>stress()</code> function solves optimisation <a href="Sec-Scope.html#eq:optimisation">(3.1)</a> for constraints specified through <code>type</code>and returns a <code>SWIM</code> object containing a list of:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left"><code>x</code></td>
+<td align="left">realisations of the model</td>
+</tr>
+<tr class="even">
+<td align="left"><code>new_weights</code></td>
+<td align="left">scenario weights</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>type</code></td>
+<td align="left">“type” of stress</td>
+</tr>
+<tr class="even">
+<td align="left"><code>specs</code></td>
+<td align="left">details about the stress</td>
+</tr>
+</tbody>
+</table>
+<p>The data frame containing the realisations of the baseline model, <code>x</code> in the above table, can be extracted from a <code>SWIM</code> object using <code>get_data()</code>. Similarly, <code>get_weights()</code> and <code>get_weightsfun()</code> provide the scenario weights, respectively the functions, that when applied to <code>x</code> generate the scenario weights. The specification of the applied stress can be obtained using <code>get_specs()</code>.</p>
+</div>
+<div id="stressing-disjoint-probability-intervals" class="section level3">
+<h3><span class="header-section-number">3.1.2</span> Stressing disjoint probability intervals</h3>
+<p>Stressing disjoint probability intervals allows to define stresses by altering regions or events of a model component. The scenario weights are calculated via <code>stress_prob()</code>, or equivalently <code>stress(type = "prob", )</code>, and the stressed probability intervals are specified through the <code>lower</code> and <code>upper</code> endpoints of the intervals. Specifically,</p>
+<blockquote>
+<p>for disjoint intervals <span class="math inline">\(B_1, \ldots, B_I\)</span> with <span class="math inline">\(P(X \in B_i) &gt;0\)</span> for all <span class="math inline">\(i = 1, \ldots, I\)</span>, and <span class="math inline">\(\alpha_1, \ldots, \alpha_I &gt; 0\)</span> such that <span class="math inline">\(\alpha_1 + \ldots + \alpha_I &lt; 1\)</span>, <code>stress_prob()</code> solves <a href="Sec-Scope.html#eq:optimisation">(3.1)</a> with the constraints
+<span class="math display" id="eq:optimisationprob">\[\begin{equation} 
+P^W(X \in B_i) = \alpha_i, ~i = 1, \ldots, I. \tag{3.2}
+\end{equation}\]</span></p>
+</blockquote>
+</div>
+<div id="stressing-moments" class="section level3">
+<h3><span class="header-section-number">3.1.3</span> Stressing moments</h3>
+<p>The functions <code>stress_mean()</code>, <code>stress_mean_sd()</code> and <code>stress_moment()</code> provide stressed models with moment constraints. The function <code>stress_mean()</code> returns a stressed model that fulfils constraints on the first moment of model components. Specifically,</p>
+<blockquote>
+<p>for <span class="math inline">\(m_i, ~ i \in J\)</span>, where <span class="math inline">\(J\)</span> is a subset of <span class="math inline">\(\{1, \ldots, d\}\)</span>, <code>stress_mean()</code> solves <a href="Sec-Scope.html#eq:optimisation">(3.1)</a> with the constraints
+<span class="math display" id="eq:optimisationmoment">\[\begin{equation} 
+E^W(X_i) = m_i, ~i \in J. \tag{3.3}
+\end{equation}\]</span></p>
+</blockquote>
+<p>The <span class="math inline">\(m_i, ~i \in J\)</span>, are specified in the <code>stress_mean()</code> function through the parameter <code>new_means</code>. The <code>stress_mean_sd()</code> allows to stress simultaneously the mean and the standard deviation of model components. Specifically,</p>
+<blockquote>
+<p>for <span class="math inline">\(m_i, s_i ~ i \in J\)</span>, where <span class="math inline">\(J\)</span> is a subset of <span class="math inline">\(\{1, \ldots, d\}\)</span>, <code>stress_mean_sd()</code> solves <a href="Sec-Scope.html#eq:optimisation">(3.1)</a> with the constraints
+<span class="math display" id="eq:optimisationmoment">\[\begin{equation} 
+E^W(X_i) = m_i \text{ and Var}^W(X_i) = s_i^2 , ~i \in J. \tag{3.3}
+\end{equation}\]</span></p>
+</blockquote>
+<p>The parameters <span class="math inline">\(m_i, s_i, ~ i \in J\)</span>, are defined in the <code>stress_mean_sd()</code> function by the parameters <code>new_means</code>and <code>new_sd</code>, respectively. The <code>stress_mean()</code> and <code>stress_mean_sd()</code> are special cases of the <code>stress_moment()</code> function, which allows for stressed models with constraints on functions of the (joint) moments of model components. Specifically</p>
+<blockquote>
+<p>for <span class="math inline">\(J_i\)</span> subsets of <span class="math inline">\(\{1, \ldots, n\}\)</span> and functions <span class="math inline">\(f_i \colon \mathbb{R}^{J_i} \to \mathbb{R}, ~i = 1, \ldots, I\)</span>, <code>stress_moment()</code> solves <a href="Sec-Scope.html#eq:optimisation">(3.1)</a> with the constraints
+<span class="math display" id="eq:optimisationmoment">\[\begin{equation} 
+E^W(f_i(X_{J_i}) ) = m_i, ~i = 1, \ldots, I. \tag{3.3}
+\end{equation}\]</span></p>
+</blockquote>
+<p>Note that <code>stress_moment()</code> not only allows to define constraints on higher moments of model components but also to construct constraints that apply to multiple model components simultaneously. For example, stressing the joint mean of two model components <span class="math inline">\(X_i, X_j\)</span>, that is <span class="math inline">\(E^W(X_i X_j) = E^W(f(X_i, X_j))\)</span>, for <span class="math inline">\(f(x_i, x_j) = x_i x_j\)</span>. The covariance of <span class="math inline">\(X_i\)</span> and <span class="math inline">\(X_j\)</span> can, for example, be approximately stressed using the function <span class="math inline">\(f(x_i, x_j) = x_i x_j - \bar{X}_i \bar{X}_j\)</span>, where <span class="math inline">\(\bar{X}_i\)</span> and <span class="math inline">\(\bar{X}_i\)</span> denote the sample mean of <span class="math inline">\(X_i\)</span> and <span class="math inline">\(X_j\)</span>, respectively. The functions <code>stress_mean()</code>, <code>stress_mean_sd()</code> and <code>stress_moment()</code> can be applied to multiple model components and are the only <code>stress</code> functions that have scenario weights calculated via numerical optimisation using the <a href="https://CRAN.R-project.org/package=nleqslv">nleqslv</a> package. Thus, depending on the choice of constraints, existence of a stressed model is not guaranteed.</p>
+</div>
+<div id="Sec:RiskMeasures" class="section level3">
+<h3><span class="header-section-number">3.1.4</span> Stressing risk measures</h3>
+<p>The functions <code>stress_VaR</code> and <code>stress_VaR_ES</code> provides stressed models, under which a model components fulfils a stress on the risk measures Value-at-Risk (<span class="math inline">\(\text{VaR}\)</span>) and/or Expected Shortfall (<span class="math inline">\(\text{ES}\)</span>). The <span class="math inline">\(\text{VaR}\)</span> at level <span class="math inline">\(0 &lt; \alpha &lt; 1\)</span> of a random variable <span class="math inline">\(Z\)</span> with distribution <span class="math inline">\(F\)</span> is defined as its left-inverse evaluated at <span class="math inline">\(\alpha\)</span>, that is <span class="math display">\[\text{VaR}_\alpha(Z) = F^{-1}(\alpha).\]</span> The <span class="math inline">\(\text{ES}\)</span> at level <span class="math inline">\(0 &lt; \alpha &lt; 1\)</span> of a random variable <span class="math inline">\(Z\)</span> is given by <span class="math display">\[\text{ES}_\alpha(Z) = \int_0^1 \text{VaR}_u(Z) \mathrm{d}u.\]</span>
+The details of the constraints, that <code>stress_VaR()</code> and <code>stress_VaR_ES()</code> solve, are as follows:</p>
+<blockquote>
+<p>For <span class="math inline">\(0&lt; \alpha &lt;1\)</span> and <span class="math inline">\(q, s \in \mathbb{R}\)</span> such that <span class="math inline">\(\text{VaR}_{\alpha}(Y)&lt;q &lt; s\)</span>, <code>stress_VaR()</code> solves <a href="Sec-Scope.html#eq:optimisation">(3.1)</a> with the constraints
+<span class="math display" id="eq:optimisationVaR">\[\begin{equation} 
+\text{VaR}_{\alpha }^W(Y) = q;  \tag{3.4}
+\end{equation}\]</span>
+and <code>stress_VaR_ES()</code> solves <a href="Sec-Scope.html#eq:optimisation">(3.1)</a> with the constraints
+<span class="math display" id="eq:optimisationVaRES">\[\begin{equation}                                                
+\text{VaR}_{\alpha }^W(Y) = q \text{ and ES}_{\alpha }^W(Y) = s.\tag{3.5}
+\end{equation}\]</span></p>
+</blockquote>
+</div>
+<div id="user-defined-scenario-weights" class="section level3">
+<h3><span class="header-section-number">3.1.5</span> User defined scenario weights</h3>
+<p>The option <code>type = user</code> allows to generate a <code>SWIM</code> object with scenario weights defined by a user. The scenario weights can be provided directly via the <code>new_weights</code> parameter or through a list of functions, <code>new_weightsfun</code>, that applied to the data <code>x</code> generates the scenario weights.</p>
+</div>
+</div>
+<div id="Sec:analysis" class="section level2">
+<h2><span class="header-section-number">3.2</span> Analysis of stressed models</h2>
+<p>The function <code>summary()</code> is a methods for an object of class SWIM and provides summary statistics of the baseline and stressed models. If the SWIM object contains more than one set of scenario weights, each corresponding to one stressed model, the <code>stress()</code> function returns for each set of scenario weights a list containing:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left"><code>mean</code></td>
+<td align="left">sample mean</td>
+</tr>
+<tr class="even">
+<td align="left"><code>sd</code></td>
+<td align="left">sample standard deviation</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>skewness</code></td>
+<td align="left">sample skewness</td>
+</tr>
+<tr class="even">
+<td align="left"><code>ex kurtosis</code></td>
+<td align="left">sample excess kurtosis</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>1st Qu.</code></td>
+<td align="left">25% quantile</td>
+</tr>
+<tr class="even">
+<td align="left"><code>Median</code></td>
+<td align="left">median, 50% quantile</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>3rd Qu.</code></td>
+<td align="left">75% quantile</td>
+</tr>
+</tbody>
+</table>
+<div id="distributional-comparison" class="section level3">
+<h3><span class="header-section-number">3.2.1</span> Distributional comparison</h3>
+<p>The <code>SWIM</code> package contains functions to compare the distribution of model components under different (stressed) models. It is important to note, that functions such as the empirical distribution function, <code>ecdf()</code>, or the <code>quantile()</code> function will <strong>not</strong> return the empirical distribution function or the quantile function under a stressed model. The empirical distribution function of model components under a stressed model can be calculated using the <code>cdf()</code> function of the SWIM package, applied to a SWIM object. To calculate sample quantiles of stressed models components, the function <code>quantile_stressed()</code> should be used. The function <code>VaR_stressed()</code> and <code>ES_stressed()</code> provide the stressed VaR and ES of model components, which is of particular interest for stressed models resulting from constraints on risk measures, see Section <a href="Sec-Scope.html#Sec:RiskMeasures">3.1.4</a>.</p>
+<p>Implemented visualisation of distribution functions are <code>plot_cdf()</code>, for plotting empirical distribution functions, and <code>plot_hist()</code>, for plotting histograms of model components under different (stressed) models.</p>
+</div>
+<div id="sensitivity-measures" class="section level3">
+<h3><span class="header-section-number">3.2.2</span> Sensitivity measures</h3>
+<p>Comparison of baseline and stressed models and how model components change under different models, is typically done via sensitivity measures. The <code>SWIM</code> packages contains the <code>sensitivity()</code> function, that calculates sensitivity measures of stressed models and model components. The implemented sensitivity measures, summarised in the table below, are the Wasserstein, Kolmogorov and the Gamma sensitivity measures, see <span class="citation">Pesenti, Millossovich, and Tsanakas (<a href="references.html#ref-Pesenti2019">2019</a>)</span> for the latter. The Wasserstein and Kolmogorov sensitivities provide a comparison of different (stressed and baseline) models, as these sensitivities only depend on the scenario weights. The Gamma sensitivity measure, which accounts for the induced stress to the mean of a model component, can be utilised to compare the impact of a stressed model on the model components. The definition of the sensitivity measures is summarised in the following table:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td align="left">Wasserstein</td>
+<td align="left"><span class="math inline">\(\int | F^W_X (x) - F_X(x)| dx\)</span></td>
+<td align="left">comparing models</td>
+</tr>
+<tr class="even">
+<td align="left">Kolmogorov</td>
+<td align="left"><span class="math inline">\(\sup_x |F^W_X (x) - F_X(x)|\)</span></td>
+<td align="left">comparing models</td>
+</tr>
+<tr class="odd">
+<td align="left">Gamma</td>
+<td align="left"><span class="math inline">\(\frac{E^W(X) - E(X)}{c}\)</span>, for a normalisation <span class="math inline">\(c\)</span></td>
+<td align="left">comparing model components</td>
+</tr>
+</tbody>
+</table>
+<p>The Gamma sensitivity measure is normalised such that it takes values between -1 and 1, and positive values correspond to a larger impact. The sensitivity measures of models or model components can be plotted using <code>plot_sensitivity()</code>. The function <code>importance_rank()</code> returns the effective rank of model component according to the chosen sensitivity measures.</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="Sec-Intro.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="Sec-CreditModel.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/lunr.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-SWIM.pdf"],
+"toc": {
+"collapse": "subsection"
+},
+"toolbar": {
+"position": "static"
+},
+"search": true,
+"css": "toc.css"
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
