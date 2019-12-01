@@ -1,10 +1,10 @@
 ---
 title: Scenario Weights for Importance Measurement (SWIM) -- an `R` package for sensitivity
   analysis
-author: Silvana M. Pesenti^[silvana.pesenti@utoronto.ca]^1, Alberto Bettini^2, Pietro
-  Millossovich^3,4^, Andreas Tsanakas^4
-date: ^1^University of Toronto, ^2^Assicurazioni Generali S.p.A, ^3^DEAMS, University
-  of Trieste, ^4^Cass Business School, City, University of London
+author: Silvana M. Pesenti^[silvana.pesenti@utoronto.ca] ^2^, Alberto Bettini^3^, Pietro
+  Millossovich^4,5^, Andreas Tsanakas^5^
+date: ^2^University of Toronto, ^3^Assicurazioni Generali S.p.A, ^4^DEAMS, University
+  of Trieste, ^5^Cass Business School, City, University of London
 bibliography: bibliography.bib
 documentclass: article
 github-repo: spesenti/SWIMvignette
@@ -25,7 +25,6 @@ abstract: 'The SWIM package implements a flexible sensitivity analysis framework
   functional relations; hence it is suitable for the analysis of black box models.
   The capabilities of SWIM are demonstrated through a case study of a credit portfolio
   model. '
-bibliography: bibliography.bib
 ---
 
 ``` {r, setup, echo=FALSE, cache=FALSE}

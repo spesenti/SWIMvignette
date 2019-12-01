@@ -89,6 +89,7 @@ and `stress_VaR_ES()` solves \@ref(eq:optimisation) with the constraints
 \begin{equation}                                                
 \text{VaR}_{\alpha }^W(Y) = q \text{ and ES}_{\alpha }^W(Y) = s.(\#eq:optimisationVaRES)
 \end{equation}
+
 ### User defined scenario weights 
 
 The option `type = user` allows to generate a `SWIM` object with  scenario weights defined by a user. The scenario weights can be provided directly via the `new_weights` parameter or through a list of functions, `new_weightsfun`, that applied to the data `x` generates the scenario weights. 
