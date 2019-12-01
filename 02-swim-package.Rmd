@@ -20,8 +20,8 @@ The subsequent table is a collection of all implemented types of stresses in the
 | `stress()`         | wrapper for the `stress_type` functions   |         | Section \@ref(Rstress)
 | `stress_user()`    | user defined scenario weights         |`user`   |
 | `stress_prob()`    | disjoint intervals                    |`prob`   | Equation \@ref(eq:optimisationprob)
-| `stress_mean()`    | means                                 |`mean`   | Equation \@ref(eq:optimisationmoment)
-| `stress_mean_sd()` | means and standard deviations         |`mean sd`| Equation \@ref(eq:optimisationmoment)
+| `stress_mean()`    | means                                 |`mean`   | Equation \@ref(eq:optimisationmean)
+| `stress_mean_sd()` | means and standard deviations         |`mean sd`| Equation \@ref(eq:optimisationmeansd)
 | `stress_moment()`  | moments (of functions)                |`moment` | Equation \@ref(eq:optimisationmoment)
 | `stress_VaR()`     | VaR risk measure (quantile)          |`VaR`    | Equation \@ref(eq:optimisationVaR)
 | `stress_VaR_ES()`  | VaR and ES risk measures              |`VaR ES` | Equation \@ref(eq:optimisationVaRES)
@@ -58,13 +58,13 @@ The functions `stress_mean()`, `stress_mean_sd()` and `stress_moment()` provide 
 
 > For $m_i, ~ i \in J$, where $J$ is a subset of $\{1, \ldots, d\}$, `stress_mean()` solves \@ref(eq:optimisation) with the constraints
 \begin{equation} 
-E^W(X_i) = m_i, ~i \in J. (\#eq:optimisationmoment)
+E^W(X_i) = m_i, ~i \in J. (\#eq:optimisationmean)
 \end{equation}
 The $m_i, ~i \in J$, are specified in the `stress_mean()` function through the argument `new_means`. The `stress_mean_sd()` allows to stress simultaneously the mean and the standard deviation of model components. Specifically,   
 
 > For $m_i, s_i ~ i \in J$, where $J$ is a subset of $\{1, \ldots, d\}$, `stress_mean_sd()` solves \@ref(eq:optimisation) with the constraints
 \begin{equation} 
-E^W(X_i) = m_i \text{ and Var}^W(X_i) = s_i^2 , ~i \in J. (\#eq:optimisationmoment)
+E^W(X_i) = m_i \text{ and Var}^W(X_i) = s_i^2 , ~i \in J. (\#eq:optimisationmeansd)
 \end{equation}
 The parameters $m_i, s_i, ~ i \in J$, are defined in the `stress_mean_sd()` function by the arguments `new_means`and `new_sd`, respectively. The `stress_mean()` and `stress_mean_sd()` are special cases of the general `stress_moment()` function, which allows for stressed models with constraints on functions of the (joint) moments of model components. Specifically
 
