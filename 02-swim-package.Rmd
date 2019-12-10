@@ -3,9 +3,14 @@
 
 
 ## Stressing a model {#Rfunctions}
-+++ Andreas, define a model as random vector and probability measures+++
+
+We briefly introduce key concepts, using slightly more technical language compared to Section +++. A *model* consists of a random vector $\mathbf X = (X_1,\dots,X_d)$ and a probability measure; we denote the probability measure of a *baseline model* by $P$ and that of a *stressed model* by $P^W$, where $W= \frac{dP^W}{dP}$, satisfying $E(W)=1,~W\geq 0$ is a Radon-Nikodym derivative. In a Monte-Carlo simulation context, the probability space is discrete with $n$ states $\Omega=\{\omega_1,\dots,\omega_n\}$, each of which corresonds to a simulated scenario. To reconcile this formulation with the notation of Section +++, we denote $X_j(\omega_i):= x_{ji}$ and $W(\omega_i):=\omega_i$. Under the baseline model, each scenario has the same probability $P(\omega_i)=1/n$, while under a stressed model it is $P(\omega_i)=W(\omega_i)/n=w_i/n$.
+
++++ just started editing, incomplete.
+
 
 While the **SWIM** package is designed to work on (Monte Carlo) realisations of model components, the scenario weights are derived in a general probabilistic framework. A baseline probability (representing the equiprobable Monte Carlo simulations) can be described by a probability measure $P$, and a stressed model by a different probability measures $P^W$. The stressed model is then uniquely described by the change of measure from the baseline to the stressed model, which can be seen as the scenario weights $W= \frac{dP^W}{dP}$ (this random variable is also known as the Radon-Nikodym derivative of $P^W$ with respect to $P$). The stressed model, under which model components fulfil specific stresses, is chosen such that the distortion to the baseline model is as small as possible when measured by the Kullback-Leibler divergence (or relative entropy). Mathematically, a stressed model is the solutions to
+
 \begin{equation} 
 \min_{ W } ~E(W \log (W)), \quad
 \text{subject to constraints under } P^W.
