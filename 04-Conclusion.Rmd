@@ -1,0 +1,3 @@
+# Conclusion
+
+Future work include a function for plotting the senario weights. 

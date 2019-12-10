@@ -20,7 +20,7 @@ head(credit_data)
 
 ## Stressing the aggregate portfolio loss 
 
-In this section, following a reverse sensitivity approach, we study the effects that stresses on (the tail of) the aggregate portfolio have on the three subportfolios. Through this analysis, we aim to assess the comparative importance of the three sub-portfolios.
+In this section, following a reverse sensitivity approach, we study the effects that stresses on (the tail of) the aggregate portfolio have on the three subportfolios. Through this analysis, we aim to assess the comparative importance of the three subportfolios.
 
 First, we impose a $20\%$ increase on the VaR at level 0.9 of the loss of the aggregate portfolio.
 
@@ -45,7 +45,7 @@ We then consider, additionally to the $20\%$ increase in $\text{VaR}_{0.9}$, a f
 stress.credit <- stress(type = "VaR ES", x = stress.credit, k = "L", alpha = 0.9, q_ratio = 1.2, s = 3500)
 ```
 
-When applying the `stress` function, or one of its alternative versions, to a SWIM object, the result will be a new SWIM object where the new stress has been "appended" to the previous one. This is convenient when large datasets are involved, as the `stress` function returns an object  containing the original simulated data and the scenario weights. 
+When applying the `stress` function, or one of its alternative versions, to a **SWIM** object, the result will be a new **SWIM** object where the new stress has been "appended" to the previous one. This is convenient when large datasets are involved, as the `stress` function returns an object  containing the original simulated data and the scenario weights. 
 
 ## Analysing stressed models
 
@@ -100,23 +100,28 @@ The impact of the stressed models on the model components can be quantified thro
 sensitivity(object = stress.credit, xCol = c(2 : 7), wCol = 1, type = "Gamma")
 ```
 
-Using the `sensitivity` function we can analyse whether the first (column 2) and third (column 4) subportfolios considered as a whole are able to exceed the riskiness of the second. This can be accomplished specifying, through the option `f`, a list of functions applicable to the columns `k` of the dataset. Through the argument `xCol = NULL` only the transformed data is considered. The sensitivity measure of a function of the columns is particularly useful when high dimensional models are considered and a resuming statistics is needed in order to compare blocks of model components against each others.
+Using the `sensitivity` function we can analyse whether the sensitivity of the joint subportfolio $L_1 + L_3$ exceeds the sensitivity of the subportfolio $L_2$. This can be accomplished by specifying, through the option `f`, a list of functions applicable to the columns `k` of the dataset. Setting `xCol = NULL` only the transformed data is considered. The sensitivity measure of a function of the columns is particularly useful when high dimensional models are considered and such summaries are needed in order to compare blocks of model components against each others.
 
 ```{r, CM-sensitivity2, cache = TRUE}
 sensitivity(object = stress.credit, type = "Gamma", f = list(sum), 
             k = list(c(2, 4)), wCol = 1, xCol = NULL)
 ```
 
-++++CAN WE ALLOW FOR "f" and "k" TO BE A FUNCTION AND A VECTOR, RESPECTIVELY, AS IN stress_moments? RIGHT NOW WE NEED TO USE "list(SUM)"++++ --- Silvana: the sensitivity function has parameters f and k, which are the same as the one specified in stress_moments. The problem is that if k has length >1, both f and k must be a list. We could change it to, if f is a function and k a vector then the same function is applied to all k's. ---
+We obserce that the sensitivity of $L_1 + L_3$ is larger than the sensitivity to both $L_1$ and $L_3$, reflecting the positive dependence structre of the credit risk portfolio. Moreover, subportfolio $L_2$ has not only the largest sensitivity compared to $L_1$ and $L_3$ but also a higher sensitivity than the combined subportfolios $L_1 + L_3$. 
 
-The `importance_rank` function, having the same structure as the `sensitivity` function, return the ranks of the sensitivity measures. This function is particularly useful when there are several risk factors involved.
+++++CAN WE ALLOW FOR "f" and "k" TO BE A FUNCTION AND A VECTOR, RESPECTIVELY, AS IN stress_moments? RIGHT NOW WE NEED TO USE "list(SUM)"++++ --- Silvana: the sensitivity function has arguments f and k, which are the same as the one specified in stress_moments. The problem is that if k has length >1, both f and k must be a list. We could change it to, if f is a function and k a vector then the same function is applied to all k's. ---
+
+The `importance_rank` function, having the same structure as the `sensitivity` function, returns the ranks of the sensitivity measures. This function is particularly useful when several risk factors are involved.
 
 ```{r, CM-rank, cache = TRUE}
 importance_rank(object = stress.credit, xCol = c(2 : 7), wCol = 1, type = "Gamma")
 importance_rank(object = stress.credit, xCol = c(2 : 7), wCol = 2, type = "Gamma")
 ```
 
-It transpires that subportfolios $2$ and $3$ are, in this order, most responsible for the stress in the global loss. Also, most of the sensitivity seems to be imputable to the systematic risk components $H_2$ and $H_3$. To confirm this, another stress resulting in the same $\text{VaR}_{90\%}(L)$, but controlling for the distribution of $H_2$, can be imposed using the function `stress_moment`. More precisely, we fix $E[H_2]$ and the $75\%$ quantile of $H_2$ as in the base model.
+
+## Advanced stresses
+
+It transpires that subportfolios $L_2$ and $L_3$ are, in this order, most responsible for the stress in the global loss, under both stresses considered. Also, most of the sensitivity seems to be attributable to the systematic risk components $H_2$ and $H_3$. To investigate this, we perform another stress resulting once again in a 20% increase in $\text{VaR}_{90\%}(L)$, but this time controlling for the distribution of $H_2$. Specifically, by fixing the mean of $H_2$ and the $75\%$ quantile of $H_2$ to the same values as in the baseline model. This set of constraints is implemented via the function `stress_moment`.
 
 +++THE APPENDING OF STRESS_MOMENT IS STILL NOT WORKING PROPERLY.+++
 
@@ -133,10 +138,10 @@ m.stressH2 = c(0.9, mean(credit_data[, "H2"]), 0.75)
 stress.credit.H2 <- stress_moment(x = credit_data, f = f.stressH2, k = k.stressH2, m = m.stressH2)
 ```
 
-In this case we can use the `summary` function to verify whether we are actually controlling the distribution of $H_2$. 
+In this case we can use the `summary` function to verify the change of the distribution of $H_2$ under the new stress.
 
 +++IS IT COMPLEX TO ADD TO THE SUMMARY FUNCTION THE POSSIBILITY OF SPECIFYING WHICH STRESS TO CONSIDER? IN THIS CASE FOR EXAMPLE SOMEONE COULD BE INTERESTED ONLY ON THE NEW STRESS AND THE BASELINE+++
----Silvana: you can do this with the parameter wCol, which can be a vector, say you want to have stresses 1 and 3 and the baseline, choose wCol = c(1,3) and base = TRUE---
+---Silvana: you can do this with the argument wCol, which can be a vector, say you want to have stresses 1 and 3 and the baseline, choose wCol = c(1,3) and base = TRUE---
 
 ```{r, summary-sens-H2, echo = -1, cache = TRUE}
 options(digits = 3)
@@ -144,9 +149,12 @@ summary(stress.credit.H2, base = TRUE)
 sensitivity(object = stress.credit.H2, xCol = c(2:7), type = "Gamma")
 ```
 
-The sensitivity measure confirms that the systematic risk prevails on binomial (event) risk.
+The sensitivity measure confirms that the systematic risk prevails on binomial (event) risk. +++More interpretation+++
 
-The following example is another case involving the stress of multiple model components. Namely, we impose a stress requiring a 20\% increase in the quantile of both the losses in subportfolios 2 and 3. In particular, we can examine two different situations: in the first the minimization problem is subject to two separate constraints while in the second it is subject to a joint one. 
+
++++Add motivating sentence+++
+
+The following example is another case involving the stress of multiple model components. Namely, we impose a stress requiring a 20\% increase in the quantile of both the losses in subportfolios $L2$ and $L3$. In particular, we can examine two different situations: in the first the minimization problem is subject to two separate constraints while in the second it is subject to a joint one. 
 
 ```{r, CM-joint-stress-VaR, echo = -1, cache = TRUE}
 options(digits = 3)
@@ -165,4 +173,6 @@ summary(stress.credit.L2L3)
 summary(stress.credit.L2L3.joint)
 ```
 
-The stress obtained with the joint constraint on $L_2$ and $L_3$ is weaker.
+The stress obtained with the joint constraint on $L_2$ and $L_3$ is weaker. +++ Interpretation?+++
+
+

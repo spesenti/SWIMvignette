@@ -4,18 +4,18 @@
 
 ## Credit Model assumptions
 
-The credit model is based on the conditionally binomial credit model described in @Mcneil2015B which belongs to the family of mixture models. Specifically, we consider a portfolio that consists of three homogeneous sub-portfolios and denote the total aggregate loss of the portfolio by $L = L_1 + L_2+  L_2$, where $L_1, L_2, L_3$ are the aggregate losses of each sub-portfolio, given by 
+The credit model of Section \@ref(Sec:CreditModel) is based on the conditionally binomial credit model described in @Mcneil2015B which belongs to the family of mixture models. Specifically, we consider a portfolio that consists of three homogeneous subportfolios and denote the total aggregate loss of the portfolio by $L = L_1 + L_2+  L_3$, where $L_1, L_2, L_3$ are the losses of each subportfolio, given by 
 \begin{equation}
 L_i=e_i\cdot\text{LGD}_i\cdot M_i,\quad i=1,2,3, 
 \end{equation}
-where $e_i$ and $M_i$ are the exposure and number of insolvencies of the $i^{\text{th}}$ sub-portfolio, respectively, and $\text{LGD}_i$ is the loss given default of sub-portfolio $i$. The number of insolvencies of the $i^{\text{th}}$ sub-portfolio $M_i$ is, conditionally on a $[0,1]$ valued random variable $H_i$, independent and Binomially distributed with parameters $m_i$, the sub-portfolio size, and common random default probability $H_i$. $H_i, ~ i = 1,2,3$ follows a Beta distribution with parameters chosen such as to match the default probability $p_i$ and the default correlation $\rho_i$, that is the correlation between two default events within a sub-portfolio, see @Mcneil2015B. The dependence structure of $(H_1,H_2,H_3)$ is modelled via a Gaussian copula with correlation matrix    
+where $e_i$ and $M_i$ are the exposure and number of insolvencies of the $i^{\text{th}}$ subportfolio, respectively, and $\text{LGD}_i$ is the loss given default of subportfolio $i$. $M_i$, representing the number of insolvencies ("defaults") in the $i^th$ subportfolio, is Binomially distributed, conditional on $H_i$, a random common default probability. Specifically $M_i|H_i \sim Binomial(m_i,H_i)$, where $m_i$ is the portfolio size. $H_i, ~ i = 1,2,3$ follows a Beta distribution with parameters chosen such as to match the overall unconditional default probability $p_i$ and the default correlation $\rho_i$, that is the correlation between (the indicators of) two default events within a subportfolio, see @Mcneil2015B. The dependence structure of $(H_1,H_2,H_3)$ is modelled via a Gaussian copula with correlation matrix    
 \begin{equation}\Sigma = \begin{pmatrix}
 1 & 0.3 & 0.1\\
 0.3 & 1 & 0.4\\
 0.1 & 0.4 & 1
 \end{pmatrix}.\end{equation}
 
-The subsequent table summarises the parameter values used in the simulation.
+The following table summarises the parameter values used in the simulation.
 
 |$i$|$m_i$|$e_i$|$p_i$|$\rho_i$|$LGD_i$|
 |:------|:------|:------|:------|:------|:------|
@@ -32,12 +32,12 @@ The subsequent table summarises the parameter values used in the simulation.
   nsim <- 100000
   
 # data
-  m1 <- 2500 # counterparties tranche A
-  m2 <- 5000 # counterparties tranche B
-  m3 <- 2500 # counterparties tranche C
+  m1 <- 2500 # counterparties subportfolio A
+  m2 <- 5000 # counterparties subportfolio B
+  m3 <- 2500 # counterparties subportfolio C
   
   p1 <- 0.0004 # prob of default 
-  rho1 <- 0.0004 # correlation within the tranche
+  rho1 <- 0.0004 # correlation within the subportfolio
 
   p2 <- 0.0097 
   rho2 <- 0.0044
@@ -57,7 +57,7 @@ The subsequent table summarises the parameter values used in the simulation.
   
 # beta-binomial model with copula 
   
-# beta parameters: matching tranches default probabilities and correlation
+# beta parameters: matching subportfolios default probabilities and correlation
   alpha1 <- p1 * (1 / rho1 - 1)
   beta1 <- alpha1 * (1 / p1 - 1)
   
@@ -67,7 +67,7 @@ The subsequent table summarises the parameter values used in the simulation.
   alpha3 <- p3 * (1 / rho3 - 1)
   beta3 <- alpha3 * (1 / p3 - 1)
   
-# correlations between sub-portfolios
+# correlations between subportfolios
   cor12 <- 0.3
   cor13 <- 0.1
   cor23 <- 0.4
@@ -85,12 +85,12 @@ The subsequent table summarises the parameter values used in the simulation.
 # simulation from the chosen copula
   H <- rMvdc(nsim, myMvd)
   
-# simulate number of default per tranches (binomial distributions)
+# simulate number of default per subportfolios (binomial distributions)
   M1 <- rbinom(n = nsim, size = m1, prob = H[, 1])
   M2 <- rbinom(n = nsim, size = m2, prob = H[, 2])
   M3 <- rbinom(n = nsim, size = m3, prob = H[, 3])
   
-# total loss per sub-portfolio
+# total loss per subportfolio
   L1 <- M1 * e1 * LGD1
   L2 <- M2 * e2 * LGD2
   L3 <- M3 * e3 * LGD3
@@ -98,7 +98,7 @@ The subsequent table summarises the parameter values used in the simulation.
 # aggregate portfolio loss
   L <- L1 + L2 + L3
   
-# DB for SWIM
+# the credit data included in SWIM
   credit_data <- cbind(L, L1, L2, L3, H)
   colnames(credit_data) <- c("L", "L1", "L2", "L3", "H1", "H2", "H3")
 ```
