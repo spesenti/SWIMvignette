@@ -1,5 +1,5 @@
 ---
-title: Scenario Weights for Importance Measurement (SWIM) -- an `R` package for sensitivity
+title: Scenario Weights for Importance Measurement (**SWIM**) -- an `R` package for sensitivity
   analysis
 author: Silvana M. Pesenti^[silvana.pesenti@utoronto.ca] ^2^, Alberto Bettini^3^, Pietro
   Millossovich^4,5^, Andreas Tsanakas^5^
