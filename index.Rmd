@@ -20,11 +20,10 @@ abstract: 'The **SWIM** package implements a flexible sensitivity analysis frame
   a stochastic model, returning scenario weights which encode the required stress
   and allow monitoring the impact of the stress on all model components. The scenario
   weights are calculated to minimise the relative entropy with respect to the baseline
-  model, subject to the stress applied. **SWIM** does not require additional evaluations
+  model, subject to the stress applied. As well as calculating scenario weights, the package provides tools for the analysis of stressed models, including plotting facilities and evaluation of sensitivity measures. **SWIM** does not require additional evaluations
   of the simulation model or explicit knowledge of its underlying statistical and
-  functional relations; hence it is suitable for the analysis of black box models.
-  The capabilities of **SWIM** are demonstrated through a case study of a credit portfolio
-  model.  +++ Andreas add sentence on what SWIM does+++ '
+  functional relations; hence it is suitable for the analysis of black box models. 
+  The capabilities of **SWIM** are demonstrated through a case study of a credit portfolio   model. '
 ---
 
 ``` {r, setup, echo=FALSE, cache=FALSE}
@@ -40,8 +39,11 @@ options(digits = 2) # auto round to 2 decimals when printed
 
 Complex quantitative models are used extensively in actuarial and financial risk management applications, as well as in wider fields such as environmental risk modelling [@Tsanakas2016b; @Borgonovo2016; @Pesenti2019]. The complexity of such models (high dimensionality of inputs; non-linear relationships)  motivates the performance of sensitivity analyses, with the aim of providing insight into the ways that model inputs interact and impact upon the model output. 
 
-The task of ranking the importance of different model inputs leads to the use of sensitivity measures, which assign a score to each model input.
-When model inputs are subject to uncertainty, the sensitivity measures used are often *global*, considering the full space of (randomly generated) multivariate scenarios, which represent possible configurations of the model input vector. A rich literature on global sensitivity analysis methods exists, with variance decomposition methods being particularly prominent; see @Saltelli2008 and @Borgonovo2016 for wide-ranging reviews.  The `R` package sensitivity [@Rsensitivity] implements a wide range of sensitivity analysis approaches and measures. +++ Andreas: slight rewording to make it less focused on sensitivity measures+++
+
+When model inputs are subject to uncertainty, *global* sensitivity methods are often used, considering the full space of (randomly generated) multivariate scenarios, which represent possible configurations of the model input vector. The particular task of ranking the importance of different model inputs leads to the use of sensitivity measures, which assign a score to each model input. A rich literature on global sensitivity analysis exists, with variance decomposition methods being particularly prominent; see @Saltelli2008 and @Borgonovo2016 for wide-ranging reviews.  The `R` package sensitivity [@Rsensitivity] implements a wide range of sensitivity analysis approaches and measures. 
+
+
+
 
 We introduce an alternative approach to sensitivity analysis called *Scenario Weights for Importance Measurement* (**SWIM**) and present the `R` package implementing it. The aim of this paper is to provide an accessible introduction to the concepts underlying **SWIM** and a vignette demonstrating how the package is used. **SWIM** quantifies how distorting a particular model component (which could be a model input, output, or an intermediate quantity) impacts all other model components. The **SWIM** approach can be summarised as follows:
 
