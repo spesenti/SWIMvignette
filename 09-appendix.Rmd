@@ -4,7 +4,7 @@
 
 ## Credit Model assumptions
 
-The credit model of Section \@ref(Sec:CreditModel) is based on the conditionally binomial credit model described in @Mcneil2015B which belongs to the family of mixture models. Specifically, we consider a portfolio that consists of three homogeneous subportfolios and denote the total aggregate loss of the portfolio by $L = L_1 + L_2+  L_3$, where $L_1, L_2, L_3$ are the losses of each subportfolio, given by 
+The credit risk portfolio of Section \@ref(Sec:CreditModel) is based on the conditionally binomial credit model described in @Mcneil2015B which belongs to the family of mixture models. Specifically, we consider a portfolio that consists of three homogeneous subportfolios and denote the total aggregate loss of the portfolio by $L = L_1 + L_2+  L_3$, where $L_1, L_2, L_3$ are the losses of each subportfolio, given by 
 \begin{equation}
 L_i=e_i\cdot\text{LGD}_i\cdot M_i,\quad i=1,2,3, 
 \end{equation}
@@ -22,6 +22,7 @@ The following table summarises the parameter values used in the simulation.
 |1|2500|80|0.0004|0.00040|0.250|
 |2|5000|25|0.0097|0.00440|0.375|
 |3|2500|10|0.0503|0.01328|0.500|
+Table: (\#tab:credit) Parameter values used in the simulation for the credit risk portfolio in Section \@ref(Sec:CreditModel).  
 
 ## Code for generating the data
 

@@ -11,6 +11,7 @@ To clarify this idea and explain how **SWIM** works, we first define the terms u
 | $x_{12}$ 	|$x_{22}$    | $\dots$  | $x_{d2}$  | $w_2$            	|
 | $\dots$  	|$\dots$  	 | $\dots$  | $\dots$   | $\dots$           |
 | $x_{1n}$  | $x_{2n}$   | $\dots$  | $x_{dn}$  | $w_n$             |
+Table: (\#tab:SWIMframework) Illustration of the **SWIM** framework, that is the baseline model, the stressed model and the scenario weights.  
 
 Each scenario has a *scenario weight*, shown in the last column, such that, scenario $i$ has probability $\frac{w_i}{n}$ of occurring. Scenario weights are always greater or equal than zero and have an average of 1. When all scenario weights are equal to 1, such that the probability of each scenario is $\frac 1 n$ (the standard Monte Carlo framework), we call the model a *baseline model* -- consequently weights of a baseline model will never explicitly be mentioned. When scenario weights are not identically equal to 1, such that some scenarios are more heavily weighted than others, we say that we have a *stressed model*. 
 

@@ -16,7 +16,7 @@ The stressed model thus arises from a change of measure from $P$ to $P^W$, which
 In what follows, we denote by a superscript $W$ quantities of interest under the stressed model, such as $F^W, ~ E^W$ for the probability distribution and expectation under the stressed model, respectively. We refer to @Pesenti2019 and references therein for further mathematical details and derivations of solutions to \@ref(eq:optimisation).
 
 
-The following table +++SHOULD ALL TABLES BE NUMBERED? is a collection of all implemented types of stresses in the **SWIM** package. The precise constraints of \@ref(eq:optimisation) are explained below.
+The following Table \@ref(tab:Rfunstress) is a collection of all implemented types of stresses in the **SWIM** package. The precise constraints of \@ref(eq:optimisation) are explained below.
 
 | R function         | Stress                                | `type`  |  Reference  
 | :------------------| :------------------------------------ |:--------|:------------------ 
@@ -28,6 +28,7 @@ The following table +++SHOULD ALL TABLES BE NUMBERED? is a collection of all imp
 | `stress_moment`  | moments (of functions) |`moment` | Eq. \@ref(eq:optimisationmoment)
 | `stress_VaR`     | VaR risk measure (quantile)           |`VaR`    | Eq. \@ref(eq:optimisationVaR)
 | `stress_VaR_ES`  | VaR and ES risk measures              |`VaR ES` | Eq. \@ref(eq:optimisationVaRES)
+Table: (\#tab:Rfunstress) Implemented types of stresses in **SWIM**.
 
 The solutions to this optimisation \@ref(eq:optimisationprob), \@ref(eq:optimisationVaR) and \@ref(eq:optimisationVaRES) are analytically given [@Pesenti2019]] whereas \@ref(eq:optimisationmean), \@ref(eq:optimisationmeansd) and \@ref(eq:optimisationmoment) are based on the package **nleqslv**.
 
@@ -41,6 +42,7 @@ The `stress` function is a wrapper for the `stress_type` functions, where `stres
 | `new_weights`  | scenario weights |
 | `type`         | type of stress |
 | `specs`        | details about the stress |
+Table: (\#tab:SWIMobject) The **SWIM** object, returned by any `stress` function. 
 
 The data frame containing the realisations of the baseline model, `x` in the above table, can be extracted from a **SWIM** object using `get_data`. Similarly, `get_weights` and `get_weightsfun` provide the scenario weights, respectively the functions, that when applied to `x` generate the scenario weights. The details of the applied stress can be obtained using `get_specs`.
 
@@ -119,6 +121,7 @@ The function `summary` is a method for an object of class **SWIM** and provides 
 |`1st Qu.`       |25% quantile
 |`Median`        |median, 50% quantile
 |`3rd Qu.`       |75% quantile
+Table: (\#tab:summary) The output of the `summary` function applied to a **SWIM** object. 
 
 ### Distributional comparison
 The **SWIM** package contains functions to compare the distribution of model components under different (stressed) models. The empirical distribution function of model components under a stressed model^[Note that \textbf{R} functions implementing the empirical cdf or the quantile, `ecdf` and `quantile`, will not return the empirical distribution function or the quantile function under a stressed model.] can be calculated using the `cdf` function of the **SWIM** package, applied to a **SWIM** object. To calculate sample quantiles of stressed models components, the function `quantile_stressed` can be used. The function `VaR_stressed` and `ES_stressed` provide the stressed VaR and ES of model components, which is of particular interest for stressed models resulting from constraints on risk measures, see Section \@ref(Sec:RiskMeasures). (While `quantile_stressed` works very similarly to the base **R** function `quantile`, `VaR_stressed` provides better capabilities for comparing different models and model components.) 
@@ -134,7 +137,24 @@ Comparison of baseline and stressed models and how model components change under
 |Wasserstein   |$\int | F^W_X (x) - F_X(x)| dx$ | comparing models
 |Kolmogorov    |$\sup_x |F^W_X (x) - F_X(x)|$ | comparing models
 |Gamma         |$\frac{E^W(X) - E(X)}{c}$, for a normalisation $c$ | comparing model components
+Table: (\#tab:sensitivity) Definition of the sensitivity measures implemented in **SWIM**.
 
 The Gamma sensitivity measure is normalised such that it takes values between -1 and 1, with higher positive (negative) values corresponding to a larger positive (negative) impact of the stress on the particular model component. The sensitivity measures of models or model components can be plotted using `plot_sensitivity`. The function `importance_rank` returns the effective rank of model components according to the chosen sensitivity measure. 
 
-+++WE NEED AN ADDITIONAL TABLE HERE WITH THE FUNCTIONS THAT PROVIDE STRESSED MODEL ANALYSIS, ANALOGOUS TO THE PREVIOUS TABLE ON FUNCTIONS CALCULATING STRESSED MODELS?
+
+Table \@ref(tab:Ranalysis) provides a complete list of all implemented **R** functions in **SWIM** for analysing stressed models. 
+
+| R function          | analysis of stressed models                                
+| :-------------------| :------------------------------------  
+| `summary`           |summary statistics   
+| `cdf`               |cumulative distribution function
+| `quantile_stressed` |quantile function
+| `VaR_stressed`      |VaR
+| `ES_stressed`       |ES 
+| `sensitivity`       |sensitivity measures 
+| `importance_rank`   |importance ranks    
+| `plot_cdf`          |plots cumulative distributions functions 
+| `plot_hist`         |plots histograms
+| `plot_sensitivity`  |plots sensitivity measures       
+Table: (\#tab:Ranalysis) Implemented **R** function in **SWIM** for analysing stressed models. 
+
