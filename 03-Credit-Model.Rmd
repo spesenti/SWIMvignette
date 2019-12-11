@@ -2,6 +2,11 @@
 # Case study {#Sec:CreditModel}
 
 ## A credit risk portfolio 
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+require(knitr)
+# Set so that long lines in R will be wrapped:
+opts_chunk$set(tidy.opts=list(width.cutoff=80),tidy=TRUE)
+```
 
 ```{r, loading-packages, cache = FALSE, include = FALSE}
 #  library(SWIM)
@@ -63,12 +68,13 @@ get_specs(stress.credit)
 w <- get_weights(stress.credit)
 ```
 
-```{r, plotting-stresses, cache = TRUE, include = TRUE, echo=TRUE, warning = FALSE, message = FALSE, fig.show='hold', out.width = '50%'}
-d <- data.frame(credit_data[1:10000, 1], w[1:10000, ])
-colnames(d) <- c("L","stress_1","stress_2")
-q <- stress.credit$specs$`stress 1`$q
-ggplot(d, aes(x = L, y = stress_1)) + geom_point() + ylim(0, 4) + theme_bw() + geom_vline(xintercept = q, colour = "red", size = 0.5, linetype = "dashed") + ylab("Scenario Weights")
-ggplot(d, aes(x = L, y = stress_2)) + geom_point() + ylim(0, 100) + theme_bw() + geom_vline(xintercept = q, colour = "red", size = 0.5, linetype = "dashed") + ylab("Scenario Weights")
++++ SILVANA to check to R code+++
+
+``` {r, credit-weights, warning = FALSE, message = FALSE, fig.show='hold', out.width = '50%',fig.cap = "Scenario weights against the aggregat portfolio $L$ for stressing VaR (left) and stressing both VaR and ES (right)."}
+# extract weights from SWIM object
+w.credit <- get_weights(stress.credit)
+plot(credit_data[,1], w.credit[,1], pch = 20, xlab = "L", ylab = "scenario weights")
+plot(credit_data[,1], w.credit[,2], pch = 20, xlab = "L", ylab = "scenario weights")
 ```
 
 It is seen that the weights generated to stress VaR, and VaR and ES together, follow a different pattern to the weights used to stress means and standard deviations, as shown in Section \@ref(Sec:Intro).
@@ -125,7 +131,7 @@ It transpires that subportfolios $L_2$ and $L_3$ are, in this order, most respon
 
 +++THE APPENDING OF STRESS_MOMENT IS STILL NOT WORKING PROPERLY.+++
 
-```{r, CM-stress-fixed-VaR, cache = TRUE}
+```{r, CM-stress-fixed-VaR, cache = TRUE, tidy = FALSE}
 VaR.L <- quantile(x = credit_data[, "L"], prob = 0.9, type = 1) # VaR of L
 q.H2 <- quantile(x = credit_data[, "H2"], prob = 0.75, type = 1) # quantile of H2
 k.stressH2 = c(1, 6, 6) # columns to be stressed (L, H2, H2)
