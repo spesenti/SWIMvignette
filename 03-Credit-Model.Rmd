@@ -139,7 +139,7 @@ f.stressH2 <- list(function(x)1 * (x <= VaR.L * 1.2), # indicator function for L
                  function(x)1 * (x <= q.H2)) # indicator function for H2
 # new values for the VaR of L, mean of H2, quantile of H2
 m.stressH2 = c(0.9, mean(credit_data[, "H2"]), 0.75) 
-stress.credit.H2 <- stress_moment(x = credit_data, f = f.stressH2, k = k.stressH2, m = m.stressH2)
+stress.credit.H2 <- stress_moment(x = stress.credit, f = f.stressH2, k = k.stressH2, m = m.stressH2)
 ```
 
 In this case we can use the `summary` function to verify the change of the distribution of $H_2$ under the new stress.
@@ -149,7 +149,7 @@ In this case we can use the `summary` function to verify the change of the distr
 
 ```{r, summary-sens-H2, echo = -1, cache = TRUE}
 options(digits = 3)
-summary(stress.credit.H2, base = TRUE)
+summary(stress.credit.H2, wCol = 3)
 sensitivity(object = stress.credit.H2, xCol = c(2:7), type = "Gamma")
 ```
 
