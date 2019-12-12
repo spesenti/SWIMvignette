@@ -40,8 +40,6 @@ VaR_stressed(object = stress.credit, alpha = 0.9, xCol = "L", base = TRUE)
 ES_stressed(object = stress.credit, alpha = 0.9, xCol = "L", base = TRUE)
 ```
 
-++++ have to amend ES_stressed and VaR_stressed to work with scalar alpha +++
-
 
 We then consider, additionally to the $20\%$ increase in $\text{VaR}_{0.9}$, a further increase in $\text{ES}_{0.9}$ of the aggregate portfolio $L$. Note that, when stressed together, both VaR and ES need be stressed at the same level `alpha = 0.9`. Instead of providing the percentage increases in the VaR and ES through the arguments `q_ratio` and `s_ratio`, the actual stressed values of VaR and ES can be set using the arguments `q` and `s`, respectively. 
 
