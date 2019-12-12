@@ -14,7 +14,7 @@ opts_chunk$set(tidy.opts=list(width.cutoff=80),tidy=TRUE)
   library(gridExtra)
 ```
 
-The credit model in this section is a conditionally binomial loan portfolio model including systematic and specific portfolio risk. We refer to the Appendix \@ref(AppendixCM) for details about the model and the generation of the simulated data. A key variable of interest is the total aggregate portfolio loss $L = L_1 + L_2 + L_3$, where $L_1, L_2, L_3$ are homogeneous subportfolios on  comparable scale (say, thousands of \$). The dataset contains 100,000 simulations of the portfolio $L$, the subportfolios $L_1, L_2, L_3$ as well as the default probability of each subportfolio $H_1, H_2, H_3$. These random default probabilities represent the sytematic risk *within* each subportfolio, while their dependence structure represents a systematic risk effect *between* the subportfolios. The simulated data of the credit risk portfolio is included in the **SWIM** package and can be accessed via `data("credit_data")`. A snippet of the dataset looks as follows:
+The credit model in this section is a conditionally binomial loan portfolio model including systematic and specific portfolio risk. We refer to the Appendix \@ref(AppendixCM) for details about the model and the generation of the simulated data. A key variable of interest is the total aggregate portfolio loss $L = L_1 + L_2 + L_3$, where $L_1, L_2, L_3$ are homogeneous subportfolios on  comparable scale (say, thousands of \$). The dataset contains 100,000 simulations of the portfolio $L$, the subportfolios $L_1, L_2, L_3$ as well as the default probability of each subportfolio $H_1, H_2, H_3$. These random default probabilities $H_1, H_2, H_3$ represent the sytematic risk *within* each subportfolio, while their dependence structure represents a systematic risk effect *between* the subportfolios. The simulated data of the credit risk portfolio is included in the **SWIM** package and can be accessed via `data("credit_data")`. A snippet of the dataset looks as follows:
 
 ```{r, CM-data-head, echo = -2, cache = TRUE}
 data("credit_data")
@@ -25,23 +25,21 @@ head(credit_data)
 
 ## Stressing the aggregate portfolio loss 
 
-In this section, following a reverse sensitivity approach, we study the effects that stresses on (the tail of) the aggregate portfolio have on the three subportfolios. Through this analysis, we aim to assess the comparative importance of the three subportfolios.
-
-First, we impose a $20\%$ increase on the VaR at level 0.9 of the loss of the aggregate portfolio.
+In this section, following a reverse sensitivity approach, we study the effects that stresses on (the tail of) the aggregate portfolio $L$ have on the three subportfolios. Through this analysis, we aim to assess the comparative importance of the three subportfolios. First, we impose a $20\%$ increase on the VaR at level 0.9 of the loss of the aggregate portfolio.
 
 ```{r, CM-stress-VaR, cache = FALSE, echo = TRUE}
 stress.credit <- stress(type = "VaR", x = credit_data, k = "L", 
                         alpha = 0.9, q_ratio = 1.2)
 ```
 
-The imposed change in VaR determines an increase in ES.
+Using the function `VaR_stressed` we can see how the tail (the quantiles) of the aggregate portfolio changes from the baseline to the stressed model. Further, the increase of the VaR of the aggregate porfolio induces an increase in the ES. The implemented function `ES_stressed` calcuates the ES at different levels (argument `alpha`) and for stressed models specified via the argmuent `wCol` (with default equal to 1)
 ```{r, CM-stress-VaR-check-ES, cache = FALSE}
-VaR_stressed(object = stress.credit, alpha = 0.9, xCol = "L", base = TRUE)
+VaR_stressed(object = stress.credit, alpha =  seq(0.8, 0.99, by = 0.05), xCol = "L", wCol = 1, base = TRUE)
 ES_stressed(object = stress.credit, alpha = 0.9, xCol = "L", base = TRUE)
 ```
 
 
-We then consider, additionally to the $20\%$ increase in $\text{VaR}_{0.9}$, a further increase in $\text{ES}_{0.9}$ of the aggregate portfolio $L$. Note that, when stressed together, both VaR and ES need be stressed at the same level `alpha = 0.9`. Instead of providing the percentage increases in the VaR and ES through the arguments `q_ratio` and `s_ratio`, the actual stressed values of VaR and ES can be set using the arguments `q` and `s`, respectively. 
+As a second stress, we consider, additionally to the $20\%$ increase in $\text{VaR}_{0.9}$, an increase in $\text{ES}_{0.9}$ of the aggregate portfolio $L$. When stressing VaR and ES together via `stress_VaR_ES`, both VaR and ES need be stressed at the same level, here `alpha = 0.9`. We've seen that stressing the VaR alone, increases ES to `r round(ES_stressed(object = stress.credit, alpha = 0.9, xCol = "L", base = TRUE)[1], 0)`. Thus, for the second stress we want the stressed ES to be equal to 3500. This can be achieved, by specifying the argument `s`, which is the actual stressed value of ES instead of `s_ratio`, the percentage increase. Similarly, one can provide `q_ratio` or `q` for the percentage increase in or actual value of VaR, respectively.
 
 
 ```{r, CM-stress-VaR-ES, cache = FALSE}
@@ -65,8 +63,6 @@ options(digits = 3)
 get_specs(stress.credit)
 w <- get_weights(stress.credit)
 ```
-
-+++ SILVANA to check to R code+++
 
 ``` {r, credit-weights, warning = FALSE, message = FALSE, fig.show='hold', out.width = '50%',fig.cap = "Scenario weights against the aggregat portfolio $L$ for stressing VaR (left) and stressing both VaR and ES (right)."}
 # extract weights from SWIM object
@@ -101,8 +97,10 @@ The tail of the subportfolio $L_2$ is more affected by the second than the first
 The impact of the stressed models on the model components can be quantified through sensitivity measures. The function `sensitivity` includes the *Kolmogorov* distance, the *Wasserstein* distance, and the sensitivity measure *Gamma*, which can be specified through the optional argument `type`. We refer to Section \@ref(Sec:analysis) for the definitions of these measures. The Kolmogorov and the Wasserstein distances are useful to compare different stressed models, whereas the sensitivity measure Gamma ranks model components for one stressed model.
 
 ```{r, CM-sensitivity1, cache = TRUE}
-sensitivity(object = stress.credit, xCol = c(2 : 7), wCol = 1, type = "Gamma")
+sensitivity(object = stress.credit, xCol = c(2 : 7), wCol = "all", type = "Gamma")
 ```
+
++++ we should start with talking about the sensitivities of both models. I think we should also look at the Kolmogorov and Wasserstein distance to see that the second stress is "larger", thus further away from the baseline model.+++
 
 Using the `sensitivity` function we can analyse whether the sensitivity of the joint subportfolio $L_1 + L_3$ exceeds the sensitivity of the subportfolio $L_2$. This can be accomplished by specifying, through the option `f`, a list of functions applicable to the columns `k` of the dataset. Setting `xCol = NULL` only the transformed data is considered. The sensitivity measure of a function of the columns is particularly useful when high dimensional models are considered and such summaries are needed in order to compare blocks of model components against each others.
 
