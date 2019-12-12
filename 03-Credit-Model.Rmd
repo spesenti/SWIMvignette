@@ -36,8 +36,8 @@ stress.credit <- stress(type = "VaR", x = credit_data, k = "L",
 
 The imposed change in VaR determines an increase in ES.
 ```{r, CM-stress-VaR-check-ES, cache = FALSE}
-VaR_stressed(object = stress.credit, alpha = c(0.9, 0.9), xCol = "L", base = TRUE)
-ES_stressed(object = stress.credit, alpha = c(0.9, 0.9), xCol = "L", base = TRUE)
+VaR_stressed(object = stress.credit, alpha = 0.9, xCol = "L", base = TRUE)
+ES_stressed(object = stress.credit, alpha = 0.9, xCol = "L", base = TRUE)
 ```
 
 ++++ have to amend ES_stressed and VaR_stressed to work with scalar alpha +++
