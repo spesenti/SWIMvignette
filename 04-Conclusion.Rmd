@@ -1,4 +1,4 @@
-Conclusion and future work
+# Conclusion and future work
 
 The **SWIM** package enables users to perform flexible and efficient sensitivity analyses of simulation models, using the method of stressing model components by re-weighting simulated scenarios. Multiple possibilities were demonstrated, from prioritising risk factors via reverse stress testing, to evaluating the impact on a portfolio distribution of increasing the probability of subportfolios’ joint exceedances. The implemented analysis and visualisation tools help users derive insights into the model and perform formal comparisons of the importance of model components. Since **SWIM** does not require re-simulation from the model, these sensitivity analyses have a low computational cost; moreover, they can be performed on black-box models. 
 

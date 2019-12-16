@@ -1,5 +1,5 @@
 ---
-title: Scenario Weights for Importance Measurement (**SWIM**) -- an `R` package for sensitivity
+title: Scenario Weights for Importance Measurement (**SWIM**) -- an **R** package for sensitivity
   analysis
 author: Silvana M. Pesenti^[silvana.pesenti@utoronto.ca] ^2^, Alberto Bettini^3^, Pietro
   Millossovich^4,5^, Andreas Tsanakas^5^
@@ -40,12 +40,12 @@ options(digits = 2) # auto round to 2 decimals when printed
 Complex quantitative models are used extensively in actuarial and financial risk management applications, as well as in wider fields such as environmental risk modelling [@Tsanakas2016b; @Borgonovo2016; @Pesenti2019]. The complexity of such models (high dimensionality of inputs; non-linear relationships)  motivates the performance of sensitivity analyses, with the aim of providing insight into the ways that model inputs interact and impact upon the model output. 
 
 
-When model inputs are subject to uncertainty, *global* sensitivity methods are often used, considering the full space of (randomly generated) multivariate scenarios, which represent possible configurations of the model input vector. The particular task of ranking the importance of different model inputs leads to the use of sensitivity measures, which assign a score to each model input. A rich literature on global sensitivity analysis exists, with variance decomposition methods being particularly prominent; see @Saltelli2008 and @Borgonovo2016 for wide-ranging reviews.  The `R` package sensitivity [@Rsensitivity] implements a wide range of sensitivity analysis approaches and measures. 
+When model inputs are subject to uncertainty, *global* sensitivity methods are often used, considering the full space of (randomly generated) multivariate scenarios, which represent possible configurations of the model input vector. The particular task of ranking the importance of different model inputs leads to the use of sensitivity measures, which assign a score to each model input. A rich literature on global sensitivity analysis exists, with variance decomposition methods being particularly prominent; see @Saltelli2008 and @Borgonovo2016 for wide-ranging reviews.  The **R** package sensitivity [@Rsensitivity] implements a wide range of sensitivity analysis approaches and measures. 
 
 
 
 
-We introduce an alternative approach to sensitivity analysis called *Scenario Weights for Importance Measurement* (**SWIM**) and present the `R` package implementing it. The aim of this paper is to provide an accessible introduction to the concepts underlying **SWIM** and a vignette demonstrating how the package is used. **SWIM** quantifies how distorting a particular model component (which could be a model input, output, or an intermediate quantity) impacts all other model components. The **SWIM** approach can be summarised as follows:
+We introduce an alternative approach to sensitivity analysis called *Scenario Weights for Importance Measurement* (**SWIM**) and present the **R** package implementing it. The aim of this paper is to provide an accessible introduction to the concepts underlying **SWIM** and a vignette demonstrating how the package is used. **SWIM** quantifies how distorting a particular model component (which could be a model input, output, or an intermediate quantity) impacts all other model components. The **SWIM** approach can be summarised as follows:
 
     
 1. The starting point is a table of simulated scenarios, each column containing realisations of a different model component. This table forms the *baseline model* as well as the dataset on which the **SWIM** bases its calculation.     
@@ -75,6 +75,6 @@ devtools::install_github("spesenti/SWIM")
 ## Structure of the paper
 
 Section \@ref(Sec:Intro) provides an introduction to **SWIM**, illustrating key concepts and basic functionalities of the package on a simple example. Section 
-\@ref(Sec:Scope) contains technical background on the optimisations that underly the **SWIM** package implementation. Furthermore, Section \@ref(Sec:Scope) inculdes a brief reference guide, providing an overview of implemented `R` functions, objects, and graphical/analysis tools.  Finally, a detailed case study of a credit risk portfolio is presented in Section \@ref(Sec:CreditModel). Through this case study, advanced  capabilities of **SWIM** for sensitivity analysis are demonstrated.
+\@ref(Sec:Scope) contains technical background on the optimisations that underly the **SWIM** package implementation. Furthermore, Section \@ref(Sec:Scope) inculdes a brief reference guide, providing an overview of implemented **R** functions, objects, and graphical/analysis tools.  Finally, a detailed case study of a credit risk portfolio is presented in Section \@ref(Sec:CreditModel). Through this case study, advanced  capabilities of **SWIM** for sensitivity analysis are demonstrated.
 
 

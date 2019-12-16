@@ -109,40 +109,7 @@ Note that, since **SWIM** works with discrete distributions, the exact required 
 The option `type = "user"` allows to generate a **SWIM** object with  scenario weights defined by a user. The scenario weights can be provided directly via the `new_weights` argument or through a list of functions, `new_weightsfun`, that applied to the data `x` generates the scenario weights. 
 
 ## Analysis of stressed models {#Sec:analysis}
-
-The function `summary` is a method for an object of class **SWIM** and provides summary statistics of the baseline and stressed models. If the **SWIM** object contains more than one set of scenario weights, each corresponding to one stressed model, the `summary` function returns for each set of scenario weights a list containing:    
-
-|                | |
-| :---           | :--- |  
-|`mean`          |sample mean
-|`sd`            |sample standard deviation
-|`skewness`      |sample skewness
-|`ex kurtosis`   |sample excess kurtosis
-|`1st Qu.`       |25% quantile
-|`Median`        |median, 50% quantile
-|`3rd Qu.`       |75% quantile
-Table: (\#tab:summary) The output of the `summary` function applied to a **SWIM** object. 
-
-### Distributional comparison
-The **SWIM** package contains functions to compare the distribution of model components under different (stressed) models. The empirical distribution function of model components under a stressed model^[Note that \textbf{R} functions implementing the empirical cdf or the quantile, `ecdf` and `quantile`, will not return the empirical distribution function or the quantile function under a stressed model.] can be calculated using the `cdf` function of the **SWIM** package, applied to a **SWIM** object. To calculate sample quantiles of stressed models components, the function `quantile_stressed` can be used. The function `VaR_stressed` and `ES_stressed` provide the stressed VaR and ES of model components, which is of particular interest for stressed models resulting from constraints on risk measures, see Section \@ref(Sec:RiskMeasures). (While `quantile_stressed` works very similarly to the base **R** function `quantile`, `VaR_stressed` provides better capabilities for comparing different models and model components.) 
-
-Implemented visualisation of distribution functions are `plot_cdf`, for plotting empirical distribution functions, and `plot_hist`, for plotting histograms of model components under different (stressed) models.
-
-
-### Sensitivity measures 
-Comparison of baseline and stressed models and how model components change under different models, is typically done via sensitivity measures. The **SWIM** packages contains the `sensitivity` function, which calculates sensitivity measures of stressed models and model components. The implemented sensitivity measures, summarised in the table below, are the Wasserstein, Kolmogorov and the Gamma sensitivity measures, see @Pesenti2016DM @Pesenti2019 @Emmer2015JR. The Wasserstein and Kolmogorov sensitivities provide a comparison of different (stressed and baseline) models, as these sensitivities only depend on the scenario weights. The Gamma sensitivity measure, which accounts for the induced stress to the mean of a model component, can be utilised to compare the impact of a stressed model on the model components. The definition of the sensitivity measures is summarised in the following table:
-
-| **Metric**     |**Definition**         | **Purpose**
-| :---           | :--- | :--- | 
-|Wasserstein   |$\int | F^W_X (x) - F_X(x)| dx$ | comparing models
-|Kolmogorov    |$\sup_x |F^W_X (x) - F_X(x)|$ | comparing models
-|Gamma         |$\frac{E^W(X) - E(X)}{c}$, for a normalisation $c$ | comparing model components
-Table: (\#tab:sensitivity) Definition of the sensitivity measures implemented in **SWIM**.
-
-The Gamma sensitivity measure is normalised such that it takes values between -1 and 1, with higher positive (negative) values corresponding to a larger positive (negative) impact of the stress on the particular model component. The sensitivity measures of models or model components can be plotted using `plot_sensitivity`. The function `importance_rank` returns the effective rank of model components according to the chosen sensitivity measure. 
-
-
-Table \@ref(tab:Ranalysis) provides a complete list of all implemented **R** functions in **SWIM** for analysing stressed models. 
+Table \@ref(tab:Ranalysis) provides a complete list of all implemented **R** functions in **SWIM** for analysing stressed models, which are described below in detail. 
 
 | R function          | analysis of stressed models                                
 | :-------------------| :------------------------------------  
@@ -157,4 +124,37 @@ Table \@ref(tab:Ranalysis) provides a complete list of all implemented **R** fun
 | `plot_hist`         |plots histograms
 | `plot_sensitivity`  |plots sensitivity measures       
 Table: (\#tab:Ranalysis) Implemented **R** function in **SWIM** for analysing stressed models. 
+
+
+### Distributional comparison
+The **SWIM** package contains functions to compare the distribution of model components under different (stressed) models. The function `summary` is a method for an object of class **SWIM** and provides summary statistics of the baseline and stressed models. If the **SWIM** object contains more than one set of scenario weights, each corresponding to one stressed model, the `summary` function returns for each set of scenario weights a list containing:    
+
+|                | |
+| :---           | :--- |  
+|`mean`          |sample mean
+|`sd`            |sample standard deviation
+|`skewness`      |sample skewness
+|`ex kurtosis`   |sample excess kurtosis
+|`1st Qu.`       |25% quantile
+|`Median`        |median, 50% quantile
+|`3rd Qu.`       |75% quantile
+Table: (\#tab:summary) The output of the `summary` function applied to a **SWIM** object. 
+
+The empirical distribution function of model components under a stressed model^[Note that \textbf{R} functions implementing the empirical cdf or the quantile, `ecdf` and `quantile`, will not return the empirical distribution function or the quantile function under a stressed model.] can be calculated using the `cdf` function of the **SWIM** package, applied to a **SWIM** object. To calculate sample quantiles of stressed models components, the function `quantile_stressed` can be used. The function `VaR_stressed` and `ES_stressed` provide the stressed VaR and ES of model components, which is of particular interest for stressed models resulting from constraints on risk measures, see Section \@ref(Sec:RiskMeasures). (While `quantile_stressed` works very similarly to the base **R** function `quantile`, `VaR_stressed` provides better capabilities for comparing different models and model components.) 
+
+Implemented visualisation of distribution functions are `plot_cdf`, for plotting empirical distribution functions, and `plot_hist`, for plotting histograms of model components under different (stressed) models.
+
+
+### Sensitivity measures 
+Comparison of baseline and stressed models and how model components change under different models, is typically done via sensitivity measures. The **SWIM** packages contains the `sensitivity` function, which calculates sensitivity measures of stressed models and model components. The implemented sensitivity measures, summarised in the table below, are the *Wasserstein*, *Kolmogorov* and the *Gamma* sensitivity measures, see @Pesenti2016DM @Pesenti2019 @Emmer2015JR. 
+
+| **Metric**     |**Definition**         
+| :---           | :--- | :--- | 
+|Wasserstein   |$\int | F^W_X (x) - F_X(x)| dx$
+|Kolmogorov    |$\sup_x |F^W_X (x) - F_X(x)|$ 
+|Gamma         |$\frac{E^W(X) - E(X)}{c}$, for a normalisation $c$ 
+Table: (\#tab:sensitivity) Definition of the sensitivity measures implemented in **SWIM**.
+
+The Gamma sensitivity measure is normalised such that it takes values between -1 and 1, with higher positive (negative) values corresponding to a larger positive (negative) impact of the stress on the particular model component. The sensitivity measures can be plotted using `plot_sensitivity`. The function `importance_rank` returns the effective rank of model components according to the chosen sensitivity measure. 
+
 
