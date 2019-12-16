@@ -1,7 +1,7 @@
 ---
 title: Scenario Weights for Importance Measurement (**SWIM**) -- an **R** package for sensitivity
   analysis
-author: Silvana M. Pesenti^[silvana.pesenti@utoronto.ca] ^2^, Alberto Bettini^3^, Pietro
+author: Silvana M. Pesenti^[Correspondence to Silvana Pesenti, Department of Statistical Sciences, University of Toronto, Canada. silvana.pesenti@utoronto.ca] ^2^, Alberto Bettini^3^, Pietro
   Millossovich^4,5^, Andreas Tsanakas^5^
 date: ^2^University of Toronto, ^3^Assicurazioni Generali S.p.A, ^4^DEAMS, University
   of Trieste, ^5^Cass Business School, City, University of London
@@ -22,8 +22,7 @@ abstract: 'The **SWIM** package implements a flexible sensitivity analysis frame
   weights are calculated to minimise the relative entropy with respect to the baseline
   model, subject to the stress applied. As well as calculating scenario weights, the package provides tools for the analysis of stressed models, including plotting facilities and evaluation of sensitivity measures. **SWIM** does not require additional evaluations
   of the simulation model or explicit knowledge of its underlying statistical and
-  functional relations; hence it is suitable for the analysis of black box models. 
-  The capabilities of **SWIM** are demonstrated through a case study of a credit portfolio   model. '
+  functional relations; hence it is suitable for the analysis of black box models. The capabilities of **SWIM** are demonstrated through a case study of a credit portfolio model.'
 ---
 
 ``` {r, setup, echo=FALSE, cache=FALSE}
@@ -31,7 +30,7 @@ options(digits = 2) # auto round to 2 decimals when printed
 ```
 
 
-
+**Keywords**: Sensitivity measures; risk measures; stress testing; scenario weights
 
 # Introduction
 
@@ -70,7 +69,6 @@ install.packages("SWIM")
 # and the development version from GitHub 
 devtools::install_github("spesenti/SWIM")
 ```
-
 
 ## Structure of the paper
 

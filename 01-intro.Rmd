@@ -2,17 +2,6 @@
 
 ```{r wrap-hook, echo = FALSE}
 library(knitr)
-hook_output = knit_hooks$get('output')
-knit_hooks$set(output = function(x, options) {
-  # this hook is used only when the linewidth option is not NULL
-  if (!is.null(n <- options$linewidth)) {
-    x = knitr:::split_lines(x)
-    # any lines wider than n should be wrapped
-    if (any(nchar(x) > n)) x = strwrap(x, width = n)
-    x = paste(x, collapse = '\n')
-  }
-  hook_output(x, options)
-})
 ```
 
 
@@ -139,7 +128,7 @@ plot(Y[1:5000], w.sd[1:5000], pch = 20, xlab = "Y", ylab = "scenario weights")
 
 Finally we ought to note that not all stresses that one may wish to apply are feasible. Assume for example that we want to increase the mean of $Z_1$ from 100 to 300, which exceeds the maximum realisation of $Z_1$ in the baseline model. Then, clearly, no set of scenario weights can be found that produce a stress that yields the required mean for $Z_1$; consequently an error message is produced.
 
-``` {r, example1_third_stress, cache = TRUE, error=TRUE}
+``` {r, example1_third_stress, cache = TRUE, error=TRUE, linewidth = 60}
 stress(type = "mean", x = dat, k = 1, new_means = 300)
 max(Z1)
 ```

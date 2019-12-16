@@ -1,15 +1,18 @@
-bookdown::gitbook:
-  lib_dir: assets
-  split_by: chapter
-  config:
-    toolbar:
-      position: static
-    search: yes
-    css: toc.css
-  split_bib: no
-  citation_package: natbib
 
 bookdown::pdf_book:
-   toc: true
-   keep_tex: yes
-   citation_package: natbib
+    includes:
+      in_header: preamble.tex
+    toc: false
+    keep_tex: yes
+    citation_package: natbib
+
+#bookdown::gitbook:
+#  lib_dir: assets
+#  split_by: chapter
+#  config:
+#    toolbar:
+#      position: static
+#    search: yes
+#    css: toc.css
+#  split_bib: no
+#  citation_package: natbib

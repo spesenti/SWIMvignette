@@ -27,7 +27,7 @@ Table: (\#tab:credit) Parameter values used in the simulation for the credit ris
 ## Code for generating the data
 
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, tidy = FALSE}
   set.seed(1)
   library(copula)
   nsim <- 100000
