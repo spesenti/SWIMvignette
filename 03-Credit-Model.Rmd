@@ -205,10 +205,10 @@ VaR.level <- seq(0.75, 0.99, by = 0.003)
 VaR.stress1 <- VaR_stressed(stress.credit.L2L3, alpha = VaR.level, xCol = "L", wCol = 1, base = TRUE)
 VaR.stress2 <- VaR_stressed(stress.credit.L2L3, alpha = VaR.level, xCol = "L", wCol = 2, base = FALSE)
 
-plot(VaR.level, VaR.stress1[, 2], col = "blue", type = "l", xlab = "quantile levels", ylab ="Quantiles of $L$ under different models")
+plot(VaR.level, VaR.stress1[, 2], col = "blue", type = "l", xlab = "quantile levels", ylab ="Quantiles of L under different models")
 lines(VaR.level, VaR.stress1[, 1], col = "red")
 lines(VaR.level, VaR.stress2, col = "green")
 ```
 
-The results and the plots indicate that this stress on joint exceedances of subportfolios, increases the tail quantiles of $L$ even further.
+The results and the plots indicate that the stress on joint exceedances of subportfolios, increases the tail quantiles of $L$ even further.
 
