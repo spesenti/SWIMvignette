@@ -1,3 +1,5 @@
-# Conclusion
+Conclusion and future work
 
-Future work include a function for plotting the senario weights. 
+The **SWIM** package enables users to perform flexible and efficient sensitivity analyses of simulation models, using the method of stressing model components by re-weighting simulated scenarios. Multiple possibilities were demonstrated, from prioritising risk factors via reverse stress testing, to evaluating the impact on a portfolio distribution of increasing the probability of subportfolios’ joint exceedances. The implemented analysis and visualisation tools help users derive insights into the model and perform formal comparisons of the importance of model components. Since **SWIM** does not require re-simulation from the model, these sensitivity analyses have a low computational cost; moreover, they can be performed on black-box models. 
+
+Future work includes enhancing analysis tools, for example by including a `plot_weights` function that enables the seamless visualisation and comparison of scenraio weights arising from different stresses, as well as `stressed_moment` and  `stressed_correlation` functions, which will make it easier to extract distributional characteristics of stressed models. Furthermore, we consider to include alternative way of calculating scenario weights, such as minimising the $\chi^2$ divergence instead of the Kullback-Leiber divergence.
