@@ -36,7 +36,7 @@ The $20\%$ increase was specified by setting the `q_ratio` argument to $1.2$ -- 
 Using the function `VaR_stressed` we can quantify how tail quantiles of the aggregate portfolio loss change, when moving from the baseline to the stressed model. We obserce that the increase in the VaR of the portfolio loss changes the tail quantiles of the aggregate portfolio loss; thus the stress on VaR induces an increase in ES. The implemented functions `VaR_stressed` and `ES_stressed` calculate respectively VaR and ES at different levels and for different stressed models. The argument `alpha` specifies the levels of VaR and ES, respectively. The stressed model under which the risk measures are calculated can be choosen using `wCol`, which is by default equal to 1. 
 
 ```{r, CM-stress-VaR-check-ES, cache = FALSE}
-VaR_stressed(object = stress.credit, alpha =  seq(0.8, 0.95, by = 0.05), xCol = "L", wCol = 1, base = TRUE)
+VaR_stressed(object = stress.credit, alpha =  c(0.75, 0.9, 0.95, 0.99), xCol = "L", wCol = 1, base = TRUE)
 ES_stressed(object = stress.credit, alpha = 0.9, xCol = "L", wCol = 1, base = TRUE)
 ```
 
@@ -144,9 +144,13 @@ q.H2 <- quantile(x = credit_data[, "H2"], prob = 0.75, type = 1)
 # columns to be stressed (L, H2, H2)
 k.stressH2 = list(1, 6, 6) 
 # functions to be applied to columns
-f.stressH2 <- list(function(x)1 * (x <= VaR.L * 1.2), # indicator function for L, for stress on VaR
-                 function(x)x, # mean of H2
-                 function(x)1 * (x <= q.H2)) # indicator function for 75th quaantile of H2
+f.stressH2 <- list(
+                 # indicator function for L, for stress on VaR
+                 function(x)1 * (x <= VaR.L * 1.2), 
+                 # mean of H2
+                 function(x)x, 
+                 # indicator function for 75th quaantile of H2
+                 function(x)1 * (x <= q.H2)) 
 # new values for the 90% VaR of L, mean of H2, 75th quantile of H2
 m.stressH2 = c(0.9, mean(credit_data[, "H2"]), 0.75) 
 stress.credit <- stress_moment(x = stress.credit, f = f.stressH2, k = k.stressH2, m = m.stressH2)
@@ -172,7 +176,8 @@ options(digits = 3)
 VaR.L2 <- quantile(x = credit_data[, "L2"], prob = 0.9, type = 1) 
 VaR.L3 <- quantile(x = credit_data[, "L3"], prob = 0.9, type = 1) 
 #stressing VaR of L2 and L3
-f.stress <- list(function(x)1 * (x <= VaR.L2 * 1.2), function(x)1 * (x <= VaR.L3 * 1.2)) 
+f.stress <- list(function(x)1 * (x <= VaR.L2 * 1.2), 
+                 function(x)1 * (x <= VaR.L3 * 1.2)) 
 stress.credit.L2L3 <- stress_moment(x = credit_data, f = f.stress, k = list(3, 4), m = c(0.9, 0.9))
 #impact on portfolio tail
 VaR_stressed(stress.credit.L2L3, alpha = c(0.75, 0.9, 0.95, 0.99), xCol = "L", base = TRUE)
@@ -182,17 +187,27 @@ It is seen how the stressing of subportfolios $L_2$ and $L_3$ has a substantial 
 
 
 ```{r, CM-joint-stress-VaR-2, echo = TRUE, cache = TRUE}
-# probability of joint exceendance under baseline
+# probability of joint exceendance under the baseline model
 mean(1 * (credit_data[, "L2"] > VaR.L2 * 1.2) * (credit_data[, "L3"] > VaR.L3 * 1.2))
 # probability of joint exceendance under the stressed model
 mean(get_weights(stress.credit.L2L3) * (credit_data[, "L2"] > VaR.L2 * 1.2) * (credit_data[, "L3"] > VaR.L3 * 1.2))
 
-# stressing L2 and L3 as before
-# additionally stressing their joint exceedance probability to the level 0.06
-f.stress.joint <- list(function(x)1 * (x <= VaR.L2 * 1.2), function(x)1 * (x <= VaR.L3 * 1.2), function(x)1 * (x[1] > VaR.L2 * 1.2) * (x[2] > VaR.L3 * 1.2)) 
+# additionally stress joint exceedance probability of L2 and L3
+f.stress.joint <- c(f.stress, function(x)1 * (x[1] > VaR.L2 * 1.2) * (x[2] > VaR.L3 * 1.2)) 
 stress.credit.L2L3 <- stress_moment(x = stress.credit.L2L3, f = f.stress.joint, k = list(3,4,c(3, 4)), m = c(0.9, 0.9, 0.06))
+```
 
-VaR_stressed(stress.credit.L2L3, alpha=c(0.75, 0.9, 0.95, 0.99), xCol = "L", base = TRUE)
+We analyise the impact the stresses of the tail of the subportfolios $L_2$ and $L_3$ have on the aggregate porfolio $L$. For this we plot in Figure \@ref(fig:CM-joint-stress-VaR-2-effect) the quantile of the aggregate porfolio under the baseline model, under the stress on the tail of $L_2$ and $L_3$ (red), and under the additional stress on the joint tail of $L_2$ and $L_3$.
+
+```{r, CM-joint-stress-VaR-2-effect, echo = TRUE, cache = TRUE, fig.cap = "Quantiles of the aggreagte loss $L$ under the baseline (blue), the additional stress on the tail of $L_2$ and $L_3$ (red), and the stress on the joint tail of $L_2$ and $L_3$ (green)."}
+# stressed quantiles
+VaR.level <- seq(0.75, 0.99, by = 0.003)
+VaR.stress1 <- VaR_stressed(stress.credit.L2L3, alpha = VaR.level, xCol = "L", wCol = 1, base = TRUE)
+VaR.stress2 <- VaR_stressed(stress.credit.L2L3, alpha = VaR.level, xCol = "L", wCol = 2, base = FALSE)
+
+plot(VaR.level, VaR.stress1[, 2], col = "blue", type = "l", xlab = "quantile levels", ylab ="Quantiles of $L$ under different models")
+lines(VaR.level, VaR.stress1[, 1], col = "red")
+lines(VaR.level, VaR.stress2, col = "green")
 ```
 
 The results and the plots indicate that this stress on joint exceedances of subportfolios, increases the tail quantiles of $L$ even further.

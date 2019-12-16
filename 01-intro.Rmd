@@ -58,7 +58,7 @@ Z2 <- 100 + 20 * (r * U1 + sqrt(1 - r ^ 2) * U2)
 Z3 <- rnorm(n.sim, 100, 20)
 # portfolio loss Y
 Y <- Z1 + Z2 + Z3
-# baseline model
+# data of baseline model
 dat <- data.frame(Z1, Z2, Z3, Y)
 ```
 
@@ -89,7 +89,7 @@ The scenario weights, given their central role, can be extracted from a **SWIM**
 
 
 ``` {r, example1-weights-mean, warning = FALSE, message = FALSE, fig.show='hold', out.width = '50%',fig.cap = "Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the mean of $Z_1$."}
-# extract weights from SWIM object
+# extract weights from stressed model
 w.mean <- get_weights(str.mean)
 plot(Z1[1:5000], w.mean[1:5000], pch = 20, xlab = "Z1", ylab = "scenario weights")
 plot(Y[1:5000], w.mean[1:5000], pch = 20, xlab = "Y", ylab = "scenario weights")

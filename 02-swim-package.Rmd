@@ -135,9 +135,9 @@ The **SWIM** package contains functions to compare the distribution of model com
 |`sd`            |sample standard deviation
 |`skewness`      |sample skewness
 |`ex kurtosis`   |sample excess kurtosis
-|`1st Qu.`       |25% quantile
-|`Median`        |median, 50% quantile
-|`3rd Qu.`       |75% quantile
+|`1st Qu.`       |$25%$ quantile
+|`Median`        |median, $50%$ quantile
+|`3rd Qu.`       |$75%$ quantile
 Table: (\#tab:summary) The output of the `summary` function applied to a **SWIM** object. 
 
 The empirical distribution function of model components under a stressed model^[Note that \textbf{R} functions implementing the empirical cdf or the quantile, `ecdf` and `quantile`, will not return the empirical distribution function or the quantile function under a stressed model.] can be calculated using the `cdf` function of the **SWIM** package, applied to a **SWIM** object. To calculate sample quantiles of stressed models components, the function `quantile_stressed` can be used. The function `VaR_stressed` and `ES_stressed` provide the stressed VaR and ES of model components, which is of particular interest for stressed models resulting from constraints on risk measures, see Section \@ref(Sec:RiskMeasures). (While `quantile_stressed` works very similarly to the base **R** function `quantile`, `VaR_stressed` provides better capabilities for comparing different models and model components.) 

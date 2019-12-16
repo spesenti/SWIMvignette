@@ -32,18 +32,19 @@ Table: (\#tab:credit) Parameter values used in the simulation for the credit ris
   library(copula)
   nsim <- 100000
   
-# data
-  m1 <- 2500 # counterparties subportfolio A
-  m2 <- 5000 # counterparties subportfolio B
-  m3 <- 2500 # counterparties subportfolio C
+# counterparties subportfolio 1, 2 and 3
+  m1 <- 2500
+  m2 <- 5000
+  m3 <- 2500
   
-  p1 <- 0.0004 # prob of default 
-  rho1 <- 0.0004 # correlation within the subportfolio
-
+  # prob of default for subportfolios 1, 2 and 3
+  p1 <- 0.0004 
   p2 <- 0.0097 
-  rho2 <- 0.0044
-  
   p3 <- 0.0503  
+  
+  # correlation within the subportfolios
+  rho1 <- 0.0004
+  rho2 <- 0.0044
   rho3 <- 0.01328
   
 # exposures
@@ -55,8 +56,6 @@ Table: (\#tab:credit) Parameter values used in the simulation for the credit ris
   LGD1 <- 0.25
   LGD2 <- 0.375
   LGD3 <- 0.5
-  
-# beta-binomial model with copula 
   
 # beta parameters: matching subportfolios default probabilities and correlation
   alpha1 <- p1 * (1 / rho1 - 1)
@@ -76,7 +75,7 @@ Table: (\#tab:credit) Parameter values used in the simulation for the credit ris
 # Gaussian copula structure
   myCop <- normalCopula(param = c(cor12, cor13, cor23), dim = 3, dispstr = "un")
   
-# define multivariate beta with given copula
+# multivariate beta with given copula
   myMvd <- mvdc(copula = myCop,
                 margins = c("beta", "beta", "beta"),
                 paramMargins = list(list(alpha1, beta1),
