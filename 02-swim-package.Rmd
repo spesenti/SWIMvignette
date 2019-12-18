@@ -75,7 +75,7 @@ E^W(X_j) = m_j \text{ and Var}^W(X_j) = s_j^2 , ~j \in J, (\#eq:optimisationmean
 \end{equation}
 for $m_j, s_j, ~ j \in J$, where $J$ is a subset of $\{1, \ldots, d\}$.
 
-The arguments $m_j, s_j$ are defined in the `stress_mean_sd` function by the arguments `new_means` and `new_sd` respectively. The funcitons `stress_mean` and `stress_mean_sd` are special cases of the general `stress_moment` function, which allows for stressed models with constraints on functions of the (joint) moments of model components. Specifically
+The arguments $m_j, s_j$ are defined in the `stress_mean_sd` function by the arguments `new_means` and `new_sd` respectively. The functions `stress_mean` and `stress_mean_sd` are special cases of the general `stress_moment` function, which allows for stressed models with constraints on functions of the (joint) moments of model components. Specifically
 
 > For $k = 1, \ldots, K$, $J_k$ subsets of $\{1, \ldots, d\}$ and functions $f_k \colon \mathbb{R}^{J_k} \to \mathbb{R}$, `stress_moment` solves \@ref(eq:optimisation) with the constraints
 \begin{equation} 

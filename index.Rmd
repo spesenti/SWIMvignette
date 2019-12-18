@@ -73,6 +73,6 @@ devtools::install_github("spesenti/SWIM")
 ## Structure of the paper
 
 Section \@ref(Sec:Intro) provides an introduction to **SWIM**, illustrating key concepts and basic functionalities of the package on a simple example. Section 
-\@ref(Sec:Scope) contains technical background on the optimisations that underly the **SWIM** package implementation. Furthermore, Section \@ref(Sec:Scope) inculdes a brief reference guide, providing an overview of implemented **R** functions, objects, and graphical/analysis tools.  Finally, a detailed case study of a credit risk portfolio is presented in Section \@ref(Sec:CreditModel). Through this case study, advanced  capabilities of **SWIM** for sensitivity analysis are demonstrated.
+\@ref(Sec:Scope) contains technical background on the optimisations that underlay the **SWIM** package implementation. Furthermore, Section \@ref(Sec:Scope) includes a brief reference guide, providing an overview of implemented **R** functions, objects, and graphical/analysis tools.  Finally, a detailed case study of a credit risk portfolio is presented in Section \@ref(Sec:CreditModel). Through this case study, advanced  capabilities of **SWIM** for sensitivity analysis are demonstrated.
 
 
