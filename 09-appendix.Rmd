@@ -4,11 +4,11 @@
 
 ## Credit Model assumptions
 
-The credit risk portfolio of Section \@ref(Sec:CreditModel) is based on the conditionally binomial credit model described in @Mcneil2015B which belongs to the family of mixture models. Specifically, we consider a portfolio that consists of three homogeneous subportfolios and denote the total aggregate loss of the portfolio by $L = L_1 + L_2+  L_3$, where $L_1, L_2, L_3$ are the losses of each subportfolio, given by 
+The credit risk portfolio of Section \@ref(Sec:CreditModel) is based on the conditionally binomial credit model described in Section 11.2 of @Mcneil2015B which belongs to the family of mixture models. Specifically, we consider a portfolio that consists of three homogeneous subportfolios and denote the aggregate portfolio loss by $L = L_1 + L_2+  L_3$, with $L_1, L_2, L_3$ the losses of each subportfolio, given by 
 \begin{equation}
 L_i=e_i\cdot\text{LGD}_i\cdot M_i,\quad i=1,2,3, 
 \end{equation}
-where $e_i$ and $M_i$ are the exposure and number of insolvencies of the $i^{\text{th}}$ subportfolio, respectively, and $\text{LGD}_i$ is the loss given default of subportfolio $i$. $M_i$, representing the number of insolvencies ("defaults") in the $i^th$ subportfolio, is Binomially distributed, conditional on $H_i$, a random common default probability. Specifically $M_i|H_i \sim Binomial(m_i,H_i)$, where $m_i$ is the portfolio size. $H_i, ~ i = 1,2,3$ follows a Beta distribution with parameters chosen such as to match the overall unconditional default probability $p_i$ and the default correlation $\rho_i$, that is the correlation between (the indicators of) two default events within a subportfolio, see @Mcneil2015B. The dependence structure of $(H_1,H_2,H_3)$ is modelled via a Gaussian copula with correlation matrix    
+where $e_i$ and $M_i$ are the exposure and number of defaults of the $i^{\text{th}}$ subportfolio, respectively, and $\text{LGD}_i$ is the loss given default of subportfolio $i$. $M_i$ is Binomially distributed, conditional on $H_i$, a random common default probability. Specifically $M_i|H_i \sim Binomial(m_i,H_i)$, where $m_i$ is the portfolio size. The $H_i$s follow a Beta distributions with parameters chosen so as to match given overall unconditional default probabilities $p_i$ and default correlations $\rho_i$, that is, the correlation between (the indicators of) two default events within a subportfolio, see @Mcneil2015B. The dependence structure of $(H_1,H_2,H_3)$ is modelled via a Gaussian copula with correlation matrix    
 \begin{equation}\Sigma = \begin{pmatrix}
 1 & 0.3 & 0.1\\
 0.3 & 1 & 0.4\\
@@ -42,7 +42,7 @@ Table: (\#tab:credit) Parameter values used in the simulation for the credit ris
   p2 <- 0.0097 
   p3 <- 0.0503  
   
-  # correlation within the subportfolios
+  # correlation between default probabilities
   rho1 <- 0.0004
   rho2 <- 0.0044
   rho3 <- 0.01328
