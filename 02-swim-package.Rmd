@@ -21,8 +21,8 @@ Table \@ref(tab:Rfunstress) provides a collection of all implemented types of st
 | R function         | Stress                                | `type`  |  Reference  
 | :------------------| :------------------------------------ |:--------|:------------------ 
 | `stress`         | wrapper for the `stress_type` functions   |      | Sec. \@ref(Rstress)
-| `stress_user`    | user defined scenario weights         |`user`   |
-| `stress_prob`    | probabilities of disjoint intervals                    |`prob`   | Eq. \@ref(eq:optimisationprob)
+| `stress_user`    | user defined scenario weights         |`user`   | Sec. \@ref(Sec:User)
+| `stress_prob`    | probabilities of disjoint intervals    |`prob`   | Eq. \@ref(eq:optimisationprob)
 | `stress_mean`    | means                                 |`mean`   | Eq. \@ref(eq:optimisationmean)
 | `stress_mean_sd` | means and standard deviations         |`mean sd`| Eq. \@ref(eq:optimisationmeansd)
 | `stress_moment`  | moments (of functions) |`moment` | Eq. \@ref(eq:optimisationmoment)
@@ -30,7 +30,7 @@ Table \@ref(tab:Rfunstress) provides a collection of all implemented types of st
 | `stress_VaR_ES`  | VaR and ES risk measures              |`VaR ES` | Eq. \@ref(eq:optimisationVaRES)
 Table: (\#tab:Rfunstress) Implemented types of stresses in **SWIM**.
 
-The solutions to the optimisations \@ref(eq:optimisationprob) and \@ref(eq:optimisationVaR) are worked out fully analytically [@Pesenti2019], whereas problems \@ref(eq:optimisationmean), \@ref(eq:optimisationmeansd), \@ref(eq:optimisationmoment) and \@ref(eq:optimisationVaRES) involve some root-finding, using the package **nleqslv**.
+The solutions to the optimisations \@ref(eq:optimisationprob) and \@ref(eq:optimisationVaR) are worked out fully analytically [@Pesenti2019], whereas problems \@ref(eq:optimisationmean), \@ref(eq:optimisationmeansd), \@ref(eq:optimisationmoment) and \@ref(eq:optimisationVaRES) involve some root-finding. Specifically, problems \@ref(eq:optimisationmean), \@ref(eq:optimisationmeansd) and \@ref(eq:optimisationmoment) rely on the package **nleqslv**, whereas \@ref(eq:optimisationVaRES) uses the `uniroot` function.
 
 
 ### The `stress` function and the **SWIM** object {#Rstress}
@@ -77,7 +77,7 @@ for $m_j, s_j, ~ j \in J$, where $J$ is a subset of $\{1, \ldots, d\}$.
 
 The arguments $m_j, s_j$ are defined in the `stress_mean_sd` function by the arguments `new_means` and `new_sd` respectively. The functions `stress_mean` and `stress_mean_sd` are special cases of the general `stress_moment` function, which allows for stressed models with constraints on functions of the (joint) moments of model components. Specifically
 
-> For $k = 1, \ldots, K$, $J_k$ subsets of $\{1, \ldots, d\}$ and functions $f_k \colon \mathbb{R}^{J_k} \to \mathbb{R}$, `stress_moment` solves \@ref(eq:optimisation) with the constraints
+> For $k = 1, \ldots, K$, $J_k$ subsets of $\{1, \ldots, d\}$ and functions $f_k \colon \mathbb{R}^{|J_k|} \to \mathbb{R}$, `stress_moment` solves \@ref(eq:optimisation) with the constraints
 \begin{equation} 
 E^W(f_k(\mathbf X_{J_k}) ) = m_k, ~k = 1, \ldots, K, (\#eq:optimisationmoment)
 \end{equation}
@@ -104,7 +104,7 @@ and `stress_VaR_ES` solves \@ref(eq:optimisation) with the constraints
 
 Note that, since **SWIM** works with discrete distributions, the exact required VaR may not be achievable. In that case, `stress_VaR` will return scenario weights inducing the largest quantile in the dataset smaller or equal to the required VaR (i.e. $q$); this guarantees that $P^W(X_j\leq q)=\alpha$.
 
-### User defined scenario weights 
+### User defined scenario weights {#Sec:User}
 
 The option `type = "user"` allows to generate a **SWIM** object with  scenario weights defined by a user. The scenario weights can be provided directly via the `new_weights` argument or through a list of functions, `new_weightsfun`, that applied to the data `x` generates the scenario weights. 
 
