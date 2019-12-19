@@ -18,9 +18,9 @@ To clarify this idea and explain how **SWIM** works, we first define the terms u
 | $x_{1n}$  | $x_{2n}$   | $\dots$  | $x_{dn}$  | $w_n$             |
 Table: (\#tab:SWIMframework) Illustration of the **SWIM** framework, that is the baseline model, the stressed model and the scenario weights.  
 
-Each scenario has a *scenario weight*, shown in the last column, such that, scenario $i$ has probability $\frac{w_i}{n}$ of occurring. Scenario weights are always greater or equal than zero and have an average of 1. When all scenario weights are equal to 1, such that the probability of each scenario is $\frac 1 n$ (the standard Monte Carlo framework), we call the model a *baseline model* -- consequently weights of a baseline model will never explicitly be mentioned. When scenario weights are not identically equal to 1, such that some scenarios are more heavily weighted than others, we say that we have a *stressed model*. 
+Each scenario has a *scenario weight*, shown in the last column, such that, scenario $i$ has probability $\frac{w_i}{n}$ of occurring. Scenario weights are always greater or equal than zero and have an average of 1. When all scenario weights are equal to 1, such that the probability of each scenario is $\frac 1 n$ (the standard Monte Carlo framework), we call the model a *baseline model* -- consequently weights of a baseline model will never be explicitly mentioned. When scenario weights are not identically equal to 1, such that some scenarios are more heavily weighted than others, we say that we have a *stressed model*. 
 
-The scenario weights make the joint distribution of model components under the stressed model  different, compared to the baseline model. For example, under the baseline model, the expected value of $X_1$ and the cumulative distribution function of $X_1$ at threshold $t$, are respectively given by:
+The scenario weights make the joint distribution of model components under the stressed model  different, compared to the baseline model. For example, under the baseline model, the expected value of $X_1$ and the cumulative distribution function of $X_1$, at threshold $t$, are respectively given by:
 
 $$
 E(X_1)=\frac 1  n \sum_{i=1}^nx_{1i},\quad F_{X_1}(t)= P(X_1\leq t)=\frac 1 n \sum_{i=1}^n \mathbf 1 _{x_{1i}\leq t},
@@ -34,17 +34,17 @@ $$
 
 Similar expressions can be derived for more involved quantities, such as higher (joint) moments and quantiles. 
 
-The logic of stressing a model with **SWIM** then proceeds as follows. An analyst or modeller is  supplied with a baseline model, in the form of a matrix of equiprobable simulated scenarios of model components. The modeller wants to investigate the impact of a change in the distribution of, say, $X_1$. To this effect, she chooses a *stress* on the distribution of $X_i$, for example requiring that $E^W(X_1)=m$; we then say that she is *stressing* $X_1$ and, by extension, the model. Subsequently, **SWIM** calculates the scenario weights such that the stress is fulfilled and the distortion to the baseline model induced by the stress is as small as possible; specifically the Kullback-Leibler divergence (or relative entropy) between the baseline and stressed models is minimised. (See Section \@ref(Rfunctions) for more detail on the different types of possible stresses and the corresponding optimisation problems). Once scenario weights are obtained, they can be used to obtain the stressed distribution of any model component or function of model components. For example, for scenario weights $W$ obtained through a stress on $X_1$, we may calculate
+The logic of stressing a model with **SWIM** then proceeds as follows. An analyst or modeller is  supplied with a baseline model, in the form of a matrix of equiprobable simulated scenarios of model components. The modeller wants to investigate the impact of a change in the distribution of, say, $X_1$. To this effect, she chooses a *stress* on the distribution of $X_i$, for example requiring that $E^W(X_1)=m$; we then say that she is *stressing* $X_1$ and, by extension, the model. Subsequently, **SWIM** calculates the scenario weights such that the stress is fulfilled and the distortion to the baseline model induced by the stress is as small as possible; specifically the Kullback-Leibler divergence (or relative entropy) between the baseline and stressed models is minimised. (See Section \@ref(Rfunctions) for more detail on the different types of possible stresses and the corresponding optimisation problems). Once scenario weights are obtained, they can be used to determine the stressed distribution of any model component or function of model components. For example, for scenario weights $W$ obtained through a stress on $X_1$, we may calculate
 
 $$
 E^W(X_2)=\frac 1  n\sum_{i=1}^n w_i x_{2i},\quad E^W(X_1^2+X_2^2)=\frac 1  n \sum_{i=1}^n w_i \left(x_{1i}^2+ x_{2i}^2 \right).
 $$
 
-Through this process the modeller can monitor the impact of the stress on $X_1$ on any other random variable of interest. It is notable that this approach does not necessitate generating new simulations from a stochastic model. As the **SWIM** approach requires a single set of simulated scenarios (the baseline model) it offers a clear computational benefit. 
+Through this process, the modeller can monitor the impact of the stress on $X_1$ on any other random variable of interest. It is notable that this approach does not necessitate generating new simulations from a stochastic model. As the **SWIM** approach requires a single set of simulated scenarios (the baseline model) it offers a clear computational benefit. 
 
 ## An introductory example
 Here, through an example, we illustrate the basic concepts and usage of **SWIM** for sensitivity analysis. More advanced usage of **SWIM** and options for constructing stresses are demonstrated in Sections \@ref(Sec:Scope) and \@ref(Sec:CreditModel).
-We consider a simple portfolio model, with the portfolio loss defined by $Y=Z_1+Z_2+Z_3$. The random variables $Z_1,Z_2,Z_3$ represent normally distributed losses, with $Z_1\sim N(100,40^2)$, $Z_2\sim Z_3\sim N(100,20^2)$. $Z_1$ and $Z_2$ are correlated, while $Z_3$ is independent of $(Z_1,Z_2)$.  Our purpose in this example is to investigate how a stress on the loss $Z_1$, impacts on the overall portfolio loss $Y$.
+We consider a simple portfolio model, with the portfolio loss defined by $Y=Z_1+Z_2+Z_3$. The random variables $Z_1,Z_2,Z_3$ represent normally distributed losses, with $Z_1\sim N(100,40^2)$, $Z_2\sim Z_3\sim N(100,20^2)$. $Z_1$ and $Z_2$ are correlated, while $Z_3$ is independent of $(Z_1,Z_2)$.  Our purpose in this example is to investigate how a stress on the loss $Z_1$ impacts on the overall portfolio loss $Y$.
 First we derive simulated data from the random vector $(Z_1,Z_2,Z_3,Y)$, forming our baseline model.
 
 ``` {r, example1_sim_data, include = TRUE}
@@ -117,7 +117,7 @@ plot_cdf(str.sd, xCol = "Z1", base = TRUE)
 plot_cdf(str.sd, xCol = 4, base = TRUE)
 ```
 
-The different ways how a stress on the standard deviation of $Z_1$, compared to a stress on its mean, impact on the model, is reflected by the scenario weights. Figure \@ref(fig:example1-weights-sd) shows the pattern of the scenario weights and how, when stressing standard deviations, higher weight is placed on scenarios where $Z_1$ is extreme, either much lower or much higher than its mean of 100.
+The different way in which a stress on the standard deviation of $Z_1$ impacts on the model, compared to a stress on the mean, is reflected by the scenario weights. Figure \@ref(fig:example1-weights-sd) shows the pattern of the scenario weights and how, when stressing standard deviations, higher weight is placed on scenarios where $Z_1$ is extreme, either much lower or much higher than its mean of 100.
 
 ``` {r, example1-weights-sd, cache = TRUE, warning = FALSE, message = FALSE, fig.show='hold', out.width = '50%',fig.cap = "Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$."}
 w.sd <- get_weights(str.sd)
