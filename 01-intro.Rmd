@@ -124,7 +124,7 @@ summary(str.sd, base = FALSE)
 Furthermore, in Figure \@ref(fig:example1-cdfs-sd), we compare the baseline and stressed cdfs of $Z_1$ and $Y$, under the new stress on $Z_1$. The crossing of probability distribution reflects the increase in volatility.
 
 
-``` {r, example1-cdfs-sd, cache = TRUE, warning = FALSE, message = FALSE, fig.show='hold', out.width = '50%', fig.cap = "Baseline and stressed empirical distribution functions of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$."}
+``` {r, example1-cdfs-sd, cache = FALSE, warning = FALSE, message = FALSE, fig.show='hold', out.width = '50%', fig.cap = "Baseline and stressed empirical distribution functions of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$."}
 plot_cdf(str.sd, xCol = "Z1", base = TRUE)
 plot_cdf(str.sd, xCol = 4, base = TRUE)
 ```

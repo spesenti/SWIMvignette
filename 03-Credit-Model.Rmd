@@ -80,14 +80,14 @@ It is seen that the weights generated to stress VaR, and VaR and ES together, fo
 ## Visualising stressed distributions
 The change in the distributions of the portfolio and subportfolio losses, when moving from the baseline to the stressed models, can be visualised through the functions `plot_hist` and `plot_cdf`. The following figure displays the histogram of the aggregate portfolio loss under the baseline and the two stressed models. It is seen how stressing VaR and ES has a higher impact on the right tail of $L$, compared to stressing VaR only. This is consistent with the tail-sensitive nature of the Expected Shortfall risk measure [@Mcneil2015B].
 
-```{r, CM-histL, cache = TRUE, fig.cap = "Histogram of the portfolio loss $L$ under the baseline and the two stressed models.", out.width = '80%', fig.align = 'center'}
+```{r, CM-histL, cache = FALSE, fig.cap = "Histogram of the portfolio loss $L$ under the baseline and the two stressed models.", out.width = '80%', fig.align = 'center'}
 plot_hist(object = stress.credit, xCol = "L", base = TRUE)
 ```
 
 The arguments `xCol` and `wCol` (with default to plot all stresses) define the columns of the data and the columns of the scenario weights, respectively, that are used for plotting. Next, we analyse the impact that stressing the aggregate loss $L$ has on the subportfolios $L_1,~ L_2~L_3$. Again, we use the function  `plot_hist` and `plot_cdf` for visual comparison, but this time placing the distribution plots and histograms of subportfolio losses along each other via the function `ggarrange` (from the package **ggpubr**). The plots obtained from `plot_hist` and `plot_cdf` can be further personalised when specifying the argument `displ = FALSE`, as then the graphical functions `plot_hist` and `plot_cdf` return data frames compatible with the package **ggplot2**. 
 
 
-```{r, CM-plot1, cache = TRUE, fig.cap = "Distribution functions and histograms of the subportfolios $L_1, L_2, L_3$ for the stresses on the VaR (stress 1) and on both the VaR and ES (stress 2) of the portfolio loss $L$.", out.width = '100%', fig.align = 'center'}
+```{r, CM-plot1, cache = FALSE, fig.cap = "Distribution functions and histograms of the subportfolios $L_1, L_2, L_3$ for the stresses on the VaR (stress 1) and on both the VaR and ES (stress 2) of the portfolio loss $L$.", out.width = '100%', fig.align = 'center'}
 pL1.cdf <- plot_cdf(object = stress.credit, xCol = 2, wCol = "all", base = TRUE)
 pL2.cdf <- plot_cdf(object = stress.credit, xCol = 3, wCol = "all", base = TRUE)
 pL3.cdf <- plot_cdf(object = stress.credit, xCol = 4, wCol = "all", base = TRUE)
@@ -204,15 +204,15 @@ stress.credit.L2L3 <- stress_moment(x = stress.credit.L2L3, f = f.stress.joint, 
 
 We analyse the impact the stresses of the tail of the subportfolios $L_2$ and $L_3$ have on the aggregate portfolio $L$. For this, we plot in Figure \@ref(fig:CM-joint-stress-VaR-2-effect) the quantile of the aggregate portfolio under the baseline model (blue), under the stress on the tail of $L_2$ and $L_3$ (red), and under the additional stress on the joint tail of $L_2$ and $L_3$ (green).
 
-```{r, CM-joint-stress-VaR-2-effect, echo = TRUE, cache = TRUE, fig.cap = "Quantiles of the aggregate loss $L$ under the baseline (blue), the stress on the tails of $L_2$ and $L_3$ (red), and the additional stress on the joint tail of $L_2$ and $L_3$ (green).", out.width = '80%', fig.align = 'center'}
+```{r, CM-joint-stress-VaR-2-effect, echo = TRUE, cache = FALSE, fig.cap = "Quantiles of the aggregate loss $L$ under the baseline (blue), the stress on the tails of $L_2$ and $L_3$ (red), and the additional stress on the joint tail of $L_2$ and $L_3$ (green).", out.width = '80%', fig.align = 'center'}
 # stressed quantiles
 VaR.level <- seq(0.75, 0.99, by = 0.003)
 VaR.stress1 <- VaR_stressed(stress.credit.L2L3, alpha = VaR.level, xCol = "L", wCol = 1, base = TRUE)
 VaR.stress2 <- VaR_stressed(stress.credit.L2L3, alpha = VaR.level, xCol = "L", wCol = 2, base = FALSE)
 
 plot(VaR.level, VaR.stress1[, 2], col = "blue", type = "l", xlab = "quantile levels", ylab ="Quantiles of L under different models")
-lines(VaR.level, VaR.stress1[, 1], col = "red")
-lines(VaR.level, VaR.stress2, col = "green")
+lines(VaR.level, VaR.stress1[, 1], col = "red", lty = 2)
+lines(VaR.level, VaR.stress2, col = "darkgreen", lty = 3)
 ```
 
 The results and the plots indicate that the additional stress on joint exceedances of subportfolios, increases the tail quantiles of $L$ even further, demonstrating the importance of (tail-)dependence in portfolio risk management. 
