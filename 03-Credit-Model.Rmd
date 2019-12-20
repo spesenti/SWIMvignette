@@ -211,8 +211,8 @@ VaR.stress1 <- VaR_stressed(stress.credit.L2L3, alpha = VaR.level, xCol = "L", w
 VaR.stress2 <- VaR_stressed(stress.credit.L2L3, alpha = VaR.level, xCol = "L", wCol = 2, base = FALSE)
 
 plot(VaR.level, VaR.stress1[, 2], col = "blue", type = "l", xlab = "quantile levels", ylab ="Quantiles of L under different models")
-lines(VaR.level, VaR.stress1[, 1], col = "red", lty = 2)
-lines(VaR.level, VaR.stress2, col = "darkgreen", lty = 3)
+lines(VaR.level, VaR.stress1[, 1], col = "red")
+lines(VaR.level, VaR.stress2, col = "darkgreen")
 ```
 
 The results and the plots indicate that the additional stress on joint exceedances of subportfolios, increases the tail quantiles of $L$ even further, demonstrating the importance of (tail-)dependence in portfolio risk management. 
