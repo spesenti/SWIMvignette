@@ -75,7 +75,7 @@ plot(credit_data[grid, 1], w.credit[grid, 2], pch = 20, xlab = "L",
      ylab = "scenario weights")
 ```
 
-It is seen that the weights generated to stress VaR, and VaR and ES together, follow different patterns to the weights used to stress means and standard deviations, as shown in Section \@ref(Sec:Intro). Recall that **SWIM** calculates the scenario weights such that under the stressed model the given constraints are fulfilled. Thus, an increase in the VaR and/or ES of the portfolio loss $L$ results in large positive realisations of $L$ being assigned higher weight. On the other hand, when the standard deviation is stressed, scenario weights are calculated that inflate the probabilities of both large positive and negative values. 
+It is seen in Figure \@ref(fig:credit-weights) that the weights generated to stress VaR, and VaR and ES together, follow different patterns to the weights used to stress means and standard deviations, as shown in Section \@ref(Sec:Intro). Recall that **SWIM** calculates the scenario weights such that under the stressed model the given constraints are fulfilled. Thus, an increase in the VaR and/or ES of the portfolio loss $L$ results in large positive realisations of $L$ being assigned higher weight. On the other hand, when the standard deviation is stressed, scenario weights are calculated that inflate the probabilities of both large positive and negative values. 
 
 ## Visualising stressed distributions
 The change in the distributions of the portfolio and subportfolio losses, when moving from the baseline to the stressed models, can be visualised through the functions `plot_hist` and `plot_cdf`. The following figure displays the histogram of the aggregate portfolio loss under the baseline and the two stressed models. It is seen how stressing VaR and ES has a higher impact on the right tail of $L$, compared to stressing VaR only. This is consistent with the tail-sensitive nature of the Expected Shortfall risk measure [@Mcneil2015B].
@@ -100,7 +100,7 @@ ggarrange(pL1.cdf, pL1.hist, pL2.cdf, pL2.hist, pL3.cdf, pL3.hist, ncol = 2, nro
           common.legend = TRUE)
 ```
 
-It is seen from both the distribution plots and the histograms that the stresses have no substantial impact on $L_1$, while $L_2$ and $L_3$ are more affected, indicating a higher sensitivity. The higher impact on the tails of stress 2 (on both VaR and ES) is also visible. Sensitivity measures quantifying these effects are introduced in the following subsection.
+It is seen from both the distribution plots and the histograms in Figures \@ref(fig:CM-histL) and \@ref(fig:CM-plot1) that the stresses have no substantial impact on $L_1$, while $L_2$ and $L_3$ are more affected, indicating a higher sensitivity. The higher impact on the tails of stress 2 (on both VaR and ES) is also visible. Sensitivity measures quantifying these effects are introduced in the following subsection.
 
 
 ## Sensitivity measures
