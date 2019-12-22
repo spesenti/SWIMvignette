@@ -4,7 +4,7 @@
 
 ## Stressing a model {#Rfunctions}
 
-We briefly introduce key concepts, using slightly more technical language compared to Section \@ref(Sec:Intro). A *model* consists of a random vector of *model components* $\mathbf X = (X_1,\dots,X_d)$ and a probability measure; we denote the probability measure of a *baseline model* by $P$ and that of a *stressed model* by $P^W$, where $W= \frac{dP^W}{dP}$, satisfying $E(W)=1$ and $W\geq 0$, is a Radon-Nikodym derivative. In a Monte-Carlo simulation context, the probability space is discrete with $n$ states $\Omega=\{\omega_1,\dots,\omega_n\}$, each of which corresponds to a simulated scenario. To reconcile this formulation with the notation of Section \@ref(Sec:Intro), we denote, for $i=1, \dots, n,~j=1,\dots, d$, the realisations $X_j(\omega_i):= x_{ji}$ and $W(\omega_i):=w_i$; the latter are the *scenario weights*. Under the baseline model, each scenario has the same probability $P(\omega_i)=1/n$, while under a stressed model it is $P^W(\omega_i)=W(\omega_i)/n=w_i/n$.
+We briefly introduce key concepts, using slightly more technical language compared to Section \@ref(Sec:Intro). A *model* consists of a random vector of *model components* $\mathbf X = (X_1,\dots,X_d)$ and a probability measure; we denote the probability measure of a *baseline model* by $P$ and that of a *stressed model* by $P^W$, where $W= \frac{dP^W}{dP}$, satisfying $E(W)=1$ and $W\geq 0$, is a Radon-Nikodym derivative. In a Monte Carlo simulation context, the probability space is discrete with $n$ states $\Omega=\{\omega_1,\dots,\omega_n\}$, each of which corresponds to a simulated scenario. To reconcile this formulation with the notation of Section \@ref(Sec:Intro), we denote, for $i=1, \dots, n,~j=1,\dots, d$, the realisations $X_j(\omega_i):= x_{ji}$ and $W(\omega_i):=w_i$; the latter are the *scenario weights*. Under the baseline model, each scenario has the same probability $P(\omega_i)=1/n$, while under a stressed model it is $P^W(\omega_i)=W(\omega_i)/n=w_i/n$.
 
 The stressed model thus arises from a change of measure from $P$ to $P^W$, which entails the application of scenario weights $w_1,\dots, w_n$ on individual simulations. **SWIM** calculates scenario weights such that model components fulfil specific stresses, while the distortion to the baseline model is as small as possible when measured by the Kullback-Leibler divergence (or relative entropy). Mathematically, a stressed model is derived by solving
 
@@ -30,7 +30,7 @@ Table \@ref(tab:Rfunstress) provides a collection of all implemented types of st
 | `stress_VaR_ES`  | VaR and ES risk measures              |`VaR ES` | Eq. \@ref(eq:optimisationVaRES)
 Table: (\#tab:Rfunstress) Implemented types of stresses in **SWIM**.
 
-The solutions to the optimisations \@ref(eq:optimisationprob) and \@ref(eq:optimisationVaR) are worked out fully analytically [@Pesenti2019], whereas problems \@ref(eq:optimisationmean), \@ref(eq:optimisationmeansd), \@ref(eq:optimisationmoment) and \@ref(eq:optimisationVaRES) involve some root-finding. Specifically, problems \@ref(eq:optimisationmean), \@ref(eq:optimisationmeansd) and \@ref(eq:optimisationmoment) rely on the package **nleqslv**, whereas \@ref(eq:optimisationVaRES) uses the `uniroot` function.
+The solutions to the optimisations \@ref(eq:optimisationprob) and \@ref(eq:optimisationVaR) are worked out fully analytically [@Pesenti2019], whereas problems \@ref(eq:optimisationmean), \@ref(eq:optimisationmeansd), \@ref(eq:optimisationmoment) and \@ref(eq:optimisationVaRES) require some root-finding. Specifically, problems \@ref(eq:optimisationmean), \@ref(eq:optimisationmeansd) and \@ref(eq:optimisationmoment) rely on the package **nleqslv**, whereas \@ref(eq:optimisationVaRES) uses the `uniroot` function.
 
 
 ### The `stress` function and the **SWIM** object {#Rstress}
@@ -48,7 +48,7 @@ The data frame containing the realisations of the baseline model, `x` in the abo
 
 ### Stressing disjoint probability intervals 
 
-Stressing probabilities of disjoint intervals allows defining stresses by altering the probabilities of events pertaining to a model component. The scenario weights are calculated via `stress_prob`, or equivalently `stress(type = "prob", )`, and the disjoint intervals are specified through the `lower` and `upper` arguments; the endpoints of the intervals. Specifically, 
+Stressing probabilities of disjoint intervals allows defining stresses by altering the probabilities of events pertaining to a model component. The scenario weights are calculated via `stress_prob`, or equivalently `stress(type = "prob", )`, and the disjoint intervals are specified through the `lower` and `upper` arguments, the endpoints of the intervals. Specifically, 
 
 
 > `stress_prob` solves \@ref(eq:optimisation) with the constraints
