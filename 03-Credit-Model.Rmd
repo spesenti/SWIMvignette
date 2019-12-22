@@ -24,7 +24,7 @@ head(credit_data)
 
 ## Stressing the portfolio loss 
 
-In this section, following a reverse sensitivity approach, we study the effects that stresses on (the tail of) the aggregate portfolio loss $L$ have on the three subportfolios; thus assessing their comparative importance. First, we impose a $20\%$ increase on the VaR at level $0.9$ of the portfolio loss.  
+In this section, following a reverse sensitivity approach, we study the effects that stresses on (the tail of) the aggregate portfolio loss $L$ have on the three subportfolios; thus assessing their comparative importance. First, we impose a $20\%$ increase on the VaR at level $90\%$ of the portfolio loss.  
 
 ```{r, CM-stress-VaR, cache = FALSE, echo = TRUE, linewidth = 55}
 stress.credit <- stress(type = "VaR", x = credit_data, k = "L", alpha = 0.9, q_ratio = 1.2)
@@ -170,7 +170,7 @@ sensitivity(object = stress.credit, xCol = c(2:4), type = "Gamma")
 It is seen that, by fixing part of the distribution of $H_2$, the importance ranking of the subportfolios changes, with $L_2$ now being significantly less sensitive than $L_3$. This confirms, in the credit risk model, the dominance of the systematic risk reflected in the randomness of default probabilities.
 
 ### Stressing tails of subportfolios 
-Up to now, we have considered the impact of stressing the aggregate portfolio loss on subportfolios. Now we consider the opposite situation: stressing the subportfolio losses and monitoring the impact on the aggregate portfolio loss $L$. First, we impose a stress requiring a simultaneous $20\%$ increase in the 90^th^ quantile of the losses in subportfolios $L_2$ and $L_3$. Note that the function `stress_VaR` (and `stress_VaR_ES`) allow to stress the VaR and/or the ES of only one model component. Thus, to induce a stress on the 90^th^ quantiles of $L_2$ and $L_3$, we use the function `stress_moments` and interpret the quantile constraints as moment constraints, via $E(1_{L_2 \leq \text{VaR}^W(L_2)})$ and $E(1_{L_3 \leq \text{VaR}^W(L_3)})$, respectively, where $\text{VaR}^W = \text{VaR} \cdot 1.2$ denotes the VaRs in the stressed model.
+Up to now, we have considered the impact of stressing the aggregate portfolio loss on subportfolios. Now, following a forward sensitivity approach, we consider the opposite situation: stressing the subportfolio losses and monitoring the impact on the aggregate portfolio loss $L$. First, we impose a stress requiring a simultaneous $20\%$ increase in the 90^th^ quantile of the losses in subportfolios $L_2$ and $L_3$. Note that the function `stress_VaR` (and `stress_VaR_ES`) allow to stress the VaR and/or the ES of only one model component. Thus, to induce a stress on the 90^th^ quantiles of $L_2$ and $L_3$, we use the function `stress_moments` and interpret the quantile constraints as moment constraints, via $E(1_{L_2 \leq \text{VaR}^W(L_2)})$ and $E(1_{L_3 \leq \text{VaR}^W(L_3)})$, respectively, where $\text{VaR}^W = \text{VaR} \cdot 1.2$ denotes the VaRs in the stressed model.
 
 
 ```{r, CM-joint-stress-VaR, echo = -1, cache = TRUE, tidy = FALSE}
