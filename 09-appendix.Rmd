@@ -15,7 +15,7 @@ where $e_i$ and $M_i$ are the exposure and number of defaults of the $i^{\text{t
 0.1 & 0.4 & 1
 \end{pmatrix}.\end{equation}
 
-The following table summarises the parameter values used in the simulation.
+Table \@ref(\#tab:credit) summarises the parameter values used in the simulation.
 
 |$i$|$m_i$|$e_i$|$p_i$|$\rho_i$|$LGD_i$|
 |:------|:------|:------|:------|:------|:------|
