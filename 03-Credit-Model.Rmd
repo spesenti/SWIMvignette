@@ -64,7 +64,7 @@ options(digits = 3)
 get_specs(stress.credit)
 ```
 
-``` {r, credit-weights, warning = FALSE, message = FALSE, fig.show='hold', out.width = '50%',fig.cap = "Scenario weights against the portfolio loss $L$ for stressing VaR (left) and stressing both VaR and ES (right).", tidy = FALSE}
+``` {r, credit-weights, warning = FALSE, cache = FALSE, message = FALSE, fig.show='hold', out.width = '50%',fig.cap = "Scenario weights against the portfolio loss $L$ for stressing VaR (left) and stressing both VaR and ES (right).", tidy = FALSE}
 # extract weights from SWIM object
 w.credit <- get_weights(stress.credit)
 # only plot a subset of the sceranio weights 
@@ -87,7 +87,7 @@ plot_hist(object = stress.credit, xCol = "L", base = TRUE)
 The arguments `xCol` and `wCol` (with default to plot all stresses) define the columns of the data and the columns of the scenario weights, respectively, that are used for plotting. Next, we analyse the impact that stressing the aggregate loss $L$ has on the subportfolios $L_1,~ L_2~L_3$. Again, we use the function  `plot_hist` and `plot_cdf` for visual comparison, but this time placing the distribution plots and histograms of subportfolio losses along each other via the function `ggarrange` (from the package **ggpubr**). The plots obtained from `plot_hist` and `plot_cdf` can be further personalised when specifying the argument `displ = FALSE`, as then the graphical functions `plot_hist` and `plot_cdf` return data frames compatible with the package **ggplot2**. 
 
 
-```{r, CM-plot1, cache = FALSE, fig.cap = "Distribution functions and histograms of the subportfolios $L_1, L_2, L_3$ for the stresses on the VaR (stress 1) and on both the VaR and ES (stress 2) of the portfolio loss $L$.", out.width = '100%', fig.align = 'center'}
+```{r, CM-plot1, cache = FALSE, fig.cap = "Distribution functions and histograms of the subportfolios $L_1, L_2, L_3$ for the stresses on the VaR (stress 1) and on both the VaR and ES (stress 2) of the portfolio loss $L$.", out.width = '100%', fig.align = 'center', warning = FALSE}
 pL1.cdf <- plot_cdf(object = stress.credit, xCol = 2, wCol = "all", base = TRUE)
 pL2.cdf <- plot_cdf(object = stress.credit, xCol = 3, wCol = "all", base = TRUE)
 pL3.cdf <- plot_cdf(object = stress.credit, xCol = 4, wCol = "all", base = TRUE)

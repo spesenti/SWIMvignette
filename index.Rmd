@@ -3,8 +3,10 @@ title: Scenario Weights for Importance Measurement (**SWIM**) -- an **R** packag
   analysis
 author: Silvana M. Pesenti^[Correspondence to Silvana Pesenti, Department of Statistical Sciences, University of Toronto, Canada. silvana.pesenti@utoronto.ca] ^2^, Alberto Bettini^3^, Pietro
   Millossovich^4,5^, Andreas Tsanakas^5^
-date: ^2^University of Toronto, ^3^Assicurazioni Generali S.p.A, ^4^DEAMS, University
-  of Trieste, ^5^Cass Business School, City, University of London
+date: |
+  | ^2^University of Toronto, ^3^Assicurazioni Generali S.p.A, ^4^DEAMS, University of Trieste, ^5^Cass Business School, City, University of London
+  |
+  | 06. January 2020 
 bibliography: bibliography.bib
 documentclass: article
 github-repo: spesenti/SWIMvignette
