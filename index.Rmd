@@ -6,7 +6,7 @@ author: Silvana M. Pesenti^[Correspondence to Silvana Pesenti, Department of Sta
 date: |
   | ^2^University of Toronto, ^3^Assicurazioni Generali S.p.A, ^4^DEAMS, University of Trieste, ^5^Cass Business School, City, University of London
   |
-  | 06. January 2020 
+  | 10. January 2020 
 bibliography: bibliography.bib
 documentclass: article
 github-repo: spesenti/SWIMvignette
@@ -46,7 +46,7 @@ When model inputs are subject to uncertainty, *global* sensitivity methods are o
 
 
 
-We introduce an alternative approach to sensitivity analysis called *Scenario Weights for Importance Measurement* (**SWIM**) and present the **R** package implementing it. The aim of this paper is to provide an accessible introduction to the concepts underlying **SWIM** and a vignette demonstrating how the package is used. **SWIM** quantifies how distorting a particular model component (which could be a model input, output, or an intermediate quantity) impacts all other model components. The **SWIM** approach can be summarised as follows:
+We introduce an alternative approach to sensitivity analysis called *Scenario Weights for Importance Measurement* (**SWIM**) and present the **R** package implementing it [@PesentiR]. The aim of this paper is to provide an accessible introduction to the concepts underlying **SWIM** and a vignette demonstrating how the package is used. **SWIM** quantifies how distorting a particular model component (which could be a model input, output, or an intermediate quantity) impacts all other model components. The **SWIM** approach can be summarised as follows:
 
     
 1. The starting point is a table of simulated scenarios, each column containing realisations of a different model component. This table forms the *baseline model* as well as the dataset on which the **SWIM** bases its calculations.     

@@ -1,0 +1,3 @@
+# Acknowledgements {-}
+
+This vignette was written in **R** [@R-base] using the packages **SWIM** [@PesentiR] and **bookdown** [@R-bookdown].
