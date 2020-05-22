@@ -5,9 +5,6 @@
 
 
 
-
-
-
 The credit model in this section is a conditionally binomial loan portfolio model including systematic and specific portfolio risk. We refer to the Appendix \@ref(AppendixCM) for details and the generation of the simulated data. Of interest is the total aggregate portfolio loss $L = L_1 + L_2 + L_3$, where $L_1, L_2, L_3$ are homogeneous subportfolios on  comparable scale (say, thousands of \$). The data set contains 100,000 simulations of the portfolio $L$, the sub-portfolios $L_1, L_2, L_3$ as well as the default probability of each subportfolio $H_1, H_2, H_3$. These (conditional) default probabilities represent the sytematic risk *within* each subportfolio, and their dependence structure allows to introduce a systematic risk effect *between* the subportfolios. A snippet of the data set looks as follows:
 
 
@@ -21,36 +18,29 @@ The credit model in this section is a conditionally binomial loan portfolio mode
 ## [6,] 1159 20 393.8 745 2.73e-04 0.00934 0.0721
 ```
 
-
 ## Stressing the aggregate portfolio loss 
 
-In this section, following a reverse sensitivity approach, we study the effect of stresses on (the tail of) the aggregate portfolio on the three sub-portfolios in order to investigate their importance. 
+In this section, following a reverse sensitivity approach, we study the effect of stresses on (the tail of) the aggregate portfolio on the three sub-portfolios in order to investigate their importance.
 
 First, we impose a $20\%$ increase on the $VaR_{0.9}$ of the loss of the aggregate portfolio.
 
 
 ```r
-stress.credit <- stress(type = "VaR", x = credit_data, k = "L", alpha = 0.9, q_ratio = 1.2)
+stress.credit <- stress(type = "VaR", x = credit_data, k = "L", 
+                        alpha = 0.9, q_ratio = 1.2)
 ```
 
 ```
 ## Stressed VaR specified was 2174.25 , stressed VaR achieved is 2173.75
 ```
 
-Note that, since we work with a simulated set of losses, the exact required quantile may not be achievable. By default, `stress_VaR` will target the smallest value in the data set larger than the required VaR. ++++IS IT CORRECT? IN THE CURRENT EXAMPLE IT IS LOWER! DID IT GET IT WRONG)++++
+Note that, since we work with a simulated set of losses, the exact required quantile may not be achievable. By default, `stress_VaR` will target the largest quantile in the data set smaller or equal than the required VaR.
 
 The imposed change in VaR determines an increase in ES.
 
-```r
-ES_stressed(object = stress.credit, alpha = 0.9, xCol = "L")
-```
 
-```
-##            L
-## 90% 2534.809
-```
-
-++++DOES ES_stressed WORK WITH MULTIPLE STRESSES? WOULD IT BE POSSIBLE TO EXTEND IT (AND quantile_stressed AS WELL) TO CALCULATE THESE QUANTITIES ON BASELINE OBJECTS (VECTORS, MATRICES OR DATA FRAMES)?+++
+++++WOULD IT BE POSSIBLE TO EXTEND ES_stressed (AND quantile_stressed AS WELL) TO CALCULATE THESE QUANTITIES ON BASELINE OBJECTS (VECTORS, MATRICES OR DATA FRAMES)?+++
+--- Silvana: ES_Stressed and VaR_stressed have a parameter base = TURE which allows to calculate the VaR and ES under the baseline model---
 
 We then consider, additionally to the $20\%$ increase in $\text{VaR}_{0.9}$, a further increase in $\text{ES}_{0.9}$ of the aggregate portfolio $L$. Note that both VaR and ES need be stressed at the same level `alpha = 0.9`. Instead of providing the percentage increases in the VaR and ES through the arguments `q_ratio` and `s_ratio`, the actual stressed values of VaR and ES can be set using the arguments `q` and `s`, respectively. 
 
@@ -65,9 +55,6 @@ stress.credit <- stress(type = "VaR ES", x = stress.credit, k = "L", alpha = 0.9
 ```
 
 When applying the `stress` function, or one of its alternative versions, to a SWIM object, the result will be a new SWIM object where the new stress has been ''appended'' to the previous one. This is convenient when large data sets are involved, as the `stress` function returns an object  containing the original simulated data and the scenario weights. 
-
-++++MAYBE CHANGE THE SECOND STRESS ACCORDING TO ANDREAS' SUGGESTION? IE LEAVE VAR UNCHANGED (CURRENTLY NOT POSSIBLE) AND STRESS ES ONLY?++++
-++++I TRIED STRESSING THE ES A LOT, NOT SURE OF THE RESULT. GRAPHICALLY NOT MUCH CAN BE SEEN++++
 
 ## Analysing the stressed model
 
@@ -110,7 +97,7 @@ summary(stress.credit, base = TRUE)
 ## 3rd Qu.     1505.62 40.00 675.00 870.00 0.000587 0.01432 0.0694
 ```
 
-The information on individual stresses can be recovered through the `get_specs` function and the actual scenario weights using `get_weight`.
+The information on individual stresses can be recovered through the `get_specs` function and the actual scenario weights using `get_weights`.
 
 
 ```r
@@ -125,12 +112,12 @@ get_specs(stress.credit)
 
 ```r
 w <- get_weights(stress.credit)
-par(mfrow = c(1, 2))
-plot(x = credit_data[, "L"], y = w[, 1], xlab = "L", ylab = "weights", main ="stressing VaR")
-plot(x = credit_data[, "L"], y = w[, 1], xlab = "L", ylab = "weights", main = "stressing VaR and ES")
 ```
 
-<img src="03-Credit-Model_files/figure-html/CM-specs-1.png" width="672" />
+<img src="03-Credit-Model_files/figure-html/plotting-stresses-1.png" width="50%" /><img src="03-Credit-Model_files/figure-html/plotting-stresses-2.png" width="50%" />
+
+++++SHOULD THE CODE BE VISIBLE? A FUTURE IMPROVEMENT FOR THE PACKAGE COULD BE ADDING A FUNCTION TO PLOT THE SCENARIO WEIGHTS+++
+---Silvana: that's a good suggestions regarding including a plot_weights function in a future version of the package. I'm open for including the code or not.---
 
 ## Visual comparison
 The change in the distributions of the portfolio and subportfolios from the baseline to the stressed models can be visualised through the functions `plot_hist` and `plot_cdf`. The following figure displays the histogram of the aggregate portfolio loss under the baseline and the two stressed models.
@@ -142,36 +129,22 @@ plot_hist(object = stress.credit, xCol = "L", base = TRUE)
 
 <img src="03-Credit-Model_files/figure-html/CM-histL-1.png" width="672" />
 
-The arguments `xCol` and `wcol` specify the columns of the data to be plotted and the scenario weights to be used, respectively. The impact on the subportfoios of stressing the aggregate loss can thus be investigated. ROLE OF wcol? I TRIED CHANGING IT BUT NO SUCCESS The graphical functions `plot_hist` and `plot_cdf` functions return objects compatible with the package **ggplot2**. Thus, we can compare the histograms of the portfolio losses via the function `grid.arrange` (of the package **gridExtra**).
+The arguments `xCol` and `wCol` specify the columns of the data to be plotted and the scenario weights to be used, respectively. The impact on the subportfolios of stressing the aggregate loss can thus be investigated. The graphical functions `plot_hist` and `plot_cdf` return objects compatible with the package **ggplot2**. Therefore, we can for instance compare the histograms of the portfolio losses via the function `grid.arrange` (of the package **gridExtra**) and understand how each tranche reacts to the different stresses.
 
 
 ```r
-library(gridExtra)
-pL1 <- plot_hist(object = stress.credit, xCol = 2, wCol = 1, base = TRUE, x_limits = c(0, 100))
-pL2 <- plot_hist(object = stress.credit, xCol = 3, wCol = 1, base = TRUE,  x_limits = c(500, 2000))
-pL3 <- plot_hist(object = stress.credit, xCol = 4, wCol = 1, base = TRUE,  x_limits = c(500, 2000))
-class(pL1)
-```
-
-```
-## [1] "gg"     "ggplot"
-```
-
-```r
-grid.arrange(pL1, pL2, pL3, ncol = 1, nrow = 3)
+pL2.stress1 <- plot_hist(object = stress.credit, xCol = 3, wCol = 1, base = TRUE)
+pL2.stress2 <- plot_hist(object = stress.credit, xCol = 3, wCol = 2, base = TRUE)
+grid.arrange(pL2.stress1, pL2.stress2, ncol = 1, nrow = 2)
 ```
 
 <img src="03-Credit-Model_files/figure-html/CM-plot1-1.png" width="672" />
 
-From the plots we observe, that the subportfolios $L_2$ and $L_3$ are significantly affected by the stress, while the distribution of $L_1$ is almost unchanged. 
-
-++++I TRIED SIDE BY SIDE, IT IS VERY CLUMSY AND NOT MUCH CAN BE SEEN. ALSO, NOT MUCH IS GAINED BY CUTTING THE X AXIS++++
-
+The tail of the subportfolios $L_2$ is more affected by the second stress. 
 
 ## Sensitivity measures
 
 The impact of the stressed models on the model components can be quantified through sensitivity measures. The function `sensitivity` includes *Kolmogorov*, the *Wasserstein* distance and the sensitivity measure *Gamma*, which can be specified through the optional argument `type`. We refer to Section \@ref(Sec:analysis) for the definitions of these measures. The Kolmogorov and the Wasserstein distance are useful to compare different stressed models, whereas the sensitivity measure Gamma ranks model components for one stressed model.
-
 
 
 ```r
@@ -183,34 +156,26 @@ sensitivity(object = stress.credit, xCol = c(2 : 7), wCol = 1, type = "Gamma")
 ## 1 stress 1 Gamma 0.15 0.819 0.772 0.196 0.811 0.767
 ```
 
-Using the `sensitivity` function we can analyse whether the first (column 2) and third (column 4) tranches are able to exceed the riskiness of the second. This can be accomplished specifying, through the option `f`, a list of functions applicable to the columns `k` of the dataset. Through the argument `xCol = NULL` only the transformed data is considered. The sensitivity measure of a function of the columns is particularly useful when high dimensional models are considered and a resuming statistics is needed in order to compare blocks of model components against each others.
+Using the `sensitivity` function we can analyse whether the first (column 2) and third (column 4) tranches considered as a whole are able to exceed the riskiness of the second. This can be accomplished specifying, through the option `f`, a list of functions applicable to the columns `k` of the dataset. Through the argument `xCol = NULL` only the transformed data is considered. The sensitivity measure of a function of the columns is particularly useful when high dimensional models are considered and a resuming statistics is needed in order to compare blocks of model components against each others.
 
 
 ```r
-sensitivity(object = stress.credit, type = "Gamma", f = list(sum), k = list(c(2, 4)), xCol = NULL, wCol = 1)
+sensitivity(object = stress.credit, type = "Gamma", f = list(sum), 
+            k = list(c(2, 4)), wCol = 1, xCol = NULL)
 ```
 
 ```
-##     stress  type    f1
-## 1 stress 1 Gamma 0.783
+##     stress  type        f1
+## 1 stress 1 Gamma 0.7830995
 ```
 
-```r
-sensitivity(object = stress.credit, type = "Gamma", f = list(sum), k = list(c(2, 4)), xCol = NULL, wCol = 2)
-```
+++++CAN WE ALLOW FOR "f" and "k" TO BE A FUNCTION AND A VECTOR, RESPECTIVELY, AS IN stress_moments? RIGHT NOW WE NEED TO USE "list(SUM)"++++ --- Silvana: the sensitivity function has parameters f and k, which are the same as the one specified in stress_moments. The problem is that if k has length >1, both f and k must be a list. We could change it to, if f is a function and k a vector then the same function is applied to all k's. ---
 
-```
-##     stress  type    f1
-## 1 stress 2 Gamma 0.645
-```
-
-++++CAN WE ALLOW FOR "f" and "k" TO BE A FUNCTION AND A VECTOR, RESPECTIVELY, AS IN stress_moments?++++
-
-The `importance_rank` function, having the same structure as the `sensitivity` function, return the ranks of the sensitivity measures. This function is particularly useful when there several risk factors involved.
+The `importance_rank` function, having the same structure as the `sensitivity` function, return the ranks of the sensitivity measures. This function is particularly useful when there are several risk factors involved.
 
 
 ```r
-importance_rank(object = stress.credit, xCol = c(2 : 7), wCol = 1, type = "Gamma")  
+importance_rank(object = stress.credit, xCol = c(2 : 7), wCol = 1, type = "Gamma")
 ```
 
 ```
@@ -218,179 +183,120 @@ importance_rank(object = stress.credit, xCol = c(2 : 7), wCol = 1, type = "Gamma
 ## 1 stress 1 Gamma  6  1  3  5  2  4
 ```
 
+```r
+importance_rank(object = stress.credit, xCol = c(2 : 7), wCol = 2, type = "Gamma")
+```
+
+```
+##     stress  type L1 L2 L3 H1 H2 H3
+## 1 stress 2 Gamma  6  1  3  5  2  4
+```
+
 It transpires that subportfolios $2$ and $3$ are, in this order, most responsible for the stress in the global loss. Also, most of the sensitivity seems to be imputable to the systematic risk components $H_2$ and $H_3$. To confirm this, another stress resulting in the same $\text{VaR}_{90\%}(L)$, but controlling for the distribution of $H_2$, can be imposed using the function `stress_moment`. More precisely, we fix $E[H_2]$ and the $75\%$ quantile of $H_2$ as in the base model.
 
++++THE APPENDING OF STRESS_MOMENT IS STILL NOT WORKING PROPERLY.+++
+
 
 ```r
-VaR.L <- quantile(x = credit_data[, "L"], prob = 0.9, type = 1)
-q.H2 <- quantile(x = credit_data[, "H2"], prob = 0.75, type = 1)
-str.var.credit2 <- stress_moment(x = credit_data,
-                                 f = list(function(x)1 * (x <= VaR.L * 1.2),
-                                          function(x)x,
-                                          function(x)1 * (x <= q.H2)),
-                                 m = c(0.9, mean(credit_data[, "H2"]), 0.75),
-                                 k = c(1, 6, 6), show = TRUE)
+VaR.L <- quantile(x = credit_data[, "L"], prob = 0.9, type = 1) # VaR of L
+q.H2 <- quantile(x = credit_data[, "H2"], prob = 0.75, type = 1) # quantile of H2
+k.stressH2 = c(1, 6, 6) # columns to be stressed (L, H2, H2)
+# functions to be applied to columns
+f.stressH2 <- list(function(x)1 * (x <= VaR.L * 1.2), # indicator function for L
+                 function(x)x, # mean of H2
+                 function(x)1 * (x <= q.H2)) # indicator function for H2
+# new values for the VaR of L, mean of H2, quantile of H2
+m.stressH2 = c(0.9, mean(credit_data[, "H2"]), 0.75) 
+stress.credit.H2 <- stress_moment(x = credit_data, f = f.stressH2, k = k.stressH2, m = m.stressH2)
+```
+
+In this case we can use the `summary` function to verify whether we are actually controlling the distribution of $H_2$. 
+
++++IS IT COMPLEX TO ADD TO THE SUMMARY FUNCTION THE POSSIBILITY OF SPECIFYING WHICH STRESS TO CONSIDER? IN THIS CASE FOR EXAMPLE SOMEONE COULD BE INTERESTED ONLY ON THE NEW STRESS AND THE BASELINE+++
+---Silvana: you can do this with the parameter wCol, which can be a vector, say you want to have stresses 1 and 3 and the baseline, choose wCol = c(1,3) and base = TRUE---
+
+
+```r
+summary(stress.credit.H2, base = TRUE)
 ```
 
 ```
-## $x
-## [1]   1.75360577  -1.47420629 -33.85297671  -0.06625847
+## $base
+##                    L    L1     L2      L3       H1      H2     H3
+## mean        1102.914 19.96 454.04 628.912 0.000401 0.00968 0.0503
+## sd           526.538 28.19 310.99 319.715 0.000400 0.00649 0.0252
+## skewness       0.942  2.10   1.31   0.945 1.969539 1.30834 0.9501
+## ex kurtosis    1.326  6.21   2.52   1.256 5.615908 2.49792 1.2708
+## 1st Qu.      718.750  0.00 225.00 395.000 0.000115 0.00490 0.0318
+## Median      1020.625  0.00 384.38 580.000 0.000279 0.00829 0.0464
+## 3rd Qu.     1398.750 20.00 609.38 810.000 0.000555 0.01296 0.0643
 ## 
-## $fvec
-## [1]  1.581201e-09 -9.911545e-10  3.890762e-11  1.316981e-10
-## 
-## $termcd
-## [1] 1
-## 
-## $message
-## [1] "Function criterion near zero"
-## 
-## $scalex
-## [1] 1 1 1 1
-## 
-## $nfcnt
-## [1] 15
-## 
-## $njcnt
-## [1] 1
-## 
-## $iter
-## [1] 12
+## $`stress 1`
+##                    L    L1    L2     L3       H1      H2     H3
+## mean        1140.535 20.06 456.0 664.47 0.000400 0.00968 0.0530
+## sd           616.930 28.48 340.9 371.14 0.000405 0.00706 0.0292
+## skewness       1.059  2.13   1.4   1.09 2.013196 1.39135 1.0949
+## ex kurtosis    0.895  6.40   2.3   1.31 5.899634 2.26506 1.3371
+## 1st Qu.      695.000  0.00 206.2 395.00 0.000113 0.00453 0.0318
+## Median      1001.875  0.00 365.6 590.00 0.000276 0.00786 0.0472
+## 3rd Qu.     1430.625 20.00 609.4 855.00 0.000554 0.01296 0.0679
 ```
 
 ```r
- stress.credit <- stress_moment(x = stress.credit, f =  list(function(x)1 * (x <= VaR.L * 1.2), function(x)x, function(x)1 * (x <= q.H2)), m = c(0.9, mean(credit_data[, "H2"]), 0.75), k = c(1, 6, 6))
-summary(str.var.credit2)
+sensitivity(object = stress.credit.H2, xCol = c(2:7), type = "Gamma")
+```
+
+```
+##     stress  type     L1     L2    L3        H1       H2    H3
+## 1 stress 1 Gamma 0.0102 0.0203 0.366 -0.000521 1.17e-08 0.359
+```
+
+The sensitivity measure confirms that the systematic risk prevails on binomial (event) risk.
+
+The following example is another case involving the stress of multiple model components. Namely, we impose a stress requiring a 20\% increase in the quantile of both the losses in subportfolios 2 and 3. In particular, we can examine two different situations: in the first the minimization problem is subject to two separate constraints while in the second it is subject to a joint one. 
+
+
+```r
+VaR.L2 <- quantile(x = credit_data[, "L2"], prob = 0.9, type = 1) # VaR of L2
+VaR.L3 <- quantile(x = credit_data[, "L3"], prob = 0.9, type = 1) # VaR of L3
+# functions to be applied to columns
+ 
+# two constraints
+f.stress <- list(function(x)1 * (x <= VaR.L2 * 1.2), function(x)1 * (x <= VaR.L3 * 1.2)) 
+# single joint constraint
+f.stress.joint <- list(function(x)1 * (x[1] <= VaR.L2 * 1.2) * (x[2] <= VaR.L3 * 1.2)) 
+stress.credit.L2L3 <- stress_moment(x = credit_data, f = f.stress, k = c(3, 4), m = c(0.9, 0.9))
+stress.credit.L2L3.joint <- stress_moment(x = credit_data, f = f.stress.joint, 
+                                          k = list(c(3, 4)), m = 0.9)
+summary(stress.credit.L2L3)
 ```
 
 ```
 ## $`stress 1`
-##                        L        L1         L2         L3           H1
-## mean        1140.5354634 20.055743 456.009433 664.470287 0.0004004611
-## sd           616.9303342 28.482651 340.852509 371.139871 0.0004046357
-## skewness       1.0587236  2.125213   1.404357   1.090368 2.0131956190
-## ex kurtosis    0.8946579  6.395638   2.302149   1.312725 5.8996342470
-## 1st Qu.      695.0000000  0.000000 206.250000 395.000000 0.0001129192
-## Median      1001.8750000  0.000000 365.625000 590.000000 0.0002762449
-## 3rd Qu.     1430.6250000 20.000000 609.375000 855.000000 0.0005542238
-##                      H2         H3
-## mean        0.009684892 0.05303803
-## sd          0.007062589 0.02921879
-## skewness    1.391352645 1.09490268
-## ex kurtosis 2.265056699 1.33711588
-## 1st Qu.     0.004531472 0.03175890
-## Median      0.007857225 0.04718364
-## 3rd Qu.     0.012955333 0.06789288
+##                    L    L1     L2      L3       H1      H2     H3
+## mean        1211.156 20.66 504.20 686.297 0.000416 0.01072 0.0548
+## sd           627.086 28.82 361.91 375.153 0.000413 0.00753 0.0295
+## skewness       0.995  2.07   1.30   0.992 1.958843 1.29316 0.9966
+## ex kurtosis    1.049  6.07   1.95   0.894 5.515336 1.96199 0.9214
+## 1st Qu.      749.375  0.00 234.38 410.000 0.000120 0.00518 0.0331
+## Median      1087.500 20.00 412.50 610.000 0.000290 0.00885 0.0489
+## 3rd Qu.     1556.250 40.00 675.00 880.000 0.000576 0.01430 0.0701
 ```
 
 ```r
- summary(stress.credit)
+summary(stress.credit.L2L3.joint)
 ```
 
 ```
 ## $`stress 1`
-##                        L        L1         L2         L3           H1
-## mean        1193.3857930 20.831143 501.097992 671.456658 0.0004165732
-## sd           623.4846001 29.089037 363.570216 361.210270 0.0004153808
-## skewness       1.0128783  2.085416   1.358798   1.023719 1.9733372317
-## ex kurtosis    0.9396505  6.137944   2.234912   1.218835 5.6301528473
-## 1st Qu.      739.3750000  0.000000 234.375000 405.000000 0.0001198463
-## Median      1065.6250000 20.000000 412.500000 605.000000 0.0002901372
-## 3rd Qu.     1505.6250000 40.000000 675.000000 865.000000 0.0005775576
-##                      H2         H3
-## mean        0.010655445 0.05362503
-## sd          0.007561023 0.02846252
-## skewness    1.350746591 1.02834250
-## ex kurtosis 2.233530201 1.23819802
-## 1st Qu.     0.005117044 0.03279018
-## Median      0.008778713 0.04834310
-## 3rd Qu.     0.014221464 0.06884588
-## 
-## $`stress 2`
-##                       L        L1         L2         L3           H1
-## mean        1289.904893 21.700135 558.272481 709.932277 0.0004368972
-## sd           875.895228 30.566506 507.780361 447.304978 0.0004484146
-## skewness       1.904647  2.170868   2.104241   1.569286 2.0904252485
-## ex kurtosis    3.674787  6.743501   4.793874   2.796753 6.2034288866
-## 1st Qu.      739.375000  0.000000 234.375000 405.000000 0.0001228676
-## Median      1065.625000 20.000000 412.500000 605.000000 0.0002970796
-## 3rd Qu.     1505.625000 40.000000 675.000000 875.000000 0.0005939864
-##                      H2         H3
-## mean        0.011804242 0.05663839
-## sd          0.010448927 0.03510638
-## skewness    2.101275755 1.53844360
-## ex kurtosis 4.970004195 2.61418427
-## 1st Qu.     0.005117705 0.03279281
-## Median      0.008789480 0.04838916
-## 3rd Qu.     0.014392481 0.06972752
-## 
-## $`stress 3`
-##                        L        L1         L2         L3           H1
-## mean        1140.5354634 20.055743 456.009433 664.470287 0.0004004611
-## sd           616.9303342 28.482651 340.852509 371.139871 0.0004046357
-## skewness       1.0587236  2.125213   1.404357   1.090368 2.0131956190
-## ex kurtosis    0.8946579  6.395638   2.302149   1.312725 5.8996342470
-## 1st Qu.      695.0000000  0.000000 206.250000 395.000000 0.0001129192
-## Median      1001.8750000  0.000000 365.625000 590.000000 0.0002762449
-## 3rd Qu.     1430.6250000 20.000000 609.375000 855.000000 0.0005542238
-##                      H2         H3
-## mean        0.009684892 0.05303803
-## sd          0.007062589 0.02921879
-## skewness    1.391352645 1.09490268
-## ex kurtosis 2.265056699 1.33711588
-## 1st Qu.     0.004531472 0.03175890
-## Median      0.007857225 0.04718364
-## 3rd Qu.     0.012955333 0.06789288
+##                    L    L1     L2      L3       H1      H2     H3
+## mean        1118.966 20.09 462.40 636.474 0.000403 0.00986 0.0509
+## sd           541.029 28.31 320.25 327.183 0.000402 0.00668 0.0258
+## skewness       0.946  2.09   1.32   0.965 1.967341 1.31574 0.9689
+## ex kurtosis    1.244  6.20   2.43   1.246 5.597467 2.42008 1.2610
+## 1st Qu.      723.125  0.00 225.00 395.000 0.000116 0.00494 0.0320
+## Median      1031.250 20.00 393.75 585.000 0.000281 0.00838 0.0467
+## 3rd Qu.     1421.875 40.00 618.75 815.000 0.000558 0.01317 0.0651
 ```
 
-```r
-sensitivity(object = str.var.credit2, xCol = c(2 : 7), type = "Gamma")
-```
-
-```
-##     stress  type         L1         L2        L3            H1           H2
-## 1 stress 1 Gamma 0.01021874 0.02031374 0.3663414 -0.0005209693 1.166618e-08
-##          H3
-## 1 0.3591785
-```
-
-```r
- sensitivity(object = stress.credit, xCol = c(2 : 7), type = "Gamma")
-```
-
-```
-##     stress  type         L1         L2        L3            H1           H2
-## 1 stress 1 Gamma 0.15011211 0.81946608 0.7723621  0.1963720925 8.113067e-01
-## 2 stress 2 Gamma 0.11313252 0.73364958 0.6385973  0.1714682450 7.079403e-01
-## 3 stress 3 Gamma 0.01021874 0.02031374 0.3663414 -0.0005209693 1.166618e-08
-##          H3
-## 1 0.7673356
-## 2 0.6363609
-## 3 0.3591785
-```
-
-+++THIS SHOULD BE APPENDED TO "stress.credit" WHEN "stress_moment" IS FIXED
-It is then clear that systematic risk prevails on binomial (event) risk. 
-
-The `stress_moment` function is flexible and allows different type of stresses to be imposed on a model. The following example forces a $50\%$ increase in correlation between the losses in the second and third portfolios, while keeping the means und standard deviations unchanged.
-
-
-```r
-m.L2 <- mean(credit_data[, "L2"])
-m.L3 <- mean(credit_data[, "L3"])
-m2.L2 <- mean(credit_data[, "L2"] ^ 2)
-m2.L3 <- mean(credit_data[, "L3"] ^ 2)
-cov.L2.L3 <- cov(credit_data[, "L2"], credit_data[, "L3"])
-# str.var.credit2 <- stress_moment(x = credit_data,
-#                                 f = list(function(x)x,
-#                                          function(x)x,
-#                                          function(x)x ^ 2,
-#                                          function(x)x ^ 2,
-#                                          function(x)x[1] * x[2] - m.L2 * m.L3),
-#                                 k = list(3, 4, 3, 4, c(3, 4)),
-#                                 m = c(m.L2, m.L3, m2.L2, m2.L3, cov.L2.L3 * 1.5)
-```
-+++CURRENTLY DOES NOT RUN - NEEDS TO BE FIXED OR REPLACED
-
-
-+++FINAL COMMENTS?
+The stress obtained with the joint constraint on $L_2$ and $L_3$ is weaker.

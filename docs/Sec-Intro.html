@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>2 What is SWIM? | Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis</title>
   <meta name="description" content="2 What is SWIM? | Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis" />
-  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
 
   <meta property="og:title" content="2 What is SWIM? | Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis" />
   <meta property="og:type" content="book" />
@@ -21,7 +21,7 @@
   
   
 
-<meta name="author" content="Silvana M. Pesenti ,2, Alberto Bettini3, Pietro Millossovich4,5, Andreas Tsanakas5" />
+<meta name="author" content="Silvana M. Pesenti 2, Alberto Bettini3, Pietro Millossovich4,5, Andreas Tsanakas5" />
 
 
 
@@ -42,6 +42,7 @@ div.abstract{
   width: 90%;
 }
 </style>
+<script src="assets/header-attrs-2.1/header-attrs.js"></script>
 <script src="assets/jquery-2.2.3/jquery.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -62,25 +63,26 @@ div.abstract{
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -89,9 +91,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -136,38 +138,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#background-and-contribution"><i class="fa fa-check"></i><b>1.1</b> Background and contribution</a></li>
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#installation"><i class="fa fa-check"></i><b>1.2</b> Installation</a></li>
 <li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#structure-of-the-paper"><i class="fa fa-check"></i><b>1.3</b> Structure of the paper</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="Sec-Intro.html"><a href="Sec-Intro.html"><i class="fa fa-check"></i><b>2</b> What is SWIM?</a><ul>
+<li class="chapter" data-level="2" data-path="Sec-Intro.html"><a href="Sec-Intro.html"><i class="fa fa-check"></i><b>2</b> What is <strong>SWIM</strong>?</a>
+<ul>
 <li class="chapter" data-level="2.1" data-path="Sec-Intro.html"><a href="Sec-Intro.html#sensitivity-testing-and-scenario-weights"><i class="fa fa-check"></i><b>2.1</b> Sensitivity testing and scenario weights</a></li>
 <li class="chapter" data-level="2.2" data-path="Sec-Intro.html"><a href="Sec-Intro.html#an-introductory-example"><i class="fa fa-check"></i><b>2.2</b> An introductory example</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="Sec-Scope.html"><a href="Sec-Scope.html"><i class="fa fa-check"></i><b>3</b> Scope of the SWIM package</a><ul>
-<li class="chapter" data-level="3.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Rfunctions"><i class="fa fa-check"></i><b>3.1</b> Stressing a model</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Rstress"><i class="fa fa-check"></i><b>3.1.1</b> The <code>stress</code> function and the <code>SWIM</code> object</a></li>
+<li class="chapter" data-level="3" data-path="Sec-Scope.html"><a href="Sec-Scope.html"><i class="fa fa-check"></i><b>3</b> Scope of the <strong>SWIM</strong> package</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Rfunctions"><i class="fa fa-check"></i><b>3.1</b> Stressing a model</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Rstress"><i class="fa fa-check"></i><b>3.1.1</b> The <code>stress</code> function and the <strong>SWIM</strong> object</a></li>
 <li class="chapter" data-level="3.1.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#stressing-disjoint-probability-intervals"><i class="fa fa-check"></i><b>3.1.2</b> Stressing disjoint probability intervals</a></li>
 <li class="chapter" data-level="3.1.3" data-path="Sec-Scope.html"><a href="Sec-Scope.html#stressing-moments"><i class="fa fa-check"></i><b>3.1.3</b> Stressing moments</a></li>
 <li class="chapter" data-level="3.1.4" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Sec:RiskMeasures"><i class="fa fa-check"></i><b>3.1.4</b> Stressing risk measures</a></li>
-<li class="chapter" data-level="3.1.5" data-path="Sec-Scope.html"><a href="Sec-Scope.html#user-defined-scenario-weights"><i class="fa fa-check"></i><b>3.1.5</b> User defined scenario weights</a></li>
+<li class="chapter" data-level="3.1.5" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Sec:User"><i class="fa fa-check"></i><b>3.1.5</b> User defined scenario weights</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Sec:analysis"><i class="fa fa-check"></i><b>3.2</b> Analysis of stressed models</a><ul>
+<li class="chapter" data-level="3.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Sec:analysis"><i class="fa fa-check"></i><b>3.2</b> Analysis of stressed models</a>
+<ul>
 <li class="chapter" data-level="3.2.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#distributional-comparison"><i class="fa fa-check"></i><b>3.2.1</b> Distributional comparison</a></li>
 <li class="chapter" data-level="3.2.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#sensitivity-measures"><i class="fa fa-check"></i><b>3.2.2</b> Sensitivity measures</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html"><i class="fa fa-check"></i><b>4</b> Simulation study</a><ul>
+<li class="chapter" data-level="4" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html"><i class="fa fa-check"></i><b>4</b> Case study</a>
+<ul>
 <li class="chapter" data-level="4.1" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#a-credit-risk-portfolio"><i class="fa fa-check"></i><b>4.1</b> A credit risk portfolio</a></li>
-<li class="chapter" data-level="4.2" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#stressing-the-aggregate-portfolio-loss"><i class="fa fa-check"></i><b>4.2</b> Stressing the aggregate portfolio loss</a></li>
-<li class="chapter" data-level="4.3" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#analysing-the-stressed-model"><i class="fa fa-check"></i><b>4.3</b> Analysing the stressed model</a></li>
-<li class="chapter" data-level="4.4" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#visual-comparison"><i class="fa fa-check"></i><b>4.4</b> Visual comparison</a></li>
+<li class="chapter" data-level="4.2" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#stressing-the-portfolio-loss"><i class="fa fa-check"></i><b>4.2</b> Stressing the portfolio loss</a></li>
+<li class="chapter" data-level="4.3" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#analysing-stressed-models"><i class="fa fa-check"></i><b>4.3</b> Analysing stressed models</a></li>
+<li class="chapter" data-level="4.4" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#visualising-stressed-distributions"><i class="fa fa-check"></i><b>4.4</b> Visualising stressed distributions</a></li>
 <li class="chapter" data-level="4.5" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#sensitivity-measures-1"><i class="fa fa-check"></i><b>4.5</b> Sensitivity measures</a></li>
+<li class="chapter" data-level="4.6" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#constructing-more-advanced-stresses"><i class="fa fa-check"></i><b>4.6</b> Constructing more advanced stresses</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#sensitivity-of-default-probabilities"><i class="fa fa-check"></i><b>4.6.1</b> Sensitivity of default probabilities</a></li>
+<li class="chapter" data-level="4.6.2" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#stressing-tails-of-subportfolios"><i class="fa fa-check"></i><b>4.6.2</b> Stressing tails of subportfolios</a></li>
 </ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="conclusion-and-future-work.html"><a href="conclusion-and-future-work.html"><i class="fa fa-check"></i><b>5</b> Conclusion and future work</a></li>
+<li class="chapter" data-level="" data-path="acknowledgements.html"><a href="acknowledgements.html"><i class="fa fa-check"></i>Acknowledgements</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
-<li class="chapter" data-level="A" data-path="AppendixCM.html"><a href="AppendixCM.html"><i class="fa fa-check"></i><b>A</b> Appendix Credit Model</a><ul>
+<li class="chapter" data-level="A" data-path="AppendixCM.html"><a href="AppendixCM.html"><i class="fa fa-check"></i><b>A</b> Appendix Credit Model</a>
+<ul>
 <li class="chapter" data-level="A.1" data-path="AppendixCM.html"><a href="AppendixCM.html#credit-model-assumptions"><i class="fa fa-check"></i><b>A.1</b> Credit Model assumptions</a></li>
 <li class="chapter" data-level="A.2" data-path="AppendixCM.html"><a href="AppendixCM.html#code-for-generating-the-data"><i class="fa fa-check"></i><b>A.2</b> Code for generating the data</a></li>
 </ul></li>
@@ -180,7 +196,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Scenario Weights for Importance Measurement (SWIM) – an <code>R</code> package for sensitivity analysis</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Scenario Weights for Importance Measurement (<strong>SWIM</strong>) – an <strong>R</strong> package for sensitivity analysis</a>
           </h1>
         </div>
 
@@ -188,13 +204,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="Sec:Intro" class="section level1">
-<h1><span class="header-section-number">2</span> What is SWIM?</h1>
-<div id="sensitivity-testing-and-scenario-weights" class="section level2">
+<div id="Sec:Intro" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> What is <strong>SWIM</strong>?</h1>
+<div id="sensitivity-testing-and-scenario-weights" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Sensitivity testing and scenario weights</h2>
-<p>The purpose of SWIM is to enable sensitivity analysis of models implemented in a Monte Carlo simulation framework, by distorting (`stressing’) some of the models’ components and monitoring the resulting impact on quantities of interest.</p>
-<p>To clarify this idea and explain how SWIM works, we first define the terms used. By a <em>model</em>, we mean a set of <span class="math inline">\(n\)</span> (typically simulated) realisations from a vector of random variables <span class="math inline">\((X_1,\dots,X_d)\)</span>, along with <em>scenario weights</em> <span class="math inline">\(W\)</span> assigned to individual realisations, as shown in the table below. Hence each of of the columns 1 to <span class="math inline">\(d\)</span> corresponds to a random variable, called a <em>model component</em>, while each row corresponds to a <em>scenario</em>, that is, a state of the world.</p>
+<p>The purpose of <strong>SWIM</strong> is to enable sensitivity analysis of models implemented in a Monte Carlo simulation framework, by distorting (<em>stressing</em>) some of the models’ components and monitoring the resulting impact on quantities of interest.
+To clarify this idea and explain how <strong>SWIM</strong> works, we first define the terms used. By a <em>model</em>, we mean a set of <span class="math inline">\(n\)</span> (typically simulated) realisations from a vector of random variables <span class="math inline">\((X_1,\dots,X_d)\)</span>, along with <em>scenario weights</em> <span class="math inline">\(W\)</span> assigned to individual realisations, as shown in the table below. Hence each of of the columns 1 to <span class="math inline">\(d\)</span> corresponds to a random variable, called a <em>model component</em>, while each row corresponds to a <em>scenario</em>, that is, a state of the world.</p>
 <table>
+<caption><span id="tab:SWIMframework">Table 2.1: </span> Illustration of the <strong>SWIM</strong> framework, that is the baseline model, the stressed model and the scenario weights.</caption>
 <thead>
 <tr class="header">
 <th align="center"><span class="math inline">\(X_1\)</span></th>
@@ -220,11 +237,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="center"><span class="math inline">\(w_2\)</span></td>
 </tr>
 <tr class="odd">
-<td align="center"><span class="math inline">\(\dots\)</span></td>
-<td align="center"><span class="math inline">\(\dots\)</span></td>
-<td align="center"><span class="math inline">\(\dots\)</span></td>
-<td align="center"><span class="math inline">\(\dots\)</span></td>
-<td align="center"><span class="math inline">\(\dots\)</span></td>
+<td align="center"><span class="math inline">\(\vdots\)</span></td>
+<td align="center"><span class="math inline">\(\vdots\)</span></td>
+<td align="center"><span class="math inline">\(\ddots\)</span></td>
+<td align="center"><span class="math inline">\(\vdots\)</span></td>
+<td align="center"><span class="math inline">\(\vdots\)</span></td>
 </tr>
 <tr class="even">
 <td align="center"><span class="math inline">\(x_{1n}\)</span></td>
@@ -235,125 +252,126 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<p>Each scenario has a <em>scenario weight</em>, shown in the last column, such that, scenario <span class="math inline">\(i\)</span> has probability <span class="math inline">\(\frac{w_i}{n}\)</span> of occurring. Scenario weights are always greater and equal than zero and have an average of 1. When all scenario weights are equal to 1, such that the probability of each scenario is <span class="math inline">\(\frac 1 n\)</span> (the standard Monte Carlo framework), we call the model a <em>baseline model</em> – and consequently never explicitly talk about the scenario weights of baseline models. When scenario weights are not identically equal to 1, we say that we have a <em>stressed model</em>.</p>
-<p>The scenario weights make the joint distribution of model components under the stressed model different, compared to the baseline model. For example, under the baseline model, the expected value of <span class="math inline">\(X_1\)</span> and the cumulative distribution function of <span class="math inline">\(X_1\)</span> at threshold <span class="math inline">\(t\)</span>, are respectively given by:
-<span class="math display">\[
+<p>Each scenario has a <em>scenario weight</em>, shown in the last column, such that, scenario <span class="math inline">\(i\)</span> has probability <span class="math inline">\(\frac{w_i}{n}\)</span> of occurring. Scenario weights are always greater or equal than zero and have an average of 1. When all scenario weights are equal to 1, such that the probability of each scenario is <span class="math inline">\(\frac 1 n\)</span> (the standard Monte Carlo framework), we call the model a <em>baseline model</em> – consequently weights of a baseline model will never be explicitly mentioned. When scenario weights are not identically equal to 1, such that some scenarios are more weighted than others, we say that we have a <em>stressed model</em>.</p>
+<p>The scenario weights make the joint distribution of model components under the stressed model different, compared to the baseline model. For example, under the baseline model, the expected value of <span class="math inline">\(X_1\)</span> and the cumulative distribution function of <span class="math inline">\(X_1\)</span>, at threshold <span class="math inline">\(t\)</span>, are respectively given by:</p>
+<p><span class="math display">\[
 E(X_1)=\frac 1  n \sum_{i=1}^nx_{1i},\quad F_{X_1}(t)= P(X_1\leq t)=\frac 1 n \sum_{i=1}^n \mathbf 1 _{x_{1i}\leq t},
-\]</span>
-where <span class="math inline">\(\mathbf 1 _{x_{1i}\leq t}=1\)</span> if <span class="math inline">\(x_{1i}\leq t\)</span> and <span class="math inline">\(0\)</span> otherwise. For a stressed model with scenario weights <span class="math inline">\(W\)</span>, the expected value and distribution function become:
-<span class="math display">\[
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf 1 _{x_{1i}\leq t}=1\)</span> if <span class="math inline">\(x_{1i}\leq t\)</span> and <span class="math inline">\(0\)</span> otherwise. For a stressed model with scenario weights <span class="math inline">\(W\)</span>, the expected value <span class="math inline">\(E^W\)</span> and cumulative distribution function <span class="math inline">\(F^W\)</span> become:</p>
+<p><span class="math display">\[
 E^W(X_1)=\frac 1  n \sum_{i=1}^n w_i x_{1i},\quad F_{X_1}^W(t)=P^W(X_1\leq t)=\frac 1 n \sum_{i=1}^n w_i \mathbf 1 _{x_{1i}\leq t}.
-\]</span>
-Similar expressions can be derived for more involved quantities, such as higher (joint) moments and quantiles.</p>
-<p>The logic of stressing a model with SWIM then proceeds as follows. An analyst or modeller is supplied with a baseline model, in the form of a matrix of equiprobable simulated scenarios of model components. The modeller wants to investigate the impact of a change in the distribution of, say, <span class="math inline">\(X_1\)</span>. To this effect, she chooses a set of scenario weights, such that the stressed distribution of <span class="math inline">\(X_1\)</span> satisfies a particular constraint, e.g. <span class="math inline">\(E^W(X_1)=m\)</span>, which we call a <em>stress</em>; we then say that she is <em>stressing</em> <span class="math inline">\(X_1\)</span> and, by extension, the model. The scenario weights are chosen such that the distortion to the baseline model induced by the stress is as small as possible; specifically in SWIM the Kullback-Leibler divergence (or relative entropy) between the baseline and stressed models is minimised, subject to the constraint of the stress (see Section <a href="Sec-Scope.html#Rfunctions">3.1</a> for more detail on the different types of possible stresses and the corresponding optimisation problems).</p>
-<p>Once scenario weights are obtained, they can be used to obtain the stressed distribution of any model component or any function of model components. For example, for scenario weights <span class="math inline">\(W\)</span> obtained through a stress on <span class="math inline">\(X_1\)</span>, we may calculate
-<span class="math display">\[
+\]</span></p>
+<p>Similar expressions can be derived for more involved quantities, such as higher (joint) moments and quantiles.</p>
+<p>The logic of stressing a model with <strong>SWIM</strong> then proceeds as follows. An analyst or modeller is supplied with a baseline model, in the form of a matrix of equiprobable simulated scenarios of model components. The modeller wants to investigate the impact of a change in the distribution of, say, <span class="math inline">\(X_1\)</span>. To this effect, she chooses a <em>stress</em> on the distribution of <span class="math inline">\(X_i\)</span>, for example requiring that <span class="math inline">\(E^W(X_1)=m\)</span>; we then say that she is <em>stressing</em> <span class="math inline">\(X_1\)</span> and, by extension, the model. Subsequently, <strong>SWIM</strong> calculates the scenario weights such that the stress is fulfilled and the distortion to the baseline model induced by the stress is as small as possible; specifically the Kullback-Leibler divergence (or relative entropy) between the baseline and stressed models is minimised. (See Section <a href="Sec-Scope.html#Rfunctions">3.1</a> for more detail on the different types of possible stresses and the corresponding optimisation problems). Once scenario weights are obtained, they can be used to determine the stressed distribution of any model component or function of model components. For example, for scenario weights <span class="math inline">\(W\)</span> obtained through a stress on <span class="math inline">\(X_1\)</span>, we may calculate</p>
+<p><span class="math display">\[
 E^W(X_2)=\frac 1  n\sum_{i=1}^n w_i x_{2i},\quad E^W(X_1^2+X_2^2)=\frac 1  n \sum_{i=1}^n w_i \left(x_{1i}^2+ x_{2i}^2 \right).
-\]</span>
-Through this process the modeller can monitor the impact of the stress on <span class="math inline">\(X_1\)</span> on any other random variable of interest. It is notable that this approach does not necessitate generating new simulations from a stochastic model. However, as the SWIM approach requires a single set of simulated scenarios (the baseline model) it offers a clear computational benefit.</p>
+\]</span></p>
+<p>Through this process, the modeller can monitor the impact of the stress on <span class="math inline">\(X_1\)</span> on any other random variable of interest. It is notable that this approach does not necessitate generating new simulations from a stochastic model. As the <strong>SWIM</strong> approach requires a single set of simulated scenarios (the baseline model) it offers a clear computational benefit.</p>
 </div>
-<div id="an-introductory-example" class="section level2">
+<div id="an-introductory-example" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> An introductory example</h2>
-<p>Here, through an example, we illustrate the basic concepts and usage of SWIM for sensitivity analysis. More advanced usage of SWIM and options for constructing stresses are demonstrated in Sections xxx.</p>
-<p>We consider a simple model, with the random variables <span class="math inline">\(Z_1,Z_2,Z_3\)</span> represent normally distributed losses in a portfolio. <span class="math inline">\(Z_1\)</span> and <span class="math inline">\(Z_2\)</span> are correlated, while <span class="math inline">\(Z_3\)</span> is independent of <span class="math inline">\((Z_1,Z_2)\)</span>. The portfolio loss is defined by <span class="math inline">\(Y=Z_1+Z_2+Z_3\)</span>. Our purpose in this example is to investigate how a stress on the loss <span class="math inline">\(Z_1\)</span>, impacts on the overall portfolio loss <span class="math inline">\(Y\)</span>.</p>
-<p>First we derive simulated data from the random vector <span class="math inline">\((Z_1,Z_2,Z_3,Y)\)</span>, forming our baseline model.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">set.seed</span>(<span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="co"># number of simulated scenarios</span></a>
-<a class="sourceLine" id="cb2-3" title="3">n.sim &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span><span class="dv">5</span></a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="co"># correlation between Z1 and Z2</span></a>
-<a class="sourceLine" id="cb2-5" title="5">r &lt;-<span class="st"> </span><span class="fl">0.5</span></a>
-<a class="sourceLine" id="cb2-6" title="6"><span class="co"># simulation of Z1  and Z2</span></a>
-<a class="sourceLine" id="cb2-7" title="7"><span class="co"># simple construction as combination of independent standard normals U1, U2</span></a>
-<a class="sourceLine" id="cb2-8" title="8">U1 &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n.sim)</a>
-<a class="sourceLine" id="cb2-9" title="9">U2 &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n.sim)</a>
-<a class="sourceLine" id="cb2-10" title="10">Z1 &lt;-<span class="st"> </span><span class="dv">100</span> <span class="op">+</span><span class="st"> </span><span class="dv">40</span> <span class="op">*</span><span class="st"> </span>U1</a>
-<a class="sourceLine" id="cb2-11" title="11">Z2 &lt;-<span class="st"> </span><span class="dv">100</span> <span class="op">+</span><span class="st"> </span><span class="dv">20</span> <span class="op">*</span><span class="st"> </span>(r <span class="op">*</span><span class="st"> </span>U1 <span class="op">+</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>r<span class="op">^</span><span class="dv">2</span>) <span class="op">*</span><span class="st"> </span>U2)</a>
-<a class="sourceLine" id="cb2-12" title="12"><span class="co"># simulation of Z3</span></a>
-<a class="sourceLine" id="cb2-13" title="13">Z3 &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n.sim, <span class="dv">100</span>, <span class="dv">20</span>)</a>
-<a class="sourceLine" id="cb2-14" title="14"><span class="co"># portfolio loss Y</span></a>
-<a class="sourceLine" id="cb2-15" title="15">Y &lt;-<span class="st"> </span>Z1 <span class="op">+</span><span class="st"> </span>Z2 <span class="op">+</span><span class="st"> </span>Z3</a></code></pre></div>
-<p>Now we introduce a stress to our baseline model. For our first stress, we require that the mean of <span class="math inline">\(Z_1\)</span> is increased from 100 to 110. This is done using the <code>stress</code> function, which generates as output the SWIM object <code>str.mean</code>. This object stores the stressed model, i.e. the realisations of the model components and the scenario weights. In the function call, <code>k=1</code> indicates that the stress is applied on the first column of <code>dat</code>, that is, on the realisations of the random variable <span class="math inline">\(Z_1\)</span>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">library</span>(SWIM)</a>
-<a class="sourceLine" id="cb3-2" title="2">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(Z1, Z2, Z3, Y)</a>
-<a class="sourceLine" id="cb3-3" title="3">str.mean &lt;-<span class="st"> </span><span class="kw">stress</span>(<span class="dt">type=</span><span class="st">&quot;mean&quot;</span>, <span class="dt">x =</span> dat, <span class="dt">k=</span><span class="dv">1</span>, <span class="dt">new_means =</span> <span class="dv">110</span>)</a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="kw">summary</span>(str.mean, <span class="dt">base =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p>Here, through an example, we illustrate the basic concepts and usage of <strong>SWIM</strong> for sensitivity analysis. More advanced usage of <strong>SWIM</strong> and options for constructing stresses are demonstrated in Sections <a href="Sec-Scope.html#Sec:Scope">3</a> and <a href="Sec-CreditModel.html#Sec:CreditModel">4</a>.
+We consider a simple portfolio model, with the portfolio loss defined by <span class="math inline">\(Y=Z_1+Z_2+Z_3\)</span>. The random variables <span class="math inline">\(Z_1,Z_2,Z_3\)</span> represent normally distributed losses, with <span class="math inline">\(Z_1\sim N(100,40^2)\)</span>, <span class="math inline">\(Z_2\sim Z_3\sim N(100,20^2)\)</span>. <span class="math inline">\(Z_1\)</span> and <span class="math inline">\(Z_2\)</span> are correlated, while <span class="math inline">\(Z_3\)</span> is independent of <span class="math inline">\((Z_1,Z_2)\)</span>. Our purpose in this example is to investigate how a stress on the loss <span class="math inline">\(Z_1\)</span> impacts on the overall portfolio loss <span class="math inline">\(Y\)</span>.
+First we derive simulated data from the random vector <span class="math inline">\((Z_1,Z_2,Z_3,Y)\)</span>, forming our baseline model.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="Sec-Intro.html#cb2-1"></a><span class="kw">set.seed</span>(<span class="dv">0</span>)</span>
+<span id="cb2-2"><a href="Sec-Intro.html#cb2-2"></a><span class="co"># number of simulated scenarios</span></span>
+<span id="cb2-3"><a href="Sec-Intro.html#cb2-3"></a>n.sim &lt;-<span class="st"> </span><span class="dv">10</span> <span class="op">^</span><span class="st"> </span><span class="dv">5</span></span>
+<span id="cb2-4"><a href="Sec-Intro.html#cb2-4"></a><span class="co"># correlation between Z1 and Z2</span></span>
+<span id="cb2-5"><a href="Sec-Intro.html#cb2-5"></a>r &lt;-<span class="st"> </span><span class="fl">0.5</span></span>
+<span id="cb2-6"><a href="Sec-Intro.html#cb2-6"></a><span class="co"># simulation of Z1  and Z2</span></span>
+<span id="cb2-7"><a href="Sec-Intro.html#cb2-7"></a><span class="co"># constructed as a combination of independent standard normals U1, U2</span></span>
+<span id="cb2-8"><a href="Sec-Intro.html#cb2-8"></a>U1 &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n.sim)</span>
+<span id="cb2-9"><a href="Sec-Intro.html#cb2-9"></a>U2 &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n.sim)</span>
+<span id="cb2-10"><a href="Sec-Intro.html#cb2-10"></a>Z1 &lt;-<span class="st"> </span><span class="dv">100</span> <span class="op">+</span><span class="st"> </span><span class="dv">40</span> <span class="op">*</span><span class="st"> </span>U1</span>
+<span id="cb2-11"><a href="Sec-Intro.html#cb2-11"></a>Z2 &lt;-<span class="st"> </span><span class="dv">100</span> <span class="op">+</span><span class="st"> </span><span class="dv">20</span> <span class="op">*</span><span class="st"> </span>(r <span class="op">*</span><span class="st"> </span>U1 <span class="op">+</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>r <span class="op">^</span><span class="st"> </span><span class="dv">2</span>) <span class="op">*</span><span class="st"> </span>U2)</span>
+<span id="cb2-12"><a href="Sec-Intro.html#cb2-12"></a><span class="co"># simulation of Z3</span></span>
+<span id="cb2-13"><a href="Sec-Intro.html#cb2-13"></a>Z3 &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n.sim, <span class="dv">100</span>, <span class="dv">20</span>)</span>
+<span id="cb2-14"><a href="Sec-Intro.html#cb2-14"></a><span class="co"># portfolio loss Y</span></span>
+<span id="cb2-15"><a href="Sec-Intro.html#cb2-15"></a>Y &lt;-<span class="st"> </span>Z1 <span class="op">+</span><span class="st"> </span>Z2 <span class="op">+</span><span class="st"> </span>Z3</span>
+<span id="cb2-16"><a href="Sec-Intro.html#cb2-16"></a><span class="co"># data of baseline model</span></span>
+<span id="cb2-17"><a href="Sec-Intro.html#cb2-17"></a>dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(Z1, Z2, Z3, Y)</span></code></pre></div>
+<p>Now we introduce a stress to our baseline model. For our first stress, we require that the mean of <span class="math inline">\(Z_1\)</span> is increased from 100 to 110. This is done using the <code>stress</code> function, which generates as output the <strong>SWIM</strong> object <code>str.mean</code>. This object stores the stressed model, i.e. the realisations of the model components and the scenario weights. In the function call, the argument <code>k = 1</code> indicates that the stress is applied on the first column of <code>dat</code>, that is, on the realisations of the random variable <span class="math inline">\(Z_1\)</span>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="Sec-Intro.html#cb3-1"></a><span class="kw">library</span>(SWIM)</span>
+<span id="cb3-2"><a href="Sec-Intro.html#cb3-2"></a>str.mean &lt;-<span class="st"> </span><span class="kw">stress</span>(<span class="dt">type =</span> <span class="st">&quot;mean&quot;</span>, <span class="dt">x =</span> dat, <span class="dt">k =</span> <span class="dv">1</span>, <span class="dt">new_means =</span> <span class="dv">110</span>)</span>
+<span id="cb3-3"><a href="Sec-Intro.html#cb3-3"></a><span class="kw">summary</span>(str.mean, <span class="dt">base =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>## $base
-##                    Z1        Z2        Z3         Y
-## mean         1.00e+02  99.94040  99.98433 299.98111
-## sd           4.00e+01  19.99695  19.98195  56.63887
-## skewness    -6.08e-04   0.00117  -0.00247  -0.00234
-## ex kurtosis -1.06e-02  -0.00897  -0.01257  -0.00938
-## 1st Qu.      7.28e+01  86.47450  86.48161 261.61212
-## Median       1.00e+02  99.98657 100.00907 300.05480
-## 3rd Qu.      1.27e+02 113.39567 113.49342 338.26698
+##                   Z1       Z2       Z3        Y
+## mean         1.0e+02  99.9404  99.9843 299.9811
+## sd           4.0e+01  19.9970  19.9819  56.6389
+## skewness    -6.1e-04   0.0012  -0.0025  -0.0023
+## ex kurtosis -1.1e-02  -0.0090  -0.0126  -0.0094
+## 1st Qu.      7.3e+01  86.4745  86.4816 261.6121
+## Median       1.0e+02  99.9866 100.0091 300.0548
+## 3rd Qu.      1.3e+02 113.3957 113.4934 338.2670
 ## 
 ## $`stress 1`
-##                    Z1        Z2        Z3         Y
-## mean        110.00000 102.44371  99.98278 312.42649
-## sd           40.03328  19.99542  19.97616  56.61726
-## skewness     -0.00240  -0.00151  -0.00493  -0.00368
-## ex kurtosis  -0.00502  -0.00316  -0.01547  -0.00119
-## 1st Qu.      82.99837  88.97706  86.48152 274.22003
-## Median      110.07585 102.48100  99.99544 312.50394
-## 3rd Qu.     136.93102 115.87438 113.50186 350.61205</code></pre>
-<p>The summary function, applied on the SWIM object <code>str.mean</code>, shows how the distributional characteristics of all random variables of interest change from the baseline to the stressed model. In particular, we see that the mean of <span class="math inline">\(Z_1\)</span> changes to its required value, while the mean of <span class="math inline">\(Y\)</span> also increases. Furthermore there is a small impact on <span class="math inline">\(Z_2\)</span>, due to its positive correlation to <span class="math inline">\(Z_1\)</span>.</p>
-<p>Beyond considering the standard statistics evaluated via the summary function, stressed probability distributions can be plotted. In Figure <a href="Sec-Intro.html#fig:example1-cdfs-mean">2.1</a> we show the impact of the stress on on the cumulative distribution functions (cdf) of <span class="math inline">\(Z_1\)</span> and <span class="math inline">\(Y\)</span>. It is seen how the stressed cdfs are lower than the original (baseline) ones. Loosely speaking, this demonstrates that the stress has increased (in a stochastic sense) both random variables <span class="math inline">\(Z_1\)</span> and <span class="math inline">\(Y\)</span>. While the stress was on <span class="math inline">\(Z_1\)</span>, the impact on the distribution of the portfolio <span class="math inline">\(Y\)</span> is clearly visible.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># can refer to variable of interest by name...</span></a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="kw">plot_cdf</span>(str.mean, <span class="dt">xCol =</span> <span class="st">&quot;Z1&quot;</span>, <span class="dt">base =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="co"># ... or column number</span></a>
-<a class="sourceLine" id="cb5-4" title="4"><span class="kw">plot_cdf</span>(str.mean, <span class="dt">xCol =</span> <span class="dv">4</span>, <span class="dt">base =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+##                   Z1       Z2       Z3        Y
+## mean        110.0000 102.4437  99.9828 312.4265
+## sd           40.0333  19.9954  19.9762  56.6173
+## skewness     -0.0024  -0.0015  -0.0049  -0.0037
+## ex kurtosis  -0.0050  -0.0032  -0.0155  -0.0012
+## 1st Qu.      82.9984  88.9771  86.4815 274.2200
+## Median      110.0759 102.4810  99.9954 312.5039
+## 3rd Qu.     136.9310 115.8744 113.5019 350.6120</code></pre>
+<p>The <code>summary</code> function, applied to the <strong>SWIM</strong> object <code>str.mean</code>, shows how the distributional characteristics of all random variables change from the baseline to the stressed model. In particular, we see that the mean of <span class="math inline">\(Z_1\)</span> changes to its required value, while the mean of <span class="math inline">\(Y\)</span> also increases. Furthermore there is a small impact on <span class="math inline">\(Z_2\)</span>, due to its positive correlation to <span class="math inline">\(Z_1\)</span>.</p>
+<p>Beyond considering the standard statistics evaluated via the <code>summary</code> function, stressed probability distributions can be plotted. In Figure <a href="Sec-Intro.html#fig:example1-cdfs-mean">2.1</a> we show the impact of the stress on the cumulative distribution functions (cdf) of <span class="math inline">\(Z_1\)</span> and <span class="math inline">\(Y\)</span>. It is seen how the stressed cdfs are lower than the original (baseline) ones. Loosely speaking, this demonstrates that the stress has increased (in a stochastic sense) both random variables <span class="math inline">\(Z_1\)</span> and <span class="math inline">\(Y\)</span>. While the stress was on <span class="math inline">\(Z_1\)</span>, the impact on the distribution of the portfolio <span class="math inline">\(Y\)</span> is clearly visible.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="Sec-Intro.html#cb5-1"></a><span class="co"># refer to variable of interest by name...</span></span>
+<span id="cb5-2"><a href="Sec-Intro.html#cb5-2"></a><span class="kw">plot_cdf</span>(str.mean, <span class="dt">xCol =</span> <span class="st">&quot;Z1&quot;</span>, <span class="dt">base =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb5-3"><a href="Sec-Intro.html#cb5-3"></a><span class="co"># ... or column number</span></span>
+<span id="cb5-4"><a href="Sec-Intro.html#cb5-4"></a><span class="kw">plot_cdf</span>(str.mean, <span class="dt">xCol =</span> <span class="dv">4</span>, <span class="dt">base =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:example1-cdfs-mean"></span>
-<img src="01-intro_files/figure-html/example1-cdfs-mean-1.png" alt="Baseline and stressed empirical distribution functions of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the mean of $Z_1$." width="50%" /><img src="01-intro_files/figure-html/example1-cdfs-mean-2.png" alt="Baseline and stressed empirical distribution functions of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the mean of $Z_1$." width="50%" />
+<img src="bookdown-SWIM_files/figure-html/example1-cdfs-mean-1.png" alt="Baseline and stressed empirical distribution functions of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the mean of $Z_1$." width="50%" /><img src="bookdown-SWIM_files/figure-html/example1-cdfs-mean-2.png" alt="Baseline and stressed empirical distribution functions of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the mean of $Z_1$." width="50%" />
 <p class="caption">
 Figure 2.1: Baseline and stressed empirical distribution functions of model components <span class="math inline">\(Z_1\)</span> (left) and <span class="math inline">\(Y\)</span> (right), subject to a stress on the mean of <span class="math inline">\(Z_1\)</span>.
 </p>
 </div>
-<p>The scenario weights, given their central role, can be extracted from a SWIM object. In Figure <a href="Sec-Intro.html#fig:example1-weights-mean">2.2</a>, the scenario weights from <code>str.mean</code> are plotted against realisations from <span class="math inline">\(Z_1\)</span> and <span class="math inline">\(Y\)</span> respectively. It is seen how the weights are increasing in the realisations from <span class="math inline">\(Z_1\)</span>. This is a consequence of the weights’ derivation via a stress on the model component <span class="math inline">\(Z_1\)</span>. The increasingness shows that those scenarios for which <span class="math inline">\(Z_1\)</span> is largest are assigned a higher weight. The relation between scenario weights and <span class="math inline">\(Y\)</span> is still increasing (reflecting that high outcomes of <span class="math inline">\(Y\)</span> tend to receive higher weights), but no longer deterministic (showing that <span class="math inline">\(Y\)</span> is not completely driven by changes in <span class="math inline">\(Z_1\)</span>).</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="co"># extract weights from SWIM object</span></a>
-<a class="sourceLine" id="cb6-2" title="2">w.mean &lt;-<span class="st"> </span><span class="kw">get_weights</span>(str.mean)</a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="kw">plot</span>(Z1[<span class="dv">1</span> <span class="op">:</span><span class="st"> </span><span class="dv">5000</span>], w.mean[<span class="dv">1</span> <span class="op">:</span><span class="st"> </span><span class="dv">5000</span>], <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">xlab =</span> <span class="st">&quot;Z1&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;scenario weights&quot;</span>)</a>
-<a class="sourceLine" id="cb6-4" title="4"><span class="kw">plot</span>(Y[<span class="dv">1</span> <span class="op">:</span><span class="st"> </span><span class="dv">5000</span>], w.mean[<span class="dv">1</span> <span class="op">:</span><span class="st"> </span><span class="dv">5000</span>], <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">xlab =</span> <span class="st">&quot;Y&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;scenario weights&quot;</span>)</a></code></pre></div>
+<p>The scenario weights, given their central role, can be extracted from a <strong>SWIM</strong> object. In Figure <a href="Sec-Intro.html#fig:example1-weights-mean">2.2</a>, the scenario weights from <code>str.mean</code> are plotted against realisations from <span class="math inline">\(Z_1\)</span> and <span class="math inline">\(Y\)</span> respectively. It is seen how the weights are increasing in the realisations from <span class="math inline">\(Z_1\)</span>. This is a consequence of the weights’ derivation via a stress on the model component <span class="math inline">\(Z_1\)</span>. The increasingness shows that those scenarios for which <span class="math inline">\(Z_1\)</span> is largest are assigned a higher weight. The relation between scenario weights and <span class="math inline">\(Y\)</span> is still increasing (reflecting that high outcomes of <span class="math inline">\(Y\)</span> tend to receive higher weights), but no longer deterministic (showing that <span class="math inline">\(Y\)</span> is not completely driven by changes in <span class="math inline">\(Z_1\)</span>).</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="Sec-Intro.html#cb6-1"></a><span class="co"># extract weights from stressed model</span></span>
+<span id="cb6-2"><a href="Sec-Intro.html#cb6-2"></a>w.mean &lt;-<span class="st"> </span><span class="kw">get_weights</span>(str.mean)</span>
+<span id="cb6-3"><a href="Sec-Intro.html#cb6-3"></a><span class="kw">plot</span>(Z1[<span class="dv">1</span><span class="op">:</span><span class="dv">5000</span>], w.mean[<span class="dv">1</span><span class="op">:</span><span class="dv">5000</span>], <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">xlab =</span> <span class="st">&quot;Z1&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;scenario weights&quot;</span>)</span>
+<span id="cb6-4"><a href="Sec-Intro.html#cb6-4"></a><span class="kw">plot</span>(Y[<span class="dv">1</span><span class="op">:</span><span class="dv">5000</span>], w.mean[<span class="dv">1</span><span class="op">:</span><span class="dv">5000</span>], <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">xlab =</span> <span class="st">&quot;Y&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;scenario weights&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:example1-weights-mean"></span>
-<img src="01-intro_files/figure-html/example1-weights-mean-1.png" alt="Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the mean of $Z_1$." width="50%" /><img src="01-intro_files/figure-html/example1-weights-mean-2.png" alt="Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the mean of $Z_1$." width="50%" />
+<img src="bookdown-SWIM_files/figure-html/example1-weights-mean-1.png" alt="Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the mean of $Z_1$." width="50%" /><img src="bookdown-SWIM_files/figure-html/example1-weights-mean-2.png" alt="Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the mean of $Z_1$." width="50%" />
 <p class="caption">
 Figure 2.2: Scenario weights against observations of model components <span class="math inline">\(Z_1\)</span> (left) and <span class="math inline">\(Y\)</span> (right), subject to a stress on the mean of <span class="math inline">\(Z_1\)</span>.
 </p>
 </div>
-<p>Stress the mean of <span class="math inline">\(Z_1\)</span> did not impact the volatility of either <span class="math inline">\(Z_1\)</span> or <span class="math inline">\(Y\)</span>, as can be seen by the practically unchanged standard deviations in the output of <code>summary(str.mean)</code>. Thus, we introduce an alternative stress that keeps the mean of <span class="math inline">\(Z_1\)</span> fixed at 100, but increases its standard deviation from 40 to 50. This new stress is seen to impact the standard deviation of the portfolio loss <span class="math inline">\(Y\)</span>.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">str.sd &lt;-<span class="st"> </span><span class="kw">stress</span>(<span class="dt">type=</span><span class="st">&quot;mean sd&quot;</span>, <span class="dt">x =</span> dat, <span class="dt">k=</span><span class="dv">1</span>, <span class="dt">new_means =</span> <span class="dv">100</span>, <span class="dt">new_sd=</span><span class="dv">50</span>)</a>
-<a class="sourceLine" id="cb7-2" title="2"><span class="kw">summary</span>(str.sd, <span class="dt">base =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<p>The stress to the mean of <span class="math inline">\(Z_1\)</span> did not impact the volatility of either <span class="math inline">\(Z_1\)</span> or <span class="math inline">\(Y\)</span>, as can be seen by the practically unchanged standard deviations in the output of <code>summary(str.mean)</code>. Thus, we introduce an alternative stress that keeps the mean of <span class="math inline">\(Z_1\)</span> fixed at 100, but increases its standard deviation from 40 to 50. This new stress is seen to impact the standard deviation of the portfolio loss <span class="math inline">\(Y\)</span>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="Sec-Intro.html#cb7-1"></a>str.sd &lt;-<span class="st"> </span><span class="kw">stress</span>(<span class="dt">type =</span> <span class="st">&quot;mean sd&quot;</span>, <span class="dt">x =</span> dat, <span class="dt">k =</span> <span class="dv">1</span>, <span class="dt">new_means =</span> <span class="dv">100</span>, <span class="dt">new_sd =</span> <span class="dv">50</span>)</span>
+<span id="cb7-2"><a href="Sec-Intro.html#cb7-2"></a><span class="kw">summary</span>(str.sd, <span class="dt">base =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
 <pre><code>## $`stress 1`
-##                    Z1        Z2        Z3         Y
-## mean        100.00000  99.94055  99.97817 299.91872
-## sd           50.00050  21.34937  19.97997  67.92330
-## skewness     -0.00272   0.00703  -0.00342   0.00491
-## ex kurtosis  -0.05561  -0.03317  -0.00612  -0.04270
-## 1st Qu.      66.09643  85.49520  86.48219 253.74962
-## Median      100.12904  99.97427 100.04553 299.97662
-## 3rd Qu.     133.77335 114.30108 113.47008 345.91590</code></pre>
+##                   Z1      Z2       Z3        Y
+## mean        100.0000  99.941  99.9782 299.9187
+## sd           50.0005  21.349  19.9800  67.9233
+## skewness     -0.0027   0.007  -0.0034   0.0049
+## ex kurtosis  -0.0556  -0.033  -0.0061  -0.0427
+## 1st Qu.      66.0964  85.495  86.4822 253.7496
+## Median      100.1290  99.974 100.0455 299.9766
+## 3rd Qu.     133.7733 114.301 113.4701 345.9159</code></pre>
 <p>Furthermore, in Figure <a href="Sec-Intro.html#fig:example1-cdfs-sd">2.3</a>, we compare the baseline and stressed cdfs of <span class="math inline">\(Z_1\)</span> and <span class="math inline">\(Y\)</span>, under the new stress on <span class="math inline">\(Z_1\)</span>. The crossing of probability distribution reflects the increase in volatility.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">plot_cdf</span>(str.sd, <span class="dt">xCol =</span> <span class="st">&quot;Z1&quot;</span>, <span class="dt">base =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb9-2" title="2"><span class="kw">plot_cdf</span>(str.sd, <span class="dt">xCol =</span> <span class="dv">4</span>, <span class="dt">base =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="Sec-Intro.html#cb9-1"></a><span class="kw">plot_cdf</span>(str.sd, <span class="dt">xCol =</span> <span class="st">&quot;Z1&quot;</span>, <span class="dt">base =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb9-2"><a href="Sec-Intro.html#cb9-2"></a><span class="kw">plot_cdf</span>(str.sd, <span class="dt">xCol =</span> <span class="dv">4</span>, <span class="dt">base =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:example1-cdfs-sd"></span>
-<img src="01-intro_files/figure-html/example1-cdfs-sd-1.png" alt="Baseline and stressed empirical distribution functions of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$." width="50%" /><img src="01-intro_files/figure-html/example1-cdfs-sd-2.png" alt="Baseline and stressed empirical distribution functions of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$." width="50%" />
+<img src="bookdown-SWIM_files/figure-html/example1-cdfs-sd-1.png" alt="Baseline and stressed empirical distribution functions of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$." width="50%" /><img src="bookdown-SWIM_files/figure-html/example1-cdfs-sd-2.png" alt="Baseline and stressed empirical distribution functions of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$." width="50%" />
 <p class="caption">
 Figure 2.3: Baseline and stressed empirical distribution functions of model components <span class="math inline">\(Z_1\)</span> (left) and <span class="math inline">\(Y\)</span> (right), subject to a stress on the standard deviation of <span class="math inline">\(Z_1\)</span>.
 </p>
 </div>
-<p>The different ways how a stress on the standard deviation of <span class="math inline">\(Z_1\)</span>, compared to a stress on its mean, impact on the model, is reflected by the scenario weights. Figure <a href="Sec-Intro.html#fig:example1-weights-sd">2.4</a> shows the pattern of the scenario weights and how, when stressing standard deviations, higher weight is placed on scenarios where <span class="math inline">\(Z_1\)</span> is extreme, either much lower or much higher than its mean of 100.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">w.sd &lt;-<span class="st"> </span><span class="kw">get_weights</span>(str.sd)</a>
-<a class="sourceLine" id="cb10-2" title="2"><span class="kw">plot</span>(Z1[<span class="dv">1</span><span class="op">:</span><span class="dv">5000</span>],w.sd[<span class="dv">1</span><span class="op">:</span><span class="dv">5000</span>],<span class="dt">pch=</span><span class="dv">20</span>,<span class="dt">xlab=</span><span class="st">&quot;Z1&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;scenario weights&quot;</span>)</a>
-<a class="sourceLine" id="cb10-3" title="3"><span class="kw">plot</span>(Y[<span class="dv">1</span><span class="op">:</span><span class="dv">5000</span>],w.sd[<span class="dv">1</span><span class="op">:</span><span class="dv">5000</span>],<span class="dt">pch=</span><span class="dv">20</span>,<span class="dt">xlab=</span><span class="st">&quot;Y&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;scenario weights&quot;</span>)</a></code></pre></div>
+<p>The different way in which a stress on the standard deviation of <span class="math inline">\(Z_1\)</span> impacts on the model, compared to a stress on the mean, is reflected by the scenario weights. Figure <a href="Sec-Intro.html#fig:example1-weights-sd">2.4</a> shows the pattern of the scenario weights and how, when stressing standard deviations, higher weight is placed on scenarios where <span class="math inline">\(Z_1\)</span> is extreme, either much lower or much higher than its mean of 100.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="Sec-Intro.html#cb10-1"></a>w.sd &lt;-<span class="st"> </span><span class="kw">get_weights</span>(str.sd)</span>
+<span id="cb10-2"><a href="Sec-Intro.html#cb10-2"></a><span class="kw">plot</span>(Z1[<span class="dv">1</span><span class="op">:</span><span class="dv">5000</span>], w.sd[<span class="dv">1</span><span class="op">:</span><span class="dv">5000</span>], <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">xlab =</span> <span class="st">&quot;Z1&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;scenario weights&quot;</span>)</span>
+<span id="cb10-3"><a href="Sec-Intro.html#cb10-3"></a><span class="kw">plot</span>(Y[<span class="dv">1</span><span class="op">:</span><span class="dv">5000</span>], w.sd[<span class="dv">1</span><span class="op">:</span><span class="dv">5000</span>], <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">xlab =</span> <span class="st">&quot;Y&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;scenario weights&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:example1-weights-sd"></span>
-<img src="01-intro_files/figure-html/example1-weights-sd-1.png" alt="Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$." width="50%" /><img src="01-intro_files/figure-html/example1-weights-sd-2.png" alt="Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$." width="50%" />
+<img src="bookdown-SWIM_files/figure-html/example1-weights-sd-1.png" alt="Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$." width="50%" /><img src="bookdown-SWIM_files/figure-html/example1-weights-sd-2.png" alt="Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$." width="50%" />
 <p class="caption">
 Figure 2.4: Scenario weights against observations of model components <span class="math inline">\(Z_1\)</span> (left) and <span class="math inline">\(Y\)</span> (right), subject to a stress on the standard deviation of <span class="math inline">\(Z_1\)</span>.
 </p>
 </div>
 <p>Finally we ought to note that not all stresses that one may wish to apply are feasible. Assume for example that we want to increase the mean of <span class="math inline">\(Z_1\)</span> from 100 to 300, which exceeds the maximum realisation of <span class="math inline">\(Z_1\)</span> in the baseline model. Then, clearly, no set of scenario weights can be found that produce a stress that yields the required mean for <span class="math inline">\(Z_1\)</span>; consequently an error message is produced.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">str.sd &lt;-<span class="st"> </span><span class="kw">stress</span>(<span class="dt">type=</span><span class="st">&quot;mean&quot;</span>,<span class="dt">x =</span> dat, <span class="dt">k=</span><span class="dv">1</span>, <span class="dt">new_means =</span> <span class="dv">300</span>)</a></code></pre></div>
-<pre><code>## Error in stress_moment(x = x, f = means, k = k, m = new_means, ...): Values in m must be in the range of f(x)</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">max</span>(Z1)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="Sec-Intro.html#cb11-1"></a><span class="kw">stress</span>(<span class="dt">type =</span> <span class="st">&quot;mean&quot;</span>, <span class="dt">x =</span> dat, <span class="dt">k =</span> <span class="dv">1</span>, <span class="dt">new_means =</span> <span class="dv">300</span>)</span></code></pre></div>
+<pre><code>## Error in stress_moment(x = x, f = means, k = as.list(k), m = new_means, :
+Values in m must be in the range of f(x)</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="Sec-Intro.html#cb13-1"></a><span class="kw">max</span>(Z1)</span></code></pre></div>
 <pre><code>## [1] 273</code></pre>
 
 </div>

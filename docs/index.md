@@ -1,27 +1,27 @@
 ---
 title: Scenario Weights for Importance Measurement (SWIM) -- an `R` package for sensitivity
   analysis
-author: Silvana M. Pesenti^[silvana.pesenti@utoronto.ca] ^,2^, Alberto Bettini^3^, Pietro
-  Millossovich^4,5^, Andreas Tsanakas^5^
-date: ^2^University of Toronto, ^3^ Assicurazioni Generali S.p.A, ^4^DEAMS, University of Trieste,
-  ^5^Cass Business School, City, University of London
-bibliography: bibliography.bib
-documentclass: article
+author: Silvana M. Pesenti^[silvana.pesenti@utoronto.ca] ^2^, Alberto Bettini^3^,
+  Pietro Millossovich^4,5^, Andreas Tsanakas^5^
+date: ^2^University of Toronto, ^3^Assicurazioni Generali S.p.A, ^4^DEAMS, University
+  of Trieste, ^5^Cass Business School, City, University of London
+output: pdf_document
+biblio-style: apalike
 github-repo: spesenti/SWIMvignette
-link-citations: true
+link-citations: yes
+bibliography: bibliography.bib
 site: bookdown::bookdown_site
-biblio-style: "apalike"
 abstract: 'The SWIM package implements a flexible sensitivity analysis framework,
   based primarily on results and tools developed by @Pesenti2019. SWIM provides a
   stressed version of a stochastic model, subject to model components (random variables)
   fulfilling given probabilistic constraints (stresses). Possible stresses can be
-  on  moments, probabilities of given events, and risk measures such as Value-at-Risk
+  on moments, probabilities of given events, and risk measures such as Value-at-Risk
   and Expected Shortfall. SWIM oparates upon a single set of simulated scenarios from
   a stochastic model, returning scenario weights which encode the required stress
   and allow monitoring the impact of the stress on all model components. The scenario
   weights are calculated to minimise the relative entropy with respect to the baseline
   model, subject to the stress applied. SWIM does not require additional evaluations
-  of the simulation model or explicit knowledge of its underlying statistical and 
+  of the simulation model or explicit knowledge of its underlying statistical and
   functional relations; hence it is suitable for the analysis of black box models.
   The capabilities of SWIM are demonstrated through a case study of a credit portfolio
   model. '
@@ -57,18 +57,13 @@ Two key benefits of SWIM are that it provides a sensitivity analysis framework t
 
 The SWIM approach is largely based on @Pesenti2019 and uses theoretical results on risk measures and sensitivity measures developed in that paper. An early sensitivity analysis approach based on scenario weighting was proposed by @Beckman1987. The Kullback-Leibler divergence has been used extensively in the financial risk management literature -- papers that are conceptually close to SWIM include @Weber2007; @Breuer2013; and @Cambou2017.
 
-
-
-
-
 ## Installation
 
 The SWIM package can be installed from [CRAN](https://CRAN.R-project.org/package=SWIM) or through [GitHub](https://github.com/spesenti/SWIM): 
 
 ``` r}
-# direlty from CRAN
+# directly from CRAN
 install.packages("SWIM")
-
 # the development version from GitHub 
 devtools::install_github("spesenti/SWIM")
 ```
@@ -78,5 +73,3 @@ devtools::install_github("spesenti/SWIM")
 
 Section \@ref(Sec:Intro) provides an introduction to SWIM, illustrating key concepts and basic functionalities of the package on a simple example. Section 
 \@ref(Sec:Scope) contains technical background on the optimisations that underly SWIM package implementation. Furthermore, a brief reference guide is given, providing an overview of implemented `R` functions, objects, and graphical/analysis tools.  Finally, in Section \@ref(Sec:CreditModel) a more detailed case study is given, focusing on sensitivity analysis of a credit risk portfolio. Through this case study, more advanced capabilities of SWIM are demonstrated.
-
-

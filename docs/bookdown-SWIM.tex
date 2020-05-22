@@ -1,35 +1,46 @@
-\documentclass[]{article}
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
-\usepackage{fixltx2e} % provides \textsubscript
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
-\else % if luatex or xelatex
-  \ifxetex
-    \usepackage{mathspec}
-  \else
-    \usepackage{fontspec}
-  \fi
-  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
-% use upquote if available, for straight quotes in verbatim environments
+% Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-% use microtype if available
-\IfFileExists{microtype.sty}{%
-\usepackage{microtype}
-\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-\usepackage{hyperref}
-\hypersetup{unicode=true,
-            pdftitle={SWIM: Scenario Weights for Importance Measurement},
-            pdfauthor={Silvana M. Pesenti ,2, Alberto Bettini, Pietro Millossovich3,4, Andreas Tsanakas4},
-            pdfborder={0 0 0},
-            breaklinks=true}
-\urlstyle{same}  % don't use monospace font for urls
-\usepackage{natbib}
-\bibliographystyle{apalike}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Scenario Weights for Importance Measurement (SWIM) -- an R package for sensitivity analysis},
+  pdfauthor={Silvana M. Pesenti 2, Alberto Bettini3, Pietro Millossovich4,5, Andreas Tsanakas5},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
 \usepackage{color}
 \usepackage{fancyvrb}
 \newcommand{\VerbBar}{|}
@@ -71,7 +82,15 @@
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{longtable,booktabs}
-\usepackage{graphicx,grffile}
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
 \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
@@ -80,290 +99,297 @@
 % margins by default, and it is still possible to overwrite the defaults
 % using explicit options in \includegraphics[width, height, ...]{}
 \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-\IfFileExists{parskip.sty}{%
-\usepackage{parskip}
-}{% else
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt plus 2pt minus 1pt}
-}
-\setlength{\emergencystretch}{3em}  % prevent overfull lines
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{5}
-% Redefines (sub)paragraphs to behave more like sections
-\ifx\paragraph\undefined\else
-\let\oldparagraph\paragraph
-\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage[margin=1.2in,headheight=13.6pt]{geometry}
+
+
+\ifxetex
+  \usepackage{letltxmacro}
+  \setlength{\XeTeXLinkMargin}{1pt}
+  \LetLtxMacro\SavedIncludeGraphics\includegraphics
+  \def\includegraphics#1#{% #1 catches optional stuff (star/opt. arg.)
+    \IncludeGraphicsAux{#1}%
+  }%
+  \newcommand*{\IncludeGraphicsAux}[2]{%
+    \XeTeXLinkBox{%
+      \SavedIncludeGraphics#1{#2}%
+    }%
+  }%
 \fi
-\ifx\subparagraph\undefined\else
-\let\oldsubparagraph\subparagraph
-\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
-\fi
+\usepackage[]{natbib}
+\bibliographystyle{apalike}
 
-%%% Use protect on footnotes to avoid problems with footnotes in titles
-\let\rmarkdownfootnote\footnote%
-\def\footnote{\protect\rmarkdownfootnote}
-
-%%% Change title format to be more compact
-\usepackage{titling}
-
-% Create subtitle command for use in maketitle
-\providecommand{\subtitle}[1]{
-  \posttitle{
-    \begin{center}\large#1\end{center}
-    }
-}
-
-\setlength{\droptitle}{-2em}
-
-  \title{SWIM: Scenario Weights for Importance Measurement}
-    \pretitle{\vspace{\droptitle}\centering\huge}
-  \posttitle{\par}
-    \author{Silvana M. Pesenti\footnote{\href{mailto:silvana.pesenti@utoronto.ca}{\nolinkurl{silvana.pesenti@utoronto.ca}}} \textsuperscript{,2}, Alberto Bettini, Pietro Millossovich\textsuperscript{3,4}, Andreas Tsanakas\textsuperscript{4}}
-    \preauthor{\centering\large\emph}
-  \postauthor{\par}
-      \predate{\centering\large\emph}
-  \postdate{\par}
-    \date{\textsuperscript{2}University of Toronto, \textsuperscript{3}DEAMS, University of Trieste Cass Business School, \textsuperscript{4}Cass Business School, City, University of London}
-
+\title{Scenario Weights for Importance Measurement (\textbf{SWIM}) -- an \textbf{R} package for sensitivity analysis}
+\author{Silvana M. Pesenti\footnote{Correspondence to Silvana Pesenti, Department of Statistical Sciences, University of Toronto, Canada. \href{mailto:silvana.pesenti@utoronto.ca}{\nolinkurl{silvana.pesenti@utoronto.ca}}} \textsuperscript{2}, Alberto Bettini\textsuperscript{3}, Pietro Millossovich\textsuperscript{4,5}, Andreas Tsanakas\textsuperscript{5}}
+\date{\textsuperscript{2}University of Toronto, \textsuperscript{3}Assicurazioni Generali S.p.A, \textsuperscript{4}DEAMS, University of Trieste, \textsuperscript{5}Cass Business School, City, University of London\\
+~\\
+10. January 2020}
 
 \begin{document}
 \maketitle
+\begin{abstract}
+The \textbf{SWIM} package implements a flexible sensitivity analysis framework, based primarily on results and tools developed by \citet{Pesenti2019}. \textbf{SWIM} provides a stressed version of a stochastic model, subject to model components (random variables) fulfilling given probabilistic constraints (stresses). Possible stresses can be applied on moments, probabilities of given events, and risk measures such as Value-at-Risk and Expected Shortfall. \textbf{SWIM} operates upon a single set of simulated scenarios from a stochastic model, returning scenario weights, which encode the required stress and allow monitoring the impact of the stress on all model components. The scenario weights are calculated to minimise the relative entropy with respect to the baseline model, subject to the stress applied. As well as calculating scenario weights, the package provides tools for the analysis of stressed models, including plotting facilities and evaluation of sensitivity measures. \textbf{SWIM} does not require additional evaluations of the simulation model or explicit knowledge of its underlying statistical and functional relations; hence it is suitable for the analysis of black box models. The capabilities of \textbf{SWIM} are demonstrated through a case study of a credit portfolio model.
+\end{abstract}
 
-{
-\setcounter{tocdepth}{2}
-\tableofcontents
-}
+\textbf{Keywords}: Sensitivity analysis; risk measures; stress testing; sensitivity measures, Kullback-Leibler divergence
+
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
-\hypertarget{abstract}{%
-\subsection{Abstract}\label{abstract}}
+\hypertarget{background-and-contribution}{%
+\subsection{Background and contribution}\label{background-and-contribution}}
 
-The SWIM package is an efficient sensitivity analysis tool for stochastic models developed in \citet{Pesenti2019}. It provides a stressed version of a stochastic model, subject to model components (random variables) fulfilling given probabilistic constraints (stresses). Possible constraints include stressing moments, propability intervals and risk measures such as the Value-at-Risk and the Expected Shortfall. Provided with simulated scenarios from a stochastic model, the SWIM package returns scenario weights under which the stochastic model satisfies the stress and minimises the relative entropy with respect to the baseline model.
+Complex quantitative models are used extensively in actuarial and financial risk management applications, as well as in wider fields such as environmental risk modelling \citep{Tsanakas2016b, Borgonovo2016, Pesenti2019}. The complexity of such models (high dimensionality of inputs; non-linear relationships) motivates the performance of sensitivity analyses, with the aim of providing insight into the ways that model inputs interact and impact upon the model output.
 
-\hypertarget{background}{%
-\subsection{Background}\label{background}}
+When model inputs are subject to uncertainty, \emph{global} sensitivity methods are often used, considering the full space of (randomly generated) multivariate scenarios, which represent possible configurations of the model input vector. The particular task of ranking the importance of different model inputs leads to the use of sensitivity measures, which assign a score to each model input. A rich literature on global sensitivity analysis exists, with variance decomposition methods being particularly prominent; see \citet{Saltelli2008} and \citet{Borgonovo2016} for wide-ranging reviews. The \textbf{R} package \textbf{sensitivity} \citep{Rsensitivity} implements a wide range of sensitivity analysis approaches and measures.
 
-a short literature review
+We introduce an alternative approach to sensitivity analysis called \emph{Scenario Weights for Importance Measurement} (\textbf{SWIM}) and present the \textbf{R} package implementing it \citep{PesentiR}. The aim of this paper is to provide an accessible introduction to the concepts underlying \textbf{SWIM} and a vignette demonstrating how the package is used. \textbf{SWIM} quantifies how distorting a particular model component (which could be a model input, output, or an intermediate quantity) impacts all other model components. The \textbf{SWIM} approach can be summarised as follows:
 
-\hypertarget{concepts-of-the-swim-package}{%
-\subsection{\texorpdfstring{Concepts of the \texttt{SWIM} package}{Concepts of the SWIM package}}\label{concepts-of-the-swim-package}}
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  The starting point is a table of simulated scenarios, each column containing realisations of a different model component. This table forms the \emph{baseline model} as well as the dataset on which the \textbf{SWIM} bases its calculations.
+\item
+  A \emph{stress} is defined as a particular modification of a model component (or group of components). This could relate to a change in moments, probabilities of events of interest, or risk measures, such as Value-at-Risk or Expected Shortfall (e.g.~\citet{Mcneil2015B}).
+\item
+  \textbf{SWIM} calculates a set of \emph{scenario weights}, acting upon the simulated scenarios and thus modifying the relative probabilities of scenarios occurring. Scenario weights are derived such that the defined stress on model components is fulfilled, while keeping the distortion to the baseline model to a minimum, as quantified by the Kullback-Leibler divergence (relative entropy).
+\item
+  Given the calculated scenario weights, the impact of the stress on the distributions of all model components is worked out and sensitivity measures, useful for ranking model components, are evaluated.
+\end{enumerate}
+
+A key benefit of \textbf{SWIM} are that it provides a sensitivity analysis framework that is economical both computationally and in terms of the information needed to perform the analysis. Specifically, sensitivity analysis is performed using only one set of simulated scenarios. No further simulations are needed, thus eliminating the need for repeated evaluation of the model, which could be numerically expensive. Furthermore, the user of \textbf{SWIM} needs to know neither the explicit form of the joint distribution of model components nor the exact form of functional relations between them. Hence, \textbf{SWIM} is appropriate for the analysis of \emph{black box} models, thus having a wide scope of applications.
+
+The \textbf{SWIM} approach is largely based on \citet{Pesenti2019} and uses theoretical results on risk measures and sensitivity measures developed in that paper. An early sensitivity analysis approach based on scenario weighting was proposed by \citet{Beckman1987}. The Kullback-Leibler divergence has been used extensively in the financial risk management literature -- papers that are conceptually close to \textbf{SWIM} include \citet{Weber2007}; \citet{Breuer2013}; and \citet{Cambou2017}. Some foundational results related to the minimisation of the Kullback-Leibler divergence are provided in \citet{Csiszar1975dAP}.
 
 \hypertarget{installation}{%
-\subsubsection{Installation}\label{installation}}
+\subsection{Installation}\label{installation}}
 
-The SWIM package can be install from \href{https://CRAN.R-project.org/package=SWIM}{CRAN} :
-
-\begin{quote}
-\url{https://CRAN.R-project.org/package=SWIM};
-\end{quote}
-
-alternatively from \href{https://github.com/spesenti/SWIM}{GitHub} in R studio:
+The \textbf{SWIM} package can be installed from \href{https://CRAN.R-project.org/package=SWIM}{CRAN} or through \href{https://github.com/spesenti/SWIM}{GitHub}:
 
 \begin{verbatim}
-install.packages("spesenti/SWIM")
+# directly from CRAN
+install.packages("SWIM")
+# and the development version from GitHub 
+devtools::install_github("spesenti/SWIM")
 \end{verbatim}
 
-\hypertarget{structure-of-the-vignette}{%
-\subsection{Structure of the vignette}\label{structure-of-the-vignette}}
+\hypertarget{structure-of-the-paper}{%
+\subsection{Structure of the paper}\label{structure-of-the-paper}}
 
-Section \ref{Sec:Scope} contains the mathematical background and the description of the optimisation that underlies the implementation of the SWIM package. For readers interested in the application and usage of the SWIM package, Section \ref{Sec:Scope} can serve as a reference, as all implemented \texttt{R} functions, including stresses and graphical and analysis tools are described in detail.
+Section \ref{Sec:Intro} provides an introduction to \textbf{SWIM}, illustrating key concepts and basic functionalities of the package on a simple example. Section
+\ref{Sec:Scope} contains technical background on the optimisations that underlay the \textbf{SWIM} package implementation. Furthermore, Section \ref{Sec:Scope} includes a brief reference guide, providing an overview of implemented \textbf{R} functions, objects, and graphical/analysis tools. Finally, a detailed case study of a credit risk portfolio is presented in Section \ref{Sec:CreditModel}. Through this case study, advanced capabilities of \textbf{SWIM} for sensitivity analysis are demonstrated.
 
-\hypertarget{what-is-swim}{%
-\section{What is SWIM?}\label{what-is-swim}}
+\hypertarget{Sec:Intro}{%
+\section{\texorpdfstring{What is \textbf{SWIM}?}{What is SWIM?}}\label{Sec:Intro}}
 
 \hypertarget{sensitivity-testing-and-scenario-weights}{%
 \subsection{Sensitivity testing and scenario weights}\label{sensitivity-testing-and-scenario-weights}}
 
-The purpose of SWIM is to enable sensitivity analysis of models implemented in a Monte Carlo simulation framework, by distorting (`stressing') some of the models' components and monitoring the resulting impact on quantities of interest.
-
-To clarify this idea and explain how SWIM works, we first define the terms used. By a \emph{model}, we mean a set of \(n\) (typically simulated) realisations from a vector of random variables \((X_1,\dots,X_d)\), along with \emph{scenario weights} \(W\) assigned to individual realisations, as shown in the table below. Hence each of of the columns 1 to \(d\) corresponds to a random variable, called a \emph{model component}, while each row corresponds to a \emph{scenario}, that is, a state of the world.
+The purpose of \textbf{SWIM} is to enable sensitivity analysis of models implemented in a Monte Carlo simulation framework, by distorting (\emph{stressing}) some of the models' components and monitoring the resulting impact on quantities of interest.
+To clarify this idea and explain how \textbf{SWIM} works, we first define the terms used. By a \emph{model}, we mean a set of \(n\) (typically simulated) realisations from a vector of random variables \((X_1,\dots,X_d)\), along with \emph{scenario weights} \(W\) assigned to individual realisations, as shown in the table below. Hence each of of the columns 1 to \(d\) corresponds to a random variable, called a \emph{model component}, while each row corresponds to a \emph{scenario}, that is, a state of the world.
 
 \begin{longtable}[]{@{}ccccc@{}}
+\caption{\label{tab:SWIMframework} Illustration of the \textbf{SWIM} framework, that is the baseline model, the stressed model and the scenario weights.}\tabularnewline
+\toprule
+\(X_1\) & \(X_2\) & \(\dots\) & \(X_d\) & \(W\)\tabularnewline
+\midrule
+\endfirsthead
 \toprule
 \(X_1\) & \(X_2\) & \(\dots\) & \(X_d\) & \(W\)\tabularnewline
 \midrule
 \endhead
 \(x_{11}\) & \(x_{21}\) & \(\dots\) & \(x_{d1}\) & \(w_1\)\tabularnewline
 \(x_{12}\) & \(x_{22}\) & \(\dots\) & \(x_{d2}\) & \(w_2\)\tabularnewline
-\(\dots\) & \(\dots\) & \(\dots\) & \(\dots\) & \(\dots\)\tabularnewline
+\(\vdots\) & \(\vdots\) & \(\ddots\) & \(\vdots\) & \(\vdots\)\tabularnewline
 \(x_{1n}\) & \(x_{2n}\) & \(\dots\) & \(x_{dn}\) & \(w_n\)\tabularnewline
 \bottomrule
 \end{longtable}
 
-Each scenario has a \emph{scenario weight}, shown in the last column, such that, scenario \(i\) has probability \(\frac{w_i}{n}\) of occurring. Scenario weights are always greater and equal than zero and have an average of 1. When all scenario weights are equal to 1, such that the probability of each scenario is \(\frac 1 n\) (the standard Monte Carlo framework), we call the model a \emph{baseline model} -- and consequently never explicitly talk about the scenario weights of baseline models. When scenario weights are not identically equal to 1, we say that we have a \emph{stressed model}.
+Each scenario has a \emph{scenario weight}, shown in the last column, such that, scenario \(i\) has probability \(\frac{w_i}{n}\) of occurring. Scenario weights are always greater or equal than zero and have an average of 1. When all scenario weights are equal to 1, such that the probability of each scenario is \(\frac 1 n\) (the standard Monte Carlo framework), we call the model a \emph{baseline model} -- consequently weights of a baseline model will never be explicitly mentioned. When scenario weights are not identically equal to 1, such that some scenarios are more weighted than others, we say that we have a \emph{stressed model}.
 
-The scenario weights make the joint distribution of model components under the stressed model different, compared to the baseline model. For example, under the baseline model, the expected value of \(X_1\) and the cumulative distribution function of \(X_1\) at threshold \(t\), are respectively given by:
+The scenario weights make the joint distribution of model components under the stressed model different, compared to the baseline model. For example, under the baseline model, the expected value of \(X_1\) and the cumulative distribution function of \(X_1\), at threshold \(t\), are respectively given by:
+
 \[
 E(X_1)=\frac 1  n \sum_{i=1}^nx_{1i},\quad F_{X_1}(t)= P(X_1\leq t)=\frac 1 n \sum_{i=1}^n \mathbf 1 _{x_{1i}\leq t},
 \]
-where \(\mathbf 1 _{x_{1i}\leq t}=1\) if \(x_{1i}\leq t\) and \(0\) otherwise. For a stressed model with scenario weights \(W\), the expected value and distribution function become:
+
+where \(\mathbf 1 _{x_{1i}\leq t}=1\) if \(x_{1i}\leq t\) and \(0\) otherwise. For a stressed model with scenario weights \(W\), the expected value \(E^W\) and cumulative distribution function \(F^W\) become:
+
 \[
 E^W(X_1)=\frac 1  n \sum_{i=1}^n w_i x_{1i},\quad F_{X_1}^W(t)=P^W(X_1\leq t)=\frac 1 n \sum_{i=1}^n w_i \mathbf 1 _{x_{1i}\leq t}.
 \]
+
 Similar expressions can be derived for more involved quantities, such as higher (joint) moments and quantiles.
 
-The logic of stressing a model with SWIM then proceeds as follows. An analyst or modeller is supplied with a baseline model, in the form of a matrix of equiprobable simulated scenarios of model components. The modeller wants to investigate the impact of a change in the distribution of, say, \(X_1\). To this effect, she chooses a set of scenario weights, such that the stressed distribution of \(X_1\) satisfies a particular constraint, e.g.~\(E^W(X_1)=m\), which we call a \emph{stress}; we then say that she is \emph{stressing} \(X_1\) and, by extension, the model. The scenario weights are chosen such that the distortion to the baseline model induced by the stress is as small as possible; specifically in SWIM the Kullback-Leibler divergence (or relative entropy) between the baseline and stressed models is minimised, subject to the constraint of the stress (see Section \ref{Rfunctions} for more detail on the different types of possible stresses and the corresponding optimisation problems).
+The logic of stressing a model with \textbf{SWIM} then proceeds as follows. An analyst or modeller is supplied with a baseline model, in the form of a matrix of equiprobable simulated scenarios of model components. The modeller wants to investigate the impact of a change in the distribution of, say, \(X_1\). To this effect, she chooses a \emph{stress} on the distribution of \(X_i\), for example requiring that \(E^W(X_1)=m\); we then say that she is \emph{stressing} \(X_1\) and, by extension, the model. Subsequently, \textbf{SWIM} calculates the scenario weights such that the stress is fulfilled and the distortion to the baseline model induced by the stress is as small as possible; specifically the Kullback-Leibler divergence (or relative entropy) between the baseline and stressed models is minimised. (See Section \ref{Rfunctions} for more detail on the different types of possible stresses and the corresponding optimisation problems). Once scenario weights are obtained, they can be used to determine the stressed distribution of any model component or function of model components. For example, for scenario weights \(W\) obtained through a stress on \(X_1\), we may calculate
 
-Once scenario weights are obtained, they can be used to obtain the stressed distribution of any model component or any function of model components. For example, for scenario weights \(W\) obtained through a stress on \(X_1\), we may calculate
 \[
 E^W(X_2)=\frac 1  n\sum_{i=1}^n w_i x_{2i},\quad E^W(X_1^2+X_2^2)=\frac 1  n \sum_{i=1}^n w_i \left(x_{1i}^2+ x_{2i}^2 \right).
 \]
-Through this process the modeller can monitor the impact of the stress on \(X_1\) on any other random variable of interest. It is notable that this approach does not necessitate generating new simulations from a stochastic model. However, as the SWIM approach requires a single set of simulated scenarios (the baseline model) it offers a clear computational benefit.
+
+Through this process, the modeller can monitor the impact of the stress on \(X_1\) on any other random variable of interest. It is notable that this approach does not necessitate generating new simulations from a stochastic model. As the \textbf{SWIM} approach requires a single set of simulated scenarios (the baseline model) it offers a clear computational benefit.
 
 \hypertarget{an-introductory-example}{%
 \subsection{An introductory example}\label{an-introductory-example}}
 
-Here, through an example, we illustrate the basic concepts and usage of SWIM for sensitivity analysis. More advanced usage of SWIM and options for constructing stresses are demonstrated in Sections xxx.
-
-We consider a simple model, with the random variables \(Z_1,Z_2,Z_3\) represent normally distributed losses in a portfolio. \(Z_1\) and \(Z_2\) are correlated, while \(Z_3\) is independent of \((Z_1,Z_2)\). The portfolio loss is defined by \(Y=Z_1+Z_2+Z_3\). Our purpose in this example is to investigate how a stress on the loss \(Z_1\), impacts on the overall portfolio loss \(Y\).
-
+Here, through an example, we illustrate the basic concepts and usage of \textbf{SWIM} for sensitivity analysis. More advanced usage of \textbf{SWIM} and options for constructing stresses are demonstrated in Sections \ref{Sec:Scope} and \ref{Sec:CreditModel}.
+We consider a simple portfolio model, with the portfolio loss defined by \(Y=Z_1+Z_2+Z_3\). The random variables \(Z_1,Z_2,Z_3\) represent normally distributed losses, with \(Z_1\sim N(100,40^2)\), \(Z_2\sim Z_3\sim N(100,20^2)\). \(Z_1\) and \(Z_2\) are correlated, while \(Z_3\) is independent of \((Z_1,Z_2)\). Our purpose in this example is to investigate how a stress on the loss \(Z_1\) impacts on the overall portfolio loss \(Y\).
 First we derive simulated data from the random vector \((Z_1,Z_2,Z_3,Y)\), forming our baseline model.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{set.seed}\NormalTok{(}\DecValTok{0}\NormalTok{)}
-\CommentTok{# number of simulated scenarios}
-\NormalTok{n.sim <-}\StringTok{ }\DecValTok{10}\OperatorTok{^}\DecValTok{5}
-\CommentTok{# correlation between Z1 and Z2}
-\NormalTok{r <-}\StringTok{ }\FloatTok{0.5}
-\CommentTok{# simulation of Z1  and Z2}
-\CommentTok{# simple construction as combination of independent standard normals U1, U2}
-\NormalTok{U1 <-}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n.sim)}
-\NormalTok{U2 <-}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n.sim)}
-\NormalTok{Z1 <-}\StringTok{ }\DecValTok{100} \OperatorTok{+}\StringTok{ }\DecValTok{40} \OperatorTok{*}\StringTok{ }\NormalTok{U1}
-\NormalTok{Z2 <-}\StringTok{ }\DecValTok{100} \OperatorTok{+}\StringTok{ }\DecValTok{20} \OperatorTok{*}\StringTok{ }\NormalTok{(r }\OperatorTok{*}\StringTok{ }\NormalTok{U1 }\OperatorTok{+}\StringTok{ }\KeywordTok{sqrt}\NormalTok{(}\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{r}\OperatorTok{^}\DecValTok{2}\NormalTok{) }\OperatorTok{*}\StringTok{ }\NormalTok{U2)}
-\CommentTok{# simulation of Z3}
-\NormalTok{Z3 <-}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n.sim, }\DecValTok{100}\NormalTok{, }\DecValTok{20}\NormalTok{)}
-\CommentTok{# portfolio loss Y}
-\NormalTok{Y <-}\StringTok{ }\NormalTok{Z1 }\OperatorTok{+}\StringTok{ }\NormalTok{Z2 }\OperatorTok{+}\StringTok{ }\NormalTok{Z3}
+\CommentTok{\# number of simulated scenarios}
+\NormalTok{n.sim \textless{}{-}}\StringTok{ }\DecValTok{10} \OperatorTok{\^{}}\StringTok{ }\DecValTok{5}
+\CommentTok{\# correlation between Z1 and Z2}
+\NormalTok{r \textless{}{-}}\StringTok{ }\FloatTok{0.5}
+\CommentTok{\# simulation of Z1  and Z2}
+\CommentTok{\# constructed as a combination of independent standard normals U1, U2}
+\NormalTok{U1 \textless{}{-}}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n.sim)}
+\NormalTok{U2 \textless{}{-}}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n.sim)}
+\NormalTok{Z1 \textless{}{-}}\StringTok{ }\DecValTok{100} \OperatorTok{+}\StringTok{ }\DecValTok{40} \OperatorTok{*}\StringTok{ }\NormalTok{U1}
+\NormalTok{Z2 \textless{}{-}}\StringTok{ }\DecValTok{100} \OperatorTok{+}\StringTok{ }\DecValTok{20} \OperatorTok{*}\StringTok{ }\NormalTok{(r }\OperatorTok{*}\StringTok{ }\NormalTok{U1 }\OperatorTok{+}\StringTok{ }\KeywordTok{sqrt}\NormalTok{(}\DecValTok{1} \OperatorTok{{-}}\StringTok{ }\NormalTok{r }\OperatorTok{\^{}}\StringTok{ }\DecValTok{2}\NormalTok{) }\OperatorTok{*}\StringTok{ }\NormalTok{U2)}
+\CommentTok{\# simulation of Z3}
+\NormalTok{Z3 \textless{}{-}}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n.sim, }\DecValTok{100}\NormalTok{, }\DecValTok{20}\NormalTok{)}
+\CommentTok{\# portfolio loss Y}
+\NormalTok{Y \textless{}{-}}\StringTok{ }\NormalTok{Z1 }\OperatorTok{+}\StringTok{ }\NormalTok{Z2 }\OperatorTok{+}\StringTok{ }\NormalTok{Z3}
+\CommentTok{\# data of baseline model}
+\NormalTok{dat \textless{}{-}}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(Z1, Z2, Z3, Y)}
 \end{Highlighting}
 \end{Shaded}
 
-Now we introduce a stress to our baseline model. For our first stress, we require that the mean of \(Z_1\) is increased from 100 to 110. This is done using the \texttt{stress} function, which generates as output the SWIM object \texttt{str.mean}. This object stores the stressed model, i.e.~the realisations of the model components and the scenario weights. In the function call, \texttt{k=1} indicates that the stress is applied on the first column of \texttt{dat}, that is, on the realisations of the random variable \(Z_1\).
+Now we introduce a stress to our baseline model. For our first stress, we require that the mean of \(Z_1\) is increased from 100 to 110. This is done using the \texttt{stress} function, which generates as output the \textbf{SWIM} object \texttt{str.mean}. This object stores the stressed model, i.e.~the realisations of the model components and the scenario weights. In the function call, the argument \texttt{k\ =\ 1} indicates that the stress is applied on the first column of \texttt{dat}, that is, on the realisations of the random variable \(Z_1\).
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(SWIM)}
-\NormalTok{dat <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(Z1, Z2, Z3, Y)}
-\NormalTok{str.mean <-}\StringTok{ }\KeywordTok{stress}\NormalTok{(}\DataTypeTok{type=}\StringTok{"mean"}\NormalTok{, }\DataTypeTok{x =}\NormalTok{ dat, }\DataTypeTok{k=}\DecValTok{1}\NormalTok{, }\DataTypeTok{new_means =} \DecValTok{110}\NormalTok{)}
+\NormalTok{str.mean \textless{}{-}}\StringTok{ }\KeywordTok{stress}\NormalTok{(}\DataTypeTok{type =} \StringTok{"mean"}\NormalTok{, }\DataTypeTok{x =}\NormalTok{ dat, }\DataTypeTok{k =} \DecValTok{1}\NormalTok{, }\DataTypeTok{new\_means =} \DecValTok{110}\NormalTok{)}
 \KeywordTok{summary}\NormalTok{(str.mean, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
 ## $base
-##                    Z1        Z2        Z3         Y
-## mean         1.00e+02  99.94040  99.98433 299.98111
-## sd           4.00e+01  19.99695  19.98195  56.63887
-## skewness    -6.08e-04   0.00117  -0.00247  -0.00234
-## ex kurtosis -1.06e-02  -0.00897  -0.01257  -0.00938
-## 1st Qu.      7.28e+01  86.47450  86.48161 261.61212
-## Median       1.00e+02  99.98657 100.00907 300.05480
-## 3rd Qu.      1.27e+02 113.39567 113.49342 338.26698
+##                   Z1       Z2       Z3        Y
+## mean         1.0e+02  99.9404  99.9843 299.9811
+## sd           4.0e+01  19.9970  19.9819  56.6389
+## skewness    -6.1e-04   0.0012  -0.0025  -0.0023
+## ex kurtosis -1.1e-02  -0.0090  -0.0126  -0.0094
+## 1st Qu.      7.3e+01  86.4745  86.4816 261.6121
+## Median       1.0e+02  99.9866 100.0091 300.0548
+## 3rd Qu.      1.3e+02 113.3957 113.4934 338.2670
 ## 
 ## $`stress 1`
-##                    Z1        Z2        Z3         Y
-## mean        110.00000 102.44371  99.98278 312.42649
-## sd           40.03328  19.99542  19.97616  56.61726
-## skewness     -0.00240  -0.00151  -0.00493  -0.00368
-## ex kurtosis  -0.00502  -0.00316  -0.01547  -0.00119
-## 1st Qu.      82.99837  88.97706  86.48152 274.22003
-## Median      110.07585 102.48100  99.99544 312.50394
-## 3rd Qu.     136.93102 115.87438 113.50186 350.61205
+##                   Z1       Z2       Z3        Y
+## mean        110.0000 102.4437  99.9828 312.4265
+## sd           40.0333  19.9954  19.9762  56.6173
+## skewness     -0.0024  -0.0015  -0.0049  -0.0037
+## ex kurtosis  -0.0050  -0.0032  -0.0155  -0.0012
+## 1st Qu.      82.9984  88.9771  86.4815 274.2200
+## Median      110.0759 102.4810  99.9954 312.5039
+## 3rd Qu.     136.9310 115.8744 113.5019 350.6120
 \end{verbatim}
 
-The summary function, applied on the SWIM object \texttt{str.mean}, shows how the distributional characteristics of all random variables of interest change from the baseline to the stressed model. In particular, we see that the mean of \(Z_1\) changes to its required value, while the mean of \(Y\) also increases. Furthermore there is a small impact on \(Z_2\), due to its positive correlation to \(Z_1\).
+The \texttt{summary} function, applied to the \textbf{SWIM} object \texttt{str.mean}, shows how the distributional characteristics of all random variables change from the baseline to the stressed model. In particular, we see that the mean of \(Z_1\) changes to its required value, while the mean of \(Y\) also increases. Furthermore there is a small impact on \(Z_2\), due to its positive correlation to \(Z_1\).
 
-Beyond considering the standard statistics evaluated via the summary function, stressed probability distributions can be plotted. In Figure \ref{fig:example1-cdfs-mean} we show the impact of the stress on on the cumulative distribution functions (cdf) of \(Z_1\) and \(Y\). It is seen how the stressed cdfs are lower than the original (baseline) ones. Loosely speaking, this demonstrates that the stress has increased (in a stochastic sense) both random variables \(Z_1\) and \(Y\). While the stress was on \(Z_1\), the impact on the distribution of the portfolio \(Y\) is clearly visible.
+Beyond considering the standard statistics evaluated via the \texttt{summary} function, stressed probability distributions can be plotted. In Figure \ref{fig:example1-cdfs-mean} we show the impact of the stress on the cumulative distribution functions (cdf) of \(Z_1\) and \(Y\). It is seen how the stressed cdfs are lower than the original (baseline) ones. Loosely speaking, this demonstrates that the stress has increased (in a stochastic sense) both random variables \(Z_1\) and \(Y\). While the stress was on \(Z_1\), the impact on the distribution of the portfolio \(Y\) is clearly visible.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# can refer to variable of interest by name...}
-\KeywordTok{plot_cdf}\NormalTok{(str.mean, }\DataTypeTok{xCol =} \StringTok{"Z1"}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
-\CommentTok{# ... or column number}
-\KeywordTok{plot_cdf}\NormalTok{(str.mean, }\DataTypeTok{xCol =} \DecValTok{4}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
+\CommentTok{\# refer to variable of interest by name...}
+\KeywordTok{plot\_cdf}\NormalTok{(str.mean, }\DataTypeTok{xCol =} \StringTok{"Z1"}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
+\CommentTok{\# ... or column number}
+\KeywordTok{plot\_cdf}\NormalTok{(str.mean, }\DataTypeTok{xCol =} \DecValTok{4}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.5\linewidth]{01-intro_files/figure-latex/example1-cdfs-mean-1} \includegraphics[width=0.5\linewidth]{01-intro_files/figure-latex/example1-cdfs-mean-2} \caption{Baseline and stressed empirical distribution functions of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the mean of $Z_1$.}\label{fig:example1-cdfs-mean}
+\includegraphics[width=0.5\linewidth]{bookdown-SWIM_files/figure-latex/example1-cdfs-mean-1} \includegraphics[width=0.5\linewidth]{bookdown-SWIM_files/figure-latex/example1-cdfs-mean-2} \caption{Baseline and stressed empirical distribution functions of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the mean of $Z_1$.}\label{fig:example1-cdfs-mean}
 \end{figure}
 
-The scenario weights, given their central role, can be extracted from a SWIM object. In Figure \ref{fig:example1-weights-mean}, the scenario weights from \texttt{str.mean} are plotted against realisations from \(Z_1\) and \(Y\) respectively. It is seen how the weights are increasing in the realisations from \(Z_1\). This is a consequence of the weights' derivation via a stress on the model component \(Z_1\). The increasingness shows that those scenarios for which \(Z_1\) is largest are assigned a higher weight. The relation between scenario weights and \(Y\) is still increasing (reflecting that high outcomes of \(Y\) tend to receive higher weights), but no longer deterministic (showing that \(Y\) is not completely driven by changes in \(Z_1\)).
+The scenario weights, given their central role, can be extracted from a \textbf{SWIM} object. In Figure \ref{fig:example1-weights-mean}, the scenario weights from \texttt{str.mean} are plotted against realisations from \(Z_1\) and \(Y\) respectively. It is seen how the weights are increasing in the realisations from \(Z_1\). This is a consequence of the weights' derivation via a stress on the model component \(Z_1\). The increasingness shows that those scenarios for which \(Z_1\) is largest are assigned a higher weight. The relation between scenario weights and \(Y\) is still increasing (reflecting that high outcomes of \(Y\) tend to receive higher weights), but no longer deterministic (showing that \(Y\) is not completely driven by changes in \(Z_1\)).
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# extract weights from SWIM object}
-\NormalTok{w.mean <-}\StringTok{ }\KeywordTok{get_weights}\NormalTok{(str.mean)}
-\KeywordTok{plot}\NormalTok{(Z1[}\DecValTok{1} \OperatorTok{:}\StringTok{ }\DecValTok{5000}\NormalTok{], w.mean[}\DecValTok{1} \OperatorTok{:}\StringTok{ }\DecValTok{5000}\NormalTok{], }\DataTypeTok{pch =} \DecValTok{20}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{"Z1"}\NormalTok{, }\DataTypeTok{ylab =} \StringTok{"scenario weights"}\NormalTok{)}
-\KeywordTok{plot}\NormalTok{(Y[}\DecValTok{1} \OperatorTok{:}\StringTok{ }\DecValTok{5000}\NormalTok{], w.mean[}\DecValTok{1} \OperatorTok{:}\StringTok{ }\DecValTok{5000}\NormalTok{], }\DataTypeTok{pch =} \DecValTok{20}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{"Y"}\NormalTok{, }\DataTypeTok{ylab =} \StringTok{"scenario weights"}\NormalTok{)}
+\CommentTok{\# extract weights from stressed model}
+\NormalTok{w.mean \textless{}{-}}\StringTok{ }\KeywordTok{get\_weights}\NormalTok{(str.mean)}
+\KeywordTok{plot}\NormalTok{(Z1[}\DecValTok{1}\OperatorTok{:}\DecValTok{5000}\NormalTok{], w.mean[}\DecValTok{1}\OperatorTok{:}\DecValTok{5000}\NormalTok{], }\DataTypeTok{pch =} \DecValTok{20}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{"Z1"}\NormalTok{, }\DataTypeTok{ylab =} \StringTok{"scenario weights"}\NormalTok{)}
+\KeywordTok{plot}\NormalTok{(Y[}\DecValTok{1}\OperatorTok{:}\DecValTok{5000}\NormalTok{], w.mean[}\DecValTok{1}\OperatorTok{:}\DecValTok{5000}\NormalTok{], }\DataTypeTok{pch =} \DecValTok{20}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{"Y"}\NormalTok{, }\DataTypeTok{ylab =} \StringTok{"scenario weights"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.5\linewidth]{01-intro_files/figure-latex/example1-weights-mean-1} \includegraphics[width=0.5\linewidth]{01-intro_files/figure-latex/example1-weights-mean-2} \caption{Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the mean of $Z_1$.}\label{fig:example1-weights-mean}
+\includegraphics[width=0.5\linewidth]{bookdown-SWIM_files/figure-latex/example1-weights-mean-1} \includegraphics[width=0.5\linewidth]{bookdown-SWIM_files/figure-latex/example1-weights-mean-2} \caption{Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the mean of $Z_1$.}\label{fig:example1-weights-mean}
 \end{figure}
 
-Stress the mean of \(Z_1\) did not impact the volatility of either \(Z_1\) or \(Y\), as can be seen by the practically unchanged standard deviations in the output of \texttt{summary(str.mean)}. Thus, we introduce an alternative stress that keeps the mean of \(Z_1\) fixed at 100, but increases its standard deviation from 40 to 50. This new stress is seen to impact the standard deviation of the portfolio loss \(Y\).
+The stress to the mean of \(Z_1\) did not impact the volatility of either \(Z_1\) or \(Y\), as can be seen by the practically unchanged standard deviations in the output of \texttt{summary(str.mean)}. Thus, we introduce an alternative stress that keeps the mean of \(Z_1\) fixed at 100, but increases its standard deviation from 40 to 50. This new stress is seen to impact the standard deviation of the portfolio loss \(Y\).
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{str.sd <-}\StringTok{ }\KeywordTok{stress}\NormalTok{(}\DataTypeTok{type=}\StringTok{"mean sd"}\NormalTok{, }\DataTypeTok{x =}\NormalTok{ dat, }\DataTypeTok{k=}\DecValTok{1}\NormalTok{, }\DataTypeTok{new_means =} \DecValTok{100}\NormalTok{, }\DataTypeTok{new_sd=}\DecValTok{50}\NormalTok{)}
+\NormalTok{str.sd \textless{}{-}}\StringTok{ }\KeywordTok{stress}\NormalTok{(}\DataTypeTok{type =} \StringTok{"mean sd"}\NormalTok{, }\DataTypeTok{x =}\NormalTok{ dat, }\DataTypeTok{k =} \DecValTok{1}\NormalTok{, }\DataTypeTok{new\_means =} \DecValTok{100}\NormalTok{, }\DataTypeTok{new\_sd =} \DecValTok{50}\NormalTok{)}
 \KeywordTok{summary}\NormalTok{(str.sd, }\DataTypeTok{base =} \OtherTok{FALSE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
 ## $`stress 1`
-##                    Z1        Z2        Z3         Y
-## mean        100.00000  99.94055  99.97817 299.91872
-## sd           50.00050  21.34937  19.97997  67.92330
-## skewness     -0.00272   0.00703  -0.00342   0.00491
-## ex kurtosis  -0.05561  -0.03317  -0.00612  -0.04270
-## 1st Qu.      66.09643  85.49520  86.48219 253.74962
-## Median      100.12904  99.97427 100.04553 299.97662
-## 3rd Qu.     133.77335 114.30108 113.47008 345.91590
+##                   Z1      Z2       Z3        Y
+## mean        100.0000  99.941  99.9782 299.9187
+## sd           50.0005  21.349  19.9800  67.9233
+## skewness     -0.0027   0.007  -0.0034   0.0049
+## ex kurtosis  -0.0556  -0.033  -0.0061  -0.0427
+## 1st Qu.      66.0964  85.495  86.4822 253.7496
+## Median      100.1290  99.974 100.0455 299.9766
+## 3rd Qu.     133.7733 114.301 113.4701 345.9159
 \end{verbatim}
 
 Furthermore, in Figure \ref{fig:example1-cdfs-sd}, we compare the baseline and stressed cdfs of \(Z_1\) and \(Y\), under the new stress on \(Z_1\). The crossing of probability distribution reflects the increase in volatility.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{plot_cdf}\NormalTok{(str.sd, }\DataTypeTok{xCol =} \StringTok{"Z1"}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
-\KeywordTok{plot_cdf}\NormalTok{(str.sd, }\DataTypeTok{xCol =} \DecValTok{4}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{plot\_cdf}\NormalTok{(str.sd, }\DataTypeTok{xCol =} \StringTok{"Z1"}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{plot\_cdf}\NormalTok{(str.sd, }\DataTypeTok{xCol =} \DecValTok{4}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.5\linewidth]{01-intro_files/figure-latex/example1-cdfs-sd-1} \includegraphics[width=0.5\linewidth]{01-intro_files/figure-latex/example1-cdfs-sd-2} \caption{Baseline and stressed empirical distribution functions of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$.}\label{fig:example1-cdfs-sd}
+\includegraphics[width=0.5\linewidth]{bookdown-SWIM_files/figure-latex/example1-cdfs-sd-1} \includegraphics[width=0.5\linewidth]{bookdown-SWIM_files/figure-latex/example1-cdfs-sd-2} \caption{Baseline and stressed empirical distribution functions of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$.}\label{fig:example1-cdfs-sd}
 \end{figure}
 
-The different ways how a stress on the standard deviation of \(Z_1\), compared to a stress on its mean, impact on the model, is reflected by the scenario weights. Figure \ref{fig:example1-weights-sd} shows the pattern of the scenario weights and how, when stressing standard deviations, higher weight is placed on scenarios where \(Z_1\) is extreme, either much lower or much higher than its mean of 100.
+The different way in which a stress on the standard deviation of \(Z_1\) impacts on the model, compared to a stress on the mean, is reflected by the scenario weights. Figure \ref{fig:example1-weights-sd} shows the pattern of the scenario weights and how, when stressing standard deviations, higher weight is placed on scenarios where \(Z_1\) is extreme, either much lower or much higher than its mean of 100.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{w.sd <-}\StringTok{ }\KeywordTok{get_weights}\NormalTok{(str.sd)}
-\KeywordTok{plot}\NormalTok{(Z1[}\DecValTok{1}\OperatorTok{:}\DecValTok{5000}\NormalTok{],w.sd[}\DecValTok{1}\OperatorTok{:}\DecValTok{5000}\NormalTok{],}\DataTypeTok{pch=}\DecValTok{20}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{"Z1"}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{"scenario weights"}\NormalTok{)}
-\KeywordTok{plot}\NormalTok{(Y[}\DecValTok{1}\OperatorTok{:}\DecValTok{5000}\NormalTok{],w.sd[}\DecValTok{1}\OperatorTok{:}\DecValTok{5000}\NormalTok{],}\DataTypeTok{pch=}\DecValTok{20}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{"Y"}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{"scenario weights"}\NormalTok{)}
+\NormalTok{w.sd \textless{}{-}}\StringTok{ }\KeywordTok{get\_weights}\NormalTok{(str.sd)}
+\KeywordTok{plot}\NormalTok{(Z1[}\DecValTok{1}\OperatorTok{:}\DecValTok{5000}\NormalTok{], w.sd[}\DecValTok{1}\OperatorTok{:}\DecValTok{5000}\NormalTok{], }\DataTypeTok{pch =} \DecValTok{20}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{"Z1"}\NormalTok{, }\DataTypeTok{ylab =} \StringTok{"scenario weights"}\NormalTok{)}
+\KeywordTok{plot}\NormalTok{(Y[}\DecValTok{1}\OperatorTok{:}\DecValTok{5000}\NormalTok{], w.sd[}\DecValTok{1}\OperatorTok{:}\DecValTok{5000}\NormalTok{], }\DataTypeTok{pch =} \DecValTok{20}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{"Y"}\NormalTok{, }\DataTypeTok{ylab =} \StringTok{"scenario weights"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.5\linewidth]{01-intro_files/figure-latex/example1-weights-sd-1} \includegraphics[width=0.5\linewidth]{01-intro_files/figure-latex/example1-weights-sd-2} \caption{Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$.}\label{fig:example1-weights-sd}
+\includegraphics[width=0.5\linewidth]{bookdown-SWIM_files/figure-latex/example1-weights-sd-1} \includegraphics[width=0.5\linewidth]{bookdown-SWIM_files/figure-latex/example1-weights-sd-2} \caption{Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$.}\label{fig:example1-weights-sd}
 \end{figure}
 
 Finally we ought to note that not all stresses that one may wish to apply are feasible. Assume for example that we want to increase the mean of \(Z_1\) from 100 to 300, which exceeds the maximum realisation of \(Z_1\) in the baseline model. Then, clearly, no set of scenario weights can be found that produce a stress that yields the required mean for \(Z_1\); consequently an error message is produced.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{str.sd <-}\StringTok{ }\KeywordTok{stress}\NormalTok{(}\DataTypeTok{type=}\StringTok{"mean"}\NormalTok{,}\DataTypeTok{x =}\NormalTok{ dat, }\DataTypeTok{k=}\DecValTok{1}\NormalTok{, }\DataTypeTok{new_means =} \DecValTok{300}\NormalTok{)}
+\KeywordTok{stress}\NormalTok{(}\DataTypeTok{type =} \StringTok{"mean"}\NormalTok{, }\DataTypeTok{x =}\NormalTok{ dat, }\DataTypeTok{k =} \DecValTok{1}\NormalTok{, }\DataTypeTok{new\_means =} \DecValTok{300}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## Error in stress_moment(x = x, f = means, k = k, m = new_means, ...): Values in m must be in the range of f(x).
+## Error in stress_moment(x = x, f = means, k = as.list(k), m = new_means, :
+Values in m must be in the range of f(x)
 \end{verbatim}
 
 \begin{Shaded}
@@ -377,22 +403,38 @@ Finally we ought to note that not all stresses that one may wish to apply are fe
 \end{verbatim}
 
 \hypertarget{Sec:Scope}{%
-\section{Scope of the SWIM package}\label{Sec:Scope}}
+\section{\texorpdfstring{Scope of the \textbf{SWIM} package}{Scope of the SWIM package}}\label{Sec:Scope}}
 
 \hypertarget{Rfunctions}{%
 \subsection{Stressing a model}\label{Rfunctions}}
 
-While the SWIM package is designed to work on (Monte Carlo) realisations of model components, the scenario weights are derived in a general probabilistic framework. A baseline probability (representing the equiprobable Monte Carlo simulations) can be described by a probability measure \(P\), and a stressed model by a different probabitlity measures \(Q\). The stressed model is uniquely described by the change from the baseline to the stressed model, which can be seen as the scenario weights \(W= \frac{dQ}{dP}\). A stressed model, under which the distribution of the model components fulfil specific stresses, is chosen such that the distortion to the baseline model is as small as possible in the Kullback-Leibler divergence (or relative entropy). Mathematically, a stressed model is the solutions to.
+We briefly introduce key concepts, using slightly more technical language compared to Section \ref{Sec:Intro}. A \emph{model} consists of a random vector of \emph{model components} \(\mathbf X = (X_1,\dots,X_d)\) and a probability measure; we denote the probability measure of a \emph{baseline model} by \(P\) and that of a \emph{stressed model} by \(P^W\), where \(W= \frac{dP^W}{dP}\), satisfying \(E(W)=1\) and \(W\geq 0\), is a Radon-Nikodym derivative. In a Monte Carlo simulation context, the probability space is discrete with \(n\) states \(\Omega=\{\omega_1,\dots,\omega_n\}\), each of which corresponds to a simulated scenario. To reconcile this formulation with the notation of Section \ref{Sec:Intro}, we denote, for \(i=1, \dots, n,~j=1,\dots, d\), the realisations \(X_j(\omega_i):= x_{ji}\) and \(W(\omega_i):=w_i\); the latter are the \emph{scenario weights}. Under the baseline model, each scenario has the same probability \(P(\omega_i)=1/n\), while under a stressed model it is \(P^W(\omega_i)=W(\omega_i)/n=w_i/n\).
+
+The stressed model thus arises from a change of measure from \(P\) to \(P^W\), which entails the application of scenario weights \(w_1,\dots, w_n\) on individual simulations. \textbf{SWIM} calculates scenario weights such that model components fulfil specific stresses, while the distortion to the baseline model is as small as possible when measured by the Kullback-Leibler divergence (or relative entropy). Mathematically, a stressed model is derived by solving
+
 \begin{equation} 
 \min_{ W } ~E(W \log (W)), \quad
-\text{subject to constraints under } P^W.
+\text{subject to constraints on } \mathbf X \text{ under } P^W.
 \label{eq:optimisation}
 \end{equation}
-Subsequently, we denote by a superscript \(W\) the quantity of interest under the stressed model, such as \(P^W, ~ E^W\) for the probabtility distribution and expectation under the stressed model, respectivley. We refer to \citet{Pesenti2019} and references therein for further mathematical details and the derivations of solutions to \eqref{eq:optimisation}.
+In what follows, we denote by a superscript \(W\) quantities of interest under the stressed model, such as \(F^W, ~ E^W\) for the probability distribution and expectation under the stressed model, respectively. We refer to \citet{Pesenti2019} and references therein for further mathematical details and derivations of solutions to \eqref{eq:optimisation}.
 
-The subsequent table is a collection of all implemented types of stresses. The pricise constraints of \eqref{eq:optimisation} are explained below.
+Table \ref{tab:Rfunstress} provides a collection of all implemented types of stresses in the \textbf{SWIM} package. The precise constraints of \eqref{eq:optimisation} are explained below.
 
 \begin{longtable}[]{@{}llll@{}}
+\caption{\label{tab:Rfunstress} Implemented types of stresses in \textbf{SWIM}.}\tabularnewline
+\toprule
+\begin{minipage}[b]{0.20\columnwidth}\raggedright
+R function\strut
+\end{minipage} & \begin{minipage}[b]{0.39\columnwidth}\raggedright
+Stress\strut
+\end{minipage} & \begin{minipage}[b]{0.09\columnwidth}\raggedright
+\texttt{type}\strut
+\end{minipage} & \begin{minipage}[b]{0.20\columnwidth}\raggedright
+Reference\strut
+\end{minipage}\tabularnewline
+\midrule
+\endfirsthead
 \toprule
 \begin{minipage}[b]{0.20\columnwidth}\raggedright
 R function\strut
@@ -406,195 +448,265 @@ Reference\strut
 \midrule
 \endhead
 \begin{minipage}[t]{0.20\columnwidth}\raggedright
-\texttt{stress()}\strut
+\texttt{stress}\strut
 \end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright
 wrapper for the \texttt{stress\_type} functions\strut
 \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
 \strut
 \end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright
-Section \ref{Rstress}\strut
+Sec. \ref{Rstress}\strut
 \end{minipage}\tabularnewline
 \begin{minipage}[t]{0.20\columnwidth}\raggedright
-\texttt{stress\_user()}\strut
+\texttt{stress\_user}\strut
 \end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright
 user defined scenario weights\strut
 \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
 \texttt{user}\strut
 \end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright
-\strut
+Sec. \ref{Sec:User}\strut
 \end{minipage}\tabularnewline
 \begin{minipage}[t]{0.20\columnwidth}\raggedright
-\texttt{stress\_prob()}\strut
+\texttt{stress\_prob}\strut
 \end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright
-disjoint intervals\strut
+probabilities of disjoint intervals\strut
 \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
 \texttt{prob}\strut
 \end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright
-\eqref{eq:optimisationprob}\strut
+Eq. \eqref{eq:optimisationprob}\strut
 \end{minipage}\tabularnewline
 \begin{minipage}[t]{0.20\columnwidth}\raggedright
-\texttt{stress\_mean()}\strut
+\texttt{stress\_mean}\strut
 \end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright
 means\strut
 \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
 \texttt{mean}\strut
 \end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright
-\eqref{eq:optimisationmoment}\strut
+Eq. \eqref{eq:optimisationmean}\strut
 \end{minipage}\tabularnewline
 \begin{minipage}[t]{0.20\columnwidth}\raggedright
-\texttt{stress\_mean\_sd()}\strut
+\texttt{stress\_mean\_sd}\strut
 \end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright
 means and standard deviations\strut
 \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
 \texttt{mean\ sd}\strut
 \end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright
-\eqref{eq:optimisationmoment}\strut
+Eq. \eqref{eq:optimisationmeansd}\strut
 \end{minipage}\tabularnewline
 \begin{minipage}[t]{0.20\columnwidth}\raggedright
-\texttt{stress\_moment()}\strut
+\texttt{stress\_moment}\strut
 \end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright
-moments, functions of moments\strut
+moments (of functions)\strut
 \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
 \texttt{moment}\strut
 \end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright
-\eqref{eq:optimisationmoment}\strut
+Eq. \eqref{eq:optimisationmoment}\strut
 \end{minipage}\tabularnewline
 \begin{minipage}[t]{0.20\columnwidth}\raggedright
-\texttt{stress\_VaR()}\strut
+\texttt{stress\_VaR}\strut
 \end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright
-VaR risk measure, a quantile\strut
+VaR risk measure (quantile)\strut
 \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
 \texttt{VaR}\strut
 \end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright
-\eqref{eq:optimisationVaR}\strut
+Eq. \eqref{eq:optimisationVaR}\strut
 \end{minipage}\tabularnewline
 \begin{minipage}[t]{0.20\columnwidth}\raggedright
-\texttt{stress\_VaR\_ES()}\strut
+\texttt{stress\_VaR\_ES}\strut
 \end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright
 VaR and ES risk measures\strut
 \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
 \texttt{VaR\ ES}\strut
 \end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright
-\eqref{eq:optimisationVaRES}\strut
+Eq. \eqref{eq:optimisationVaRES}\strut
 \end{minipage}\tabularnewline
 \bottomrule
 \end{longtable}
 
-\hypertarget{Rstress}{%
-\subsubsection{\texorpdfstring{The \texttt{stress} function and the \texttt{SWIM} object}{The stress function and the SWIM object}}\label{Rstress}}
+The solutions to the optimisations \eqref{eq:optimisationprob} and \eqref{eq:optimisationVaR} are worked out fully analytically \citep{Pesenti2019}, whereas problems \eqref{eq:optimisationmean}, \eqref{eq:optimisationmeansd}, \eqref{eq:optimisationmoment} and \eqref{eq:optimisationVaRES} require some root-finding. Specifically, problems \eqref{eq:optimisationmean}, \eqref{eq:optimisationmeansd} and \eqref{eq:optimisationmoment} rely on the package \textbf{nleqslv}, whereas \eqref{eq:optimisationVaRES} uses the \texttt{uniroot} function.
 
-The \texttt{stress()} function is a wapper for the \texttt{stress\_} functions, with \texttt{stress(type\ =\ "type",\ ...\ )} and \texttt{stress\_type(...)} being equivalent. The \texttt{stress()} function solves optimisation \eqref{eq:optimisation} for constraints specified through \texttt{type}and returns a \texttt{SWIM} object containing a list of:
+\hypertarget{Rstress}{%
+\subsubsection{\texorpdfstring{The \texttt{stress} function and the \textbf{SWIM} object}{The stress function and the SWIM object}}\label{Rstress}}
+
+The \texttt{stress} function is a wrapper for the \texttt{stress\_type} functions, where \texttt{stress(type\ =\ "type",\ )} and \texttt{stress\_type} are equivalent. The \texttt{stress} function solves optimisation \eqref{eq:optimisation} for constraints specified through \texttt{type} and returns a \texttt{SWIM} object, that is, a list including the elements shown in Table \ref{tab:SWIMobject}:
 
 \begin{longtable}[]{@{}ll@{}}
+\caption{\label{tab:SWIMobject} The \textbf{SWIM} object, returned by any \texttt{stress} function.}\tabularnewline
 \toprule
 \endhead
-\texttt{x} & realistaions of the model\tabularnewline
+\texttt{x} & realisations of the model\tabularnewline
 \texttt{new\_weights} & scenario weights\tabularnewline
-\texttt{type} & ``type'' of stress\tabularnewline
+\texttt{type} & type of stress\tabularnewline
 \texttt{specs} & details about the stress\tabularnewline
 \bottomrule
 \end{longtable}
 
-The data frame, \texttt{x} in the above table, containing the realisations of the baseline model, can be extracted from a \texttt{SWIM} object using \texttt{get\_data()}. Similarly, \texttt{get\_weights()} and \texttt{get\_weightsfun()} provide the scenario weights, respectively the functions, that when applied to \texttt{x} generate the scenarion weights. The specification of the applied stress can be obtained using \texttt{get\_specs()}.
+The data frame containing the realisations of the baseline model, \texttt{x} in the above table, can be extracted from a \textbf{SWIM} object using \texttt{get\_data}. Similarly, \texttt{get\_weights} and \texttt{get\_weightsfun} provide the scenario weights, respectively the functions that, when applied to \texttt{x}, generate the scenario weights. The details of the applied stress can be obtained using \texttt{get\_specs}.
 
 \hypertarget{stressing-disjoint-probability-intervals}{%
 \subsubsection{Stressing disjoint probability intervals}\label{stressing-disjoint-probability-intervals}}
 
-Stressing disjoint probability intervals, allows to define stresses by altering regions or events of a model component. The scenario weights are calculated via \texttt{stress\_prob()}, or equivalently \texttt{stress(type\ =\ "prob",\ ...)}, and the stressed probability intervals are specified through the \texttt{lower} and \texttt{upper} endpoints of the intervals.
+Stressing probabilities of disjoint intervals allows defining stresses by altering the probabilities of events pertaining to a model component. The scenario weights are calculated via \texttt{stress\_prob}, or equivalently \texttt{stress(type\ =\ "prob",\ )}, and the disjoint intervals are specified through the \texttt{lower} and \texttt{upper} arguments, the endpoints of the intervals. Specifically,
 
 \begin{quote}
-For disjoint intervals \(B_1, \ldots, B_I\) with \(P(X \in B_i) >0\), for all \(i = 1, \ldots, I\), and \(\alpha_1, \ldots, \alpha_I > 0\) such that \(\alpha_1 + \ldots + \alpha_I < 1\), \texttt{stress\_prob()} solves for the constraints
+\texttt{stress\_prob} solves \eqref{eq:optimisation} with the constraints
 \begin{equation} 
-P^W(X \in B_i) = \alpha_i, ~i = 1, \ldots, I. \label{eq:optimisationprob}
+P^W(X_j \in B_k) = \alpha_k, ~k = 1, \ldots, K, \label{eq:optimisationprob}
 \end{equation}
+for disjoint intervals \(B_1, \ldots, B_K\) with \(P(X_j \in B_k) >0\) for all \(k = 1, \ldots, K\), and \(\alpha_1, \ldots, \alpha_K > 0\) such that \(\alpha_1 + \ldots + \alpha_K \leq 1\) and a model component \(X_j\).
 \end{quote}
 
 \hypertarget{stressing-moments}{%
 \subsubsection{Stressing moments}\label{stressing-moments}}
 
-The functions \texttt{stress\_mean()}, \texttt{stress\_mean\_sd()} and \texttt{stress\_moment()} can be applied to multiple model components and are the only \texttt{stress} functions that have scenrio weights calculated via numerical optimisation using the \href{https://CRAN.R-project.org/package=nleqslv}{nleqslv} package. Thus, dependending on the choice of moment stresses, existence of a stressed model is not guaranteed.
+The functions \texttt{stress\_mean}, \texttt{stress\_mean\_sd} and \texttt{stress\_moment} provide stressed models with moment constraints. The function \texttt{stress\_mean} returns a stressed model that fulfils constraints on the first moment of model components. Specifically,
 
 \begin{quote}
-For \(i = 1, \ldots, I\) with \(J_i \subset \{1, \ldots, n\}\) and functions \(f_i \colon \mathbb{R}^{J_i} \to \mathbb{R}\), \texttt{stress\_moment()} solves for the constraints
+\texttt{stress\_mean} solves \eqref{eq:optimisation} with the constraints
 \begin{equation} 
-E^W(f_i(X_{J_i}) ) = m_i, ~i = 1, \ldots, I. \label{eq:optimisationmoment}
+E^W(X_j) = m_j, ~j \in J, \label{eq:optimisationmean}
 \end{equation}
+for \(m_j, ~ j \in J\), where \(J\) is a subset of \(\{1, \ldots, d\}\).
 \end{quote}
 
-\hypertarget{stressing-risk-measures}{%
-\subsubsection{Stressing risk measures}\label{stressing-risk-measures}}
-
-The functions \texttt{stress\_VaR} and \texttt{stress\_VaR\_ES} provides stressed models, under which a model components fulfils a stress on the Value-at-Risk (\(\text{VaR}\)) and/or Expected Shortfall (\(\text{ES}\)) risk measures. The \(\text{VaR}\) at level \(0 < \alpha < 1\) of a random variable \(Z\) with distrbution \(F\), is defined as the \(\alpha-\)quantile of \(F\), that is \[\text{VaR}_\alpha(Z) = F^{-1}(\alpha).\] The \(\text{ES}\) at level \(0 < \alpha < 1\) of a random variable \(Z\) is given by \[\text{ES}_\alpha(Z) = \int_0^1 \text{VaR}_u(Z) \mathrm{d}u.\]
+The arguments \(m_j\) are specified in the \texttt{stress\_mean} function through the argument \texttt{new\_means}. The \texttt{stress\_mean\_sd} function allows to stress simultaneously the mean and the standard deviation of model components. Specifically,
 
 \begin{quote}
-For \(0< \alpha <1\) and \(q, s \in \mathbb{R}\) such that \(\text{VaR}_{\alpha}(Y)<q < s\), \texttt{stress\_VaR()} solves for the constraints
+\texttt{stress\_mean\_sd} solves \eqref{eq:optimisation} with the constraints
 \begin{equation} 
-\text{VaR}_{\alpha }^W(Y) = q;  \label{eq:optimisationVaR}
+E^W(X_j) = m_j \text{ and Var}^W(X_j) = s_j^2 , ~j \in J, \label{eq:optimisationmeansd}
 \end{equation}
-and \texttt{stress\_VaR\_ES()} solves for the constraints
+for \(m_j, s_j, ~ j \in J\), where \(J\) is a subset of \(\{1, \ldots, d\}\).
+\end{quote}
+
+The arguments \(m_j, s_j\) are defined in the \texttt{stress\_mean\_sd} function by the arguments \texttt{new\_means} and \texttt{new\_sd} respectively. The functions \texttt{stress\_mean} and \texttt{stress\_mean\_sd} are special cases of the general \texttt{stress\_moment} function, which allows for stressed models with constraints on functions of the (joint) moments of model components. Specifically
+
+\begin{quote}
+For \(k = 1, \ldots, K\), \(J_k\) subsets of \(\{1, \ldots, d\}\) and functions \(f_k \colon \mathbb{R}^{|J_k|} \to \mathbb{R}\), \texttt{stress\_moment} solves \eqref{eq:optimisation} with the constraints
+\begin{equation} 
+E^W(f_k(\mathbf X_{J_k}) ) = m_k, ~k = 1, \ldots, K, \label{eq:optimisationmoment}
+\end{equation}
+for \(m_k, ~k=1, \dots,K\) and \(\mathbf X_{J_k}\) the subvector of model components with indices in \(J_k\).
+\end{quote}
+
+Note that \texttt{stress\_moment} not only allows to define constraints on higher moments of model components, but also to construct constraints that apply to multiple model components simultaneously. For example, the stress \(E^W(X_h X_l) =m_k\) is achieved by setting \(f_k(x_h, x_l) = x_h x_l\) in \eqref{eq:optimisationmoment} above. The functions \texttt{stress\_mean}, \texttt{stress\_mean\_sd} and \texttt{stress\_moment} can be applied to multiple model components and are the only \texttt{stress} functions that have scenario weights calculated via numerical optimisation, using the \href{https://CRAN.R-project.org/package=nleqslv}{\textbf{nleqslv}} package. Thus, depending on the choice of constraints, existence or uniqueness of a stressed model is not guaranteed.
+
+\hypertarget{Sec:RiskMeasures}{%
+\subsubsection{Stressing risk measures}\label{Sec:RiskMeasures}}
+
+The functions \texttt{stress\_VaR} and \texttt{stress\_VaR\_ES} provide stressed models, under which a model component fulfils a stress on the risk measures Value-at-Risk (\(\text{VaR}\)) and/or Expected Shortfall (\(\text{ES}\)). The \(\text{VaR}\) at level \(0 < \alpha < 1\) of a random variable \(Z\) with distribution \(F\) is defined as its left-inverse evaluated at \(\alpha\), that is
+\[\text{VaR}_\alpha(Z) = F^{-1}(\alpha) = \inf\{ y \in \mathbb{R} ~|~F(y) \geq \alpha\}.\]
+The \(\text{ES}\) at level \(0 < \alpha < 1\) of a random variable \(Z\) is given by \[\text{ES}_\alpha(Z) =\frac{1}{1-\alpha}\int_\alpha^1 \text{VaR}_u(Z) \mathrm{d}u.\]
+The details of the constraints that \texttt{stress\_VaR} and \texttt{stress\_VaR\_ES} solve, are as follows:
+
+\begin{quote}
+For \(0< \alpha <1\) and \(q, s\) such that \(q < s\), \texttt{stress\_VaR} solves \eqref{eq:optimisation} with the constraint
+\begin{equation} 
+\text{VaR}_{\alpha }^W(X_j) = q;  \label{eq:optimisationVaR}
+\end{equation}
+and \texttt{stress\_VaR\_ES} solves \eqref{eq:optimisation} with the constraints
 \begin{equation}                                                
-\text{VaR}_{\alpha }^W(Y) = q, \text{ ES}_{\alpha }^W(Y) = s.\label{eq:optimisationVaRES}
+\text{VaR}_{\alpha }^W(X_j) = q \text{ and ES}_{\alpha }^W(X_j) = s.\label{eq:optimisationVaRES}
 \end{equation}
 \end{quote}
+
+Note that, since \textbf{SWIM} works with discrete distributions, the exact required VaR may not be achievable. In that case, \texttt{stress\_VaR} will return scenario weights inducing the largest quantile in the dataset smaller or equal to the required VaR (i.e.~\(q\)); this guarantees that \(P^W(X_j\leq q)=\alpha\).
+
+\hypertarget{Sec:User}{%
+\subsubsection{User defined scenario weights}\label{Sec:User}}
+
+The option \texttt{type\ =\ "user"} allows to generate a \textbf{SWIM} object with scenario weights defined by a user. The scenario weights can be provided directly via the \texttt{new\_weights} argument or through a list of functions, \texttt{new\_weightsfun}, that applied to the data \texttt{x} generates the scenario weights.
 
 \hypertarget{Sec:analysis}{%
 \subsection{Analysis of stressed models}\label{Sec:analysis}}
 
-The function \texttt{summary()} is a methods for an object of class SWIM and provides summary statistics of the baseline and stressed models. If the SWIM object contains more than one set of scenario weights, each corresponding to one stressed model, the \texttt{stress()} function returns for each set of scenarion weights a list containting:
+Table \ref{tab:Ranalysis} provides a complete list of all implemented \textbf{R} functions in \textbf{SWIM} for analysing stressed models, which are described below in detail.
 
 \begin{longtable}[]{@{}ll@{}}
+\caption{\label{tab:Ranalysis} Implemented \textbf{R} function in \textbf{SWIM} for analysing stressed models.}\tabularnewline
+\toprule
+R function & analysis of stressed models\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+R function & analysis of stressed models\tabularnewline
+\midrule
+\endhead
+\texttt{summary} & summary statistics\tabularnewline
+\texttt{cdf} & cumulative distribution function\tabularnewline
+\texttt{quantile\_stressed} & quantile function\tabularnewline
+\texttt{VaR\_stressed} & VaR\tabularnewline
+\texttt{ES\_stressed} & ES\tabularnewline
+\texttt{sensitivity} & sensitivity measures\tabularnewline
+\texttt{importance\_rank} & importance ranks\tabularnewline
+\texttt{plot\_cdf} & plots cumulative distributions functions\tabularnewline
+\texttt{plot\_hist} & plots histograms\tabularnewline
+\texttt{plot\_sensitivity} & plots sensitivity measures\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{distributional-comparison}{%
+\subsubsection{Distributional comparison}\label{distributional-comparison}}
+
+The \textbf{SWIM} package contains functions to compare the distribution of model components under different (stressed) models. The function \texttt{summary} is a method for an object of class \textbf{SWIM} and provides summary statistics of the baseline and stressed models. If the \textbf{SWIM} object contains more than one set of scenario weights, each corresponding to one stressed model, the \texttt{summary} function returns for each set of scenario weights a list, containing the elements shown in Table \ref{tab:summary}.
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{\label{tab:summary} The output of the \texttt{summary} function applied to a \textbf{SWIM} object.}\tabularnewline
 \toprule
 \endhead
 \texttt{mean} & sample mean\tabularnewline
 \texttt{sd} & sample standard deviation\tabularnewline
 \texttt{skewness} & sample skewness\tabularnewline
 \texttt{ex\ kurtosis} & sample excess kurtosis\tabularnewline
-\texttt{1st\ Qu.} & 25\% quantile\tabularnewline
-\texttt{Median} & median, 50\% quantile\tabularnewline
-\texttt{3rd\ Qu.} & 75\% quantile\tabularnewline
+\texttt{1st\ Qu.} & \(25%
+\) quantile\tabularnewline
+\texttt{Median} & median, \(50%
+\) quantile\tabularnewline
+\texttt{3rd\ Qu.} & \(75%
+\) quantile\tabularnewline
 \bottomrule
 \end{longtable}
 
-The empirical distribution functions of model components under a stressed model can be calculated by evaluation of \texttt{cdf()} on a SWIM object. It is important to note, that the standard empirical distribution function, \texttt{ecdf()} applied to a SWIM object will \textbf{not} return empirical distribution functions under a stressed model. Similarly, to calculate sample quantiles of stressed models components, the function \texttt{quantile\_stressed()} should be used. Implemented visualisation of distribution functions are \texttt{plot\_cdf()}, for plotting empirical distribution functions, and \texttt{plot\_hist()}, for plotting histograms of model components under stressed models.
+The empirical distribution function of model components under a stressed model\footnote{Note that \textbf{R} functions implementing the empirical cdf or the quantile, \texttt{ecdf} and \texttt{quantile}, will not return the empirical distribution function or the quantile function under a stressed model.} can be calculated using the \texttt{cdf} function of the \textbf{SWIM} package, applied to a \textbf{SWIM} object. To calculate sample quantiles of stressed model components, the function \texttt{quantile\_stressed} can be used. The function \texttt{VaR\_stressed} and \texttt{ES\_stressed} provide the stressed VaR and ES of model components, which is of particular interest for stressed models resulting from constraints on risk measures, see Section \ref{Sec:RiskMeasures}. (While \texttt{quantile\_stressed} works very similarly to the base \textbf{R} function \texttt{quantile}, \texttt{VaR\_stressed} provides better capabilities for comparing different models and model components.)
 
-Comparison of baseline and stressed models and how stressed model impact model components, can be done via the \texttt{sensitivity()} function. The implemented sensitivity measures are summarised in the table below. The Wasserstein and Kolmogorov, sensitivities are to compare stressed (and baseline) models, as these sensitivities only depend on the scenario weights, whereas the Gamma sensitivity is useful to compare the impact of a stress model on the model components.
+Implemented visualisation of distribution functions are \texttt{plot\_cdf}, for plotting empirical distribution functions, and \texttt{plot\_hist}, for plotting histograms of model components under different (stressed) models.
+
+\hypertarget{sensitivity-measures}{%
+\subsubsection{Sensitivity measures}\label{sensitivity-measures}}
+
+Comparison of baseline and stressed models and how model components change under different models, is typically done via sensitivity measures. The \textbf{SWIM} packages contains the \texttt{sensitivity} function, which calculates sensitivity measures of stressed models and model components. The implemented sensitivity measures, summarised in the table below, are the \emph{Wasserstein}, \emph{Kolmogorov} and the \emph{Gamma} sensitivity measures, see \citet{Pesenti2016DM} \citet{Pesenti2019} \citet{Emmer2015JR}.
 
 \begin{longtable}[]{@{}lll@{}}
+\caption{\label{tab:sensitivity} Definition of the sensitivity measures implemented in \textbf{SWIM}.}\tabularnewline
 \toprule
+\textbf{Metric} & \textbf{Definition} &\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+\textbf{Metric} & \textbf{Definition} &\tabularnewline
+\midrule
 \endhead
-\begin{minipage}[t]{0.30\columnwidth}\raggedright
-Wasserstein\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright
-\(\int | F^W_X (x) - F_X(x)| dx\)\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright
-comparing models\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.30\columnwidth}\raggedright
-Kolmogorov\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright
-\(\sup_x |F^W_X (x) - F_X(x)|\)\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright
-comparing models\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.30\columnwidth}\raggedright
-Gamma\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright
-\(\frac{E^W(X) - E(X)}{c}\), for a normalisation \(c\)\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright
-comparing model components\strut
-\end{minipage}\tabularnewline
+Wasserstein & \(\int | F^W_X (x) - F_X(x)| dx\) &\tabularnewline
+Kolmogorov & \(\sup_x |F^W_X (x) - F_X(x)|\) &\tabularnewline
+Gamma & \(\frac{E^W(X) - E(X)}{c}\), for a normalisation \(c\) &\tabularnewline
 \bottomrule
 \end{longtable}
 
-The normalisation for the Gamma sensitivity is such that Gamma takes values between -1 and 1, where positive values correspond to a larger impact on a larger impact. The sensitivities of model components can be plotted using \texttt{plot\_sensitivity()}. The function \texttt{importance\_rank()}, returns the effective rank of model component according ot the chosen sensitivity measures.
+The Gamma sensitivity measure is normalised such that it takes values between -1 and 1, with higher positive (negative) values corresponding to a larger positive (negative) impact of the stress on the particular model component. The sensitivity measures can be plotted using \texttt{plot\_sensitivity}. The function \texttt{importance\_rank} returns the effective rank of model components according to the chosen sensitivity measure.
 
 \hypertarget{Sec:CreditModel}{%
-\section{Simulation study}\label{Sec:CreditModel}}
+\section{Case study}\label{Sec:CreditModel}}
 
-\hypertarget{the-credit-risk-portfolio}{%
-\subsection{The credit risk portfolio}\label{the-credit-risk-portfolio}}
+\hypertarget{a-credit-risk-portfolio}{%
+\subsection{A credit risk portfolio}\label{a-credit-risk-portfolio}}
 
-The credit model in this section is a conditionally binomial credit model and we refer to the Appendix \ref{AppendixCM} for details and the generation of the simulated data. Of interest ist the total aggregate portfolio loss \(L = L_1 + L_2 + L_3\), where \(L_1, L_2, L_3\) are homogeneous subportfolios on comparable scale. The data set contains 100,000 simulations of the portfolio \(L\), the sub-portfolios \(L_1, L_2, L_3\) as well as the (conditional) default probability of each subportfolio \(H_1, H_2, H_3\). A snipped of data set looks as follows:
+The credit model in this section is a conditionally binomial loan portfolio model including systematic and specific portfolio risk. We refer to the Appendix \ref{AppendixCM} for details about the model and the generation of the simulated data. A key variable of interest is the total aggregate portfolio loss \(L = L_1 + L_2 + L_3\), where \(L_1, L_2, L_3\) are homogeneous subportfolios on a comparable scale (say, thousands of \$). The dataset contains 100,000 simulations of the portfolio \(L\), the subportfolios \(L_1, L_2, L_3\) as well as the random default probabilities within each subportfolio, \(H_1, H_2, H_3\). These default probabilities represent the systematic risk \emph{within} each subportfolio, while their dependence structure represents a systematic risk effect \emph{between} the subportfolios. The simulated data of the credit risk portfolio are included in the \textbf{SWIM} package and can be accessed via \texttt{data("credit\_data")}. A snippet of the dataset looks as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{data}\NormalTok{(}\StringTok{"credit\_data"}\NormalTok{)}
+\KeywordTok{head}\NormalTok{(credit\_data)}
+\end{Highlighting}
+\end{Shaded}
 
 \begin{verbatim}
 ##         L L1    L2  L3       H1      H2     H3
@@ -606,35 +718,72 @@ The credit model in this section is a conditionally binomial credit model and we
 ## [6,] 1159 20 393.8 745 2.73e-04 0.00934 0.0721
 \end{verbatim}
 
-\hypertarget{stressing-the-aggregate-portfolio-loss}{%
-\subsection{Stressing the aggregate portfolio loss}\label{stressing-the-aggregate-portfolio-loss}}
+\hypertarget{stressing-the-portfolio-loss}{%
+\subsection{Stressing the portfolio loss}\label{stressing-the-portfolio-loss}}
 
-In this section, we study the effect of stresses on (the tail of) the aggregate portfolio on the three sub-portfolios. First, we stress the \(VaR_{0.9}\) of the total loss of the aggregate portfolio by \(20\%\). For this we use the \texttt{stress} function with the argument \texttt{type\ =\ "VaR"}. The input parameter \texttt{x} is the simulated data, \texttt{k} corresponds to the name of the row of \texttt{x} on which the stress is applied to, \texttt{alpha} determines the level of the stresses VaR and \texttt{q\_ratio} the percentage increase.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{stress.credit <-}\StringTok{ }\KeywordTok{stress}\NormalTok{(}\DataTypeTok{type =} \StringTok{"VaR"}\NormalTok{, }\DataTypeTok{x =}\NormalTok{ credit_data, }\DataTypeTok{k =} \StringTok{"L"}\NormalTok{, }
-                        \DataTypeTok{alpha =} \FloatTok{0.9}\NormalTok{, }\DataTypeTok{q_ratio =} \FloatTok{1.2}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-Second, we consider, additionally to the \(20\%\) increase in \(\text{VaR}_{0.9}\), a \(30\%\) increase in \(\text{ES}_{0.9}\) of the aggregate portfolio \(L\). Generating a stressed model, resulting from a simultaneous stress on the VaR and the ES can be acchieve using \texttt{type\ =\ "VaR\ ES"}. Note that both VaR and ES need be stressed at the same level \texttt{alpha\ =\ 0.9}. The additonal input parameter \texttt{s\_ratio} determines the percentage increase in the ES. Instead of providing the percentage inceases in the VaR and ES, the \texttt{stress} function allows for the actual stressed values of the VaR and ES using the parameters \texttt{s} and \texttt{q} instead of \texttt{s\_ratio} and \texttt{q\_ratio}, respectively.
+In this section, following a reverse sensitivity approach, we study the effects that stresses on (the tail of) the aggregate portfolio loss \(L\) have on the three subportfolios; thus assessing their comparative importance. First, we impose a \(20\%\) increase on the VaR at level \(90\%\) of the portfolio loss.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{stress.credit <-}\StringTok{ }\KeywordTok{stress}\NormalTok{(}\DataTypeTok{type =} \StringTok{"VaR ES"}\NormalTok{, }\DataTypeTok{x =}\NormalTok{ stress.credit, }\DataTypeTok{k =} \StringTok{"L"}\NormalTok{, }
-                        \DataTypeTok{alpha =} \FloatTok{0.9}\NormalTok{, }\DataTypeTok{q_ratio =} \FloatTok{1.2}\NormalTok{, }\DataTypeTok{s_ratio =} \FloatTok{1.3}\NormalTok{)}
+\NormalTok{stress.credit \textless{}{-}}\StringTok{ }\KeywordTok{stress}\NormalTok{(}\DataTypeTok{type =} \StringTok{"VaR"}\NormalTok{, }\DataTypeTok{x =}\NormalTok{ credit\_data, }\DataTypeTok{k =} \StringTok{"L"}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.9}\NormalTok{, }
+    \DataTypeTok{q\_ratio =} \FloatTok{1.2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-Note, that as input \texttt{x} we used the above calucalted stressed model, resulting from a stress on the \(VaR_{0.9}\). Using a stressed model as an input for the \texttt{stress} function is convenient for large data sets, as the \texttt{stress} function returns an object (\texttt{stress.credit}) that countains the original simualted data and the scenario weights.
+\begin{verbatim}
+## Stressed VaR specified was 2174.25 , stressed VaR achieved is 2173.75
+\end{verbatim}
 
-++++MAYBE CHANGE THE SECOND STRESS ACCORDING TO ANDREAS' SUGGESTION? IE LEAVE VAR UNCHANGED (CURRENTLY NOT POSSIBLE) AND STRESS ES ONLY?
+The \(20\%\) increase was specified by setting the \texttt{q\_ratio} argument to \(1.2\) -- alternatively the argument \texttt{q} can be set to the actual value of the stressed VaR.
 
-\hypertarget{analysing-the-stressed-model}{%
-\subsection{Analysing the stressed model}\label{analysing-the-stressed-model}}
+Using the function \texttt{VaR\_stressed}, we can quantify how tail quantiles of the aggregate portfolio loss change, when moving from the baseline to the stressed model. We observe that the increase in the VaR of the portfolio loss changes more broadly its tail quantiles; thus the stress on VaR also induces an increase in ES. The implemented functions \texttt{VaR\_stressed} and \texttt{ES\_stressed} calculate respectively VaR and ES; the argument \texttt{alpha} specifies the levels of VaR and ES, respectively, while the stressed model under which the risk measures are calculated can be chosen using \texttt{wCol} (by default equal to 1).
 
-The \texttt{summary} function provides a statistical summary of the stressed models. Choosing \texttt{base\ =\ TRUE}, compares the stressed models with the the simulated data - the baseline model.
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{VaR\_stressed}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{alpha =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.75}\NormalTok{, }\FloatTok{0.9}\NormalTok{, }\FloatTok{0.95}\NormalTok{, }\FloatTok{0.99}\NormalTok{), }
+    \DataTypeTok{xCol =} \StringTok{"L"}\NormalTok{, }\DataTypeTok{wCol =} \DecValTok{1}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        L base L
+## 75% 1506   1399
+## 90% 2174   1812
+## 95% 2426   2085
+## 99% 2997   2671
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ES\_stressed}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{alpha =} \FloatTok{0.9}\NormalTok{, }\DataTypeTok{xCol =} \StringTok{"L"}\NormalTok{, }\DataTypeTok{wCol =} \DecValTok{1}\NormalTok{, }
+    \DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        L base L
+## 90% 2535   2191
+\end{verbatim}
+
+As a second stress, we consider, additionally to the \(20\%\) increase in the \(\text{VaR}_{0.9}\), an increase in \(\text{ES}_{0.9}\) of the portfolio loss \(L\). When stressing VaR and ES together via \texttt{stress\_VaR\_ES}, both VaR and ES need to be stressed at the same level, here \texttt{alpha\ =\ 0.9}. We observe that when stressing the VaR alone, ES increases to 2535. For the second stress we want a greater impact on ES, thus we require that the stressed ES be equal to 3500. This can be achieved by specifying the argument \texttt{s}, which is the stressed value of ES (rather than \texttt{s\_ratio}, the proportional increase).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{stress.credit \textless{}{-}}\StringTok{ }\KeywordTok{stress}\NormalTok{(}\DataTypeTok{type =} \StringTok{"VaR ES"}\NormalTok{, }\DataTypeTok{x =}\NormalTok{ stress.credit, }\DataTypeTok{k =} \StringTok{"L"}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.9}\NormalTok{, }
+    \DataTypeTok{q\_ratio =} \FloatTok{1.2}\NormalTok{, }\DataTypeTok{s =} \DecValTok{3500}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Stressed VaR specified was 2174.25 , stressed VaR achieved is 2173.75
+\end{verbatim}
+
+When applying the \texttt{stress} function or one of its alternative versions to a \textbf{SWIM} object rather than to a data frame (via \texttt{x\ =\ stress.credit} in the example above), the result will be a new \textbf{SWIM} object with the new stress ``appended'' to existing stresses. This is convenient when large datasets are involved, as the \texttt{stress} function returns an object containing the original simulated data and the scenario weights. Note however, that this only works if the underlying data are exactly the same.
+
+\hypertarget{analysing-stressed-models}{%
+\subsection{Analysing stressed models}\label{analysing-stressed-models}}
+
+The \texttt{summary} function provides a statistical summary of the stressed models. Choosing \texttt{base\ =\ TRUE} compares the stressed models with the the baseline model.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -665,104 +814,133 @@ The \texttt{summary} function provides a statistical summary of the stressed mod
 ## 
 ## $`stress 2`
 ##                   L    L1     L2     L3       H1      H2     H3
-## mean        1224.76 21.13 519.17 684.46 0.000423 0.01102 0.0547
-## sd           707.59 29.61 410.43 390.67 0.000427 0.00851 0.0308
-## skewness       1.48  2.13   1.77   1.28 2.034985 1.76908 1.2802
-## ex kurtosis    2.69  6.49   4.18   2.15 6.009169 4.26790 2.1077
-## 1st Qu.      739.38  0.00 234.38 405.00 0.000121 0.00512 0.0328
-## Median      1065.62 20.00 412.50 605.00 0.000293 0.00878 0.0484
-## 3rd Qu.     1505.62 40.00 675.00 870.00 0.000584 0.01430 0.0692
+## mean        1289.90 21.70 558.27 709.93 0.000437 0.01180 0.0566
+## sd           875.90 30.57 507.78 447.30 0.000448 0.01045 0.0351
+## skewness       1.90  2.17   2.10   1.57 2.090425 2.10128 1.5384
+## ex kurtosis    3.67  6.74   4.79   2.80 6.203429 4.97000 2.6142
+## 1st Qu.      739.38  0.00 234.38 405.00 0.000123 0.00512 0.0328
+## Median      1065.62 20.00 412.50 605.00 0.000297 0.00879 0.0484
+## 3rd Qu.     1505.62 40.00 675.00 875.00 0.000594 0.01439 0.0697
 \end{verbatim}
 
-The information on individual stresses can be recovered through the \texttt{get\_specs} function and the actual scenario weitghts using \texttt{get\_weight}.
+Note that \texttt{stress\ 1} is the \texttt{summary} output corresponding to the \(20\%\) increase in the VaR, while \texttt{stress\ 2} corresponds to the stress in both VaR and ES. The information on individual stresses can be recovered through the \texttt{get\_specs} function, and the actual scenario weights using \texttt{get\_weights}. Since the \textbf{SWIM} object \texttt{stress.credit} contains two stresses, the scenario weights that are returned by \texttt{get\_weights} form a data frame consisting of two columns, corresponding to \texttt{stress\ 1} and to \texttt{stress\ 2}, respectively.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{get_specs}\NormalTok{(stress.credit)}
+\KeywordTok{get\_specs}\NormalTok{(stress.credit)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-##            type k alpha       q            s
-## stress 1    VaR L   0.9 2174.25         <NA>
-## stress 2 VaR ES L   0.9 2174.25 2848.5562625
+##            type k alpha       q    s
+## stress 1    VaR L   0.9 2173.75 <NA>
+## stress 2 VaR ES L   0.9 2173.75 3500
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{w <-}\StringTok{ }\KeywordTok{get_weights}\NormalTok{(stress.credit)}
-\KeywordTok{colMeans}\NormalTok{(w)}
+\CommentTok{\# extract weights from SWIM object}
+\NormalTok{w.credit \textless{}{-}}\StringTok{ }\KeywordTok{get\_weights}\NormalTok{(stress.credit)}
+\CommentTok{\# only plot a subset of the sceranio weights }
+\NormalTok{grid \textless{}{-}}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{100000}\NormalTok{, }\DataTypeTok{by =} \DecValTok{50}\NormalTok{)}
+\KeywordTok{plot}\NormalTok{(credit\_data[grid, }\DecValTok{1}\NormalTok{], w.credit[grid, }\DecValTok{1}\NormalTok{], }\DataTypeTok{pch =} \DecValTok{20}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{"L"}\NormalTok{, }
+     \DataTypeTok{ylab =} \StringTok{"scenario weights"}\NormalTok{)}
+\KeywordTok{plot}\NormalTok{(credit\_data[grid, }\DecValTok{1}\NormalTok{], w.credit[grid, }\DecValTok{2}\NormalTok{], }\DataTypeTok{pch =} \DecValTok{20}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{"L"}\NormalTok{, }
+     \DataTypeTok{ylab =} \StringTok{"scenario weights"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\includegraphics[width=0.5\linewidth]{bookdown-SWIM_files/figure-latex/credit-weights-1} \includegraphics[width=0.5\linewidth]{bookdown-SWIM_files/figure-latex/credit-weights-2} \caption{Scenario weights against the portfolio loss $L$ for stressing VaR (left) and stressing both VaR and ES (right).}\label{fig:credit-weights}
+\end{figure}
+
+It is seen in Figure \ref{fig:credit-weights} that the weights generated to stress VaR, and VaR and ES together, follow different patterns to the weights used to stress means and standard deviations, as shown in Section \ref{Sec:Intro}. Recall that \textbf{SWIM} calculates the scenario weights such that under the stressed model the given constraints are fulfilled. Thus, an increase in the VaR and/or ES of the portfolio loss \(L\) results in large positive realisations of \(L\) being assigned higher weight. On the other hand, when the standard deviation is stressed, scenario weights are calculated that inflate the probabilities of both large positive and negative values.
+
+\hypertarget{visualising-stressed-distributions}{%
+\subsection{Visualising stressed distributions}\label{visualising-stressed-distributions}}
+
+The change in the distributions of the portfolio and subportfolio losses, when moving from the baseline to the stressed models, can be visualised through the functions \texttt{plot\_hist} and \texttt{plot\_cdf}. The following figure displays the histogram of the aggregate portfolio loss under the baseline and the two stressed models. It is seen how stressing VaR and ES has a higher impact on the right tail of \(L\), compared to stressing VaR only. This is consistent with the tail-sensitive nature of the Expected Shortfall risk measure \citep{Mcneil2015B}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot\_hist}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{xCol =} \StringTok{"L"}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{bookdown-SWIM_files/figure-latex/CM-histL-1} 
+
+}
+
+\caption{Histogram of the portfolio loss $L$ under the baseline and the two stressed models.}\label{fig:CM-histL}
+\end{figure}
+
+The arguments \texttt{xCol} and \texttt{wCol} (with default to plot all stresses) define the columns of the data and the columns of the scenario weights, respectively, that are used for plotting. Next, we analyse the impact that stressing the aggregate loss \(L\) has on the subportfolios \(L_1,~ L_2~L_3\). Again, we use the function \texttt{plot\_hist} and \texttt{plot\_cdf} for visual comparison, but this time placing the distribution plots and histograms of subportfolio losses along each other via the function \texttt{ggarrange} (from the package \textbf{ggpubr}). The plots obtained from \texttt{plot\_hist} and \texttt{plot\_cdf} can be further personalised when specifying the argument \texttt{displ\ =\ FALSE}, as then the graphical functions \texttt{plot\_hist} and \texttt{plot\_cdf} return data frames compatible with the package \textbf{ggplot2}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pL1.cdf \textless{}{-}}\StringTok{ }\KeywordTok{plot\_cdf}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{xCol =} \DecValTok{2}\NormalTok{, }\DataTypeTok{wCol =} \StringTok{"all"}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{pL2.cdf \textless{}{-}}\StringTok{ }\KeywordTok{plot\_cdf}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{xCol =} \DecValTok{3}\NormalTok{, }\DataTypeTok{wCol =} \StringTok{"all"}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{pL3.cdf \textless{}{-}}\StringTok{ }\KeywordTok{plot\_cdf}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{xCol =} \DecValTok{4}\NormalTok{, }\DataTypeTok{wCol =} \StringTok{"all"}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
+
+\NormalTok{pL1.hist \textless{}{-}}\StringTok{ }\KeywordTok{plot\_hist}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{xCol =} \DecValTok{2}\NormalTok{, }\DataTypeTok{wCol =} \StringTok{"all"}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{pL2.hist \textless{}{-}}\StringTok{ }\KeywordTok{plot\_hist}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{xCol =} \DecValTok{3}\NormalTok{, }\DataTypeTok{wCol =} \StringTok{"all"}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{pL3.hist \textless{}{-}}\StringTok{ }\KeywordTok{plot\_hist}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{xCol =} \DecValTok{4}\NormalTok{, }\DataTypeTok{wCol =} \StringTok{"all"}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
+
+\KeywordTok{ggarrange}\NormalTok{(pL1.cdf, pL1.hist, pL2.cdf, pL2.hist, pL3.cdf, pL3.hist, }\DataTypeTok{ncol =} \DecValTok{2}\NormalTok{, }
+    \DataTypeTok{nrow =} \DecValTok{3}\NormalTok{, }\DataTypeTok{common.legend =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{bookdown-SWIM_files/figure-latex/CM-plot1-1} 
+
+}
+
+\caption{Distribution functions and histograms of the subportfolios $L_1, L_2, L_3$ for the stresses on the VaR (stress 1) and on both the VaR and ES (stress 2) of the portfolio loss $L$.}\label{fig:CM-plot1}
+\end{figure}
+
+It is seen from both the distribution plots and the histograms in Figures \ref{fig:CM-histL} and \ref{fig:CM-plot1} that the stresses have no substantial impact on \(L_1\), while \(L_2\) and \(L_3\) are more affected, indicating a higher sensitivity. The higher impact on the tails of stress 2 (on both VaR and ES) is also visible. Sensitivity measures quantifying these effects are introduced in the following subsection.
+
+\hypertarget{sensitivity-measures-1}{%
+\subsection{Sensitivity measures}\label{sensitivity-measures-1}}
+
+The impact of the stressed models on the model components can be quantified through sensitivity measures. The function \texttt{sensitivity} includes the \emph{Kolmogorov} distance, the \emph{Wasserstein} distance, and the sensitivity measure \emph{Gamma}; the choice of measure is by the argument \texttt{type}. We refer to Section \ref{Sec:analysis} for the definitions of those sensitivity measures. The Kolmogorov distance is useful for comparing different stressed models. It is seen that \texttt{stress\ 2} produces a more substantial distortion to the baseline distribution of \(L\) compared to \texttt{stress\ 1}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{sensitivity}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{xCol =} \DecValTok{1}\NormalTok{, }\DataTypeTok{wCol =} \StringTok{"all"}\NormalTok{, }\DataTypeTok{type =} \StringTok{"Kolmogorov"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## stress 1 stress 2 
-##        1        1
+##     stress       type      L
+## 1 stress 1 Kolmogorov 0.0607
+## 2 stress 2 Kolmogorov 0.0748
 \end{verbatim}
 
-+++HERE WE COULD USE THE ``expected shortfall'' FUNCTION (NOT AVAILABLE YET) TO CALCULATE THE EXPECTED SHORTFALL OF ``stress.credit\$stress1''
-
-\hypertarget{visual-comparison}{%
-\subsection{Visual comparison}\label{visual-comparison}}
-
-The change of the distributions of the portfolio and subportfolios from the baseline to the stressed models can be visualised through \texttt{plot\_hist} and \texttt{plot\_cdf}. The following plot displays the empirical histogramm of the aggregate portfolio loss under the baseline and the two stressed models.
+We now rank the sensitivities of model components by the measure Gamma, for each stressed model. Consistently with what the distribution plots showed, \(L_2\) is the most sensitive subportfolio, followed by \(L_3\) and \(L_1\). The respective default probabilities \(H_1,H_2,H_3\) are similarly ranked.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{plot_hist}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{xCol =} \StringTok{"L"}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{04-Credit-Model_files/figure-latex/CM-histL-1.pdf}
-
-Both functions,\texttt{plot\_hist} and \texttt{plot\_cdf}, include the parameters \texttt{xCol} specifying the columns of the data and \texttt{wCol} determining the columns of the scenario weights. Thus, allowing to plot the impact of the stressed models on the subportfoios. The graphical functions \texttt{plot\_hist} and \texttt{plot\_cdf} functions return objects compatible with the package \textbf{ggplot2}. Thus, we can compare the histograms of the portfolio losses via the function \texttt{grid.arrange} (of the package \textbf{gridExtra}).
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(gridExtra)}
-\NormalTok{pL1 <-}\StringTok{ }\KeywordTok{plot_hist}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{xCol =} \DecValTok{2}\NormalTok{, }\DataTypeTok{wCol =} \DecValTok{1}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
-\NormalTok{pL2 <-}\StringTok{ }\KeywordTok{plot_hist}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{xCol =} \DecValTok{3}\NormalTok{, }\DataTypeTok{wCol =} \DecValTok{1}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
-\NormalTok{pL3 <-}\StringTok{ }\KeywordTok{plot_hist}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{xCol =} \DecValTok{4}\NormalTok{, }\DataTypeTok{wCol =} \DecValTok{1}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
-\KeywordTok{class}\NormalTok{(pL1)}
+\KeywordTok{sensitivity}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{xCol =} \KeywordTok{c}\NormalTok{(}\DecValTok{2}\OperatorTok{:}\DecValTok{7}\NormalTok{), }\DataTypeTok{wCol =} \StringTok{"all"}\NormalTok{, }\DataTypeTok{type =} \StringTok{"Gamma"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "gg"     "ggplot"
+##     stress  type    L1    L2    L3    H1    H2    H3
+## 1 stress 1 Gamma 0.150 0.819 0.772 0.196 0.811 0.767
+## 2 stress 2 Gamma 0.113 0.734 0.639 0.171 0.708 0.636
 \end{verbatim}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{grid.arrange}\NormalTok{(pL1, pL2, pL3, }\DataTypeTok{ncol =} \DecValTok{1}\NormalTok{, }\DataTypeTok{nrow =} \DecValTok{3}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{04-Credit-Model_files/figure-latex/CM-plot1-1.pdf}
-
-From the plots we observe, that the subportfolios \(L_2\) and \(L_3\) are significanlty affected by the stress, while the distribution of \(L_1\) is almost unchanged.
-
-\hypertarget{sensitivity-measures}{%
-\subsection{Sensitivity measures}\label{sensitivity-measures}}
-
-The impact of the stressed models on the model components can be quantified through sensitivity measures. The function \texttt{sensitivity} includes the \emph{Kolmogorov}, the \emph{Wasserstein} distance and the sensitivity measure \emph{Gamma}, which can be specified through the optional parameter \texttt{type}. We refer to Section \ref{Sec:analysis} for the definition. The Kolmogorov and the Wasserstein distance are useful to compare different stressed models, whereas the sensitivity measure Gamma ranks model components for one stressed model.
+Using the \texttt{sensitivity} function we can analyse whether the sensitivity of the joint subportfolio \(L_1 + L_3\) exceeds the sensitivity of the (most sensitive) subportfolio \(L_2\). This can be accomplished by specifying, through the argument \texttt{f}, a list of functions applicable to the columns \texttt{k} of the dataset. By setting \texttt{xCol\ =\ NULL} only the transformed data is considered. The sensitivity measure of functions of columns of the data is particularly useful when high dimensional models are considered, providing a way to compare the sensitivity of blocks of model components.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{sensitivity}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{xCol =} \KeywordTok{c}\NormalTok{(}\DecValTok{2} \OperatorTok{:}\StringTok{ }\DecValTok{7}\NormalTok{), }\DataTypeTok{wCol =} \DecValTok{1}\NormalTok{, }\DataTypeTok{type =} \StringTok{"Gamma"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-##     stress  type   L1    L2    L3    H1    H2    H3
-## 1 stress 1 Gamma 0.15 0.819 0.772 0.196 0.811 0.767
-\end{verbatim}
-
-Using the \texttt{sensitivity} function we can analyse whether the first and third tranches are able to exceed the riskiness of the second. This can be accomplished specifying, through the option \texttt{f}, a list of functions applicable to the columns \texttt{k} of the dataset. Finally, setting \texttt{xCol\ =\ NULL} allows to consider only the transformed data:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{sensitivity}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit,}\DataTypeTok{type =} \StringTok{"Gamma"}\NormalTok{, }\DataTypeTok{f =} \KeywordTok{list}\NormalTok{(}\ControlFlowTok{function}\NormalTok{(x)x[}\DecValTok{1}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{x[}\DecValTok{2}\NormalTok{]), }
-            \DataTypeTok{k =} \KeywordTok{list}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{)), }\DataTypeTok{xCol =} \OtherTok{NULL}\NormalTok{, }\DataTypeTok{wCol =} \DecValTok{1}\NormalTok{)}
+\KeywordTok{sensitivity}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{type =} \StringTok{"Gamma"}\NormalTok{, }\DataTypeTok{f =}\NormalTok{ sum, }\DataTypeTok{k =} \KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{), }
+    \DataTypeTok{wCol =} \DecValTok{1}\NormalTok{, }\DataTypeTok{xCol =} \OtherTok{NULL}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -771,11 +949,13 @@ Using the \texttt{sensitivity} function we can analyse whether the first and thi
 ## 1 stress 1 Gamma 0.783
 \end{verbatim}
 
-The \texttt{importance\_rank} function, having the same structure as the \texttt{sensitivity} function, return the ranks of the sensitivity measures. This function is particularly useful when there are several risk factors involved.
+We observe that the sensitivity of \(L_1 + L_3\) is larger than the sensitivity to either \(L_1\) and \(L_3\), reflecting the positive dependence structure of the credit risk portfolio. Nonetheless, subportfolio \(L_2\) has not only the largest sensitivity compared to \(L_1\) and \(L_3\) but also a higher sensitivity than the combined subportfolios \(L_1 + L_3\).
+
+The \texttt{importance\_rank} function, having the same structure as the \texttt{sensitivity} function, returns the ranks of the sensitivity measures. This function is particularly useful when several risk factors are involved.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{importance_rank}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{xCol =} \KeywordTok{c}\NormalTok{(}\DecValTok{2} \OperatorTok{:}\StringTok{ }\DecValTok{7}\NormalTok{), }\DataTypeTok{wCol =} \DecValTok{1}\NormalTok{, }\DataTypeTok{type =} \StringTok{"Gamma"}\NormalTok{)  }
+\KeywordTok{importance\_rank}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{xCol =} \KeywordTok{c}\NormalTok{(}\DecValTok{2}\OperatorTok{:}\DecValTok{7}\NormalTok{), }\DataTypeTok{wCol =} \DecValTok{1}\NormalTok{, }\DataTypeTok{type =} \StringTok{"Gamma"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -784,83 +964,188 @@ The \texttt{importance\_rank} function, having the same structure as the \texttt
 ## 1 stress 1 Gamma  6  1  3  5  2  4
 \end{verbatim}
 
-It transpires that subportfolios \(2\) and \(3\) are, in this order, most responsible for the stress in the global loss. Also, most of the sensitivity seems to be due to the systematic risk components \(H_2\) and \(H_3\). To confirm this, another stress resulting in the same \(\text{VaR}_{90\%}(L)\), but controlling the distribution of \(H_2\), can be imposed using the function \texttt{stress\_moment}. More precisely, we impose that \(E[H_2]\) and the \(75\%\) quantile of \(H_2\) are fixed as in the base model.
+\hypertarget{constructing-more-advanced-stresses}{%
+\subsection{Constructing more advanced stresses}\label{constructing-more-advanced-stresses}}
+
+\hypertarget{sensitivity-of-default-probabilities}{%
+\subsubsection{Sensitivity of default probabilities}\label{sensitivity-of-default-probabilities}}
+
+From the preceding analysis, it transpires that the subportfolios \(L_2\) and \(L_3\) are, in that order, most responsible for the stress in the portfolio loss, under both stresses considered. Furthermore, most of the sensitivity seems to be attributable to the systematic risk components \(H_2\) and \(H_3\), reflected by their high values of the Gamma measure. To investigate this, we perform another stress, resulting once again in a \(20\%\) increase in \(\text{VaR}(L)\), but this time fixing some elements of the distribution of \(H_2\). Specifically, in addition to the \(20\%\) increase in \(\text{VaR}(L)\), we fix the mean and the \(75\%\) quantile of \(H_2\) to the same values as in the baseline model. This set of constraints is implemented via the function \texttt{stress\_moment}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{VaR.L <-}\StringTok{ }\KeywordTok{quantile}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ credit_data[, }\StringTok{"L"}\NormalTok{], }\DataTypeTok{prob =} \FloatTok{0.9}\NormalTok{, }\DataTypeTok{type =} \DecValTok{1}\NormalTok{)}
-\NormalTok{q.H2 <-}\StringTok{ }\KeywordTok{quantile}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ credit_data[, }\StringTok{"H2"}\NormalTok{], }\DataTypeTok{prob =} \FloatTok{0.75}\NormalTok{, }\DataTypeTok{type =} \DecValTok{1}\NormalTok{)}
-\NormalTok{str.var.credit2 <-}\StringTok{ }\KeywordTok{stress_moment}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ credit_data,}
-                                \DataTypeTok{f =} \KeywordTok{list}\NormalTok{(}\ControlFlowTok{function}\NormalTok{(x)}\DecValTok{1} \OperatorTok{*}\StringTok{ }\NormalTok{(x }\OperatorTok{<=}\StringTok{ }\NormalTok{VaR.L }\OperatorTok{*}\StringTok{ }\FloatTok{1.2}\NormalTok{),}
-                                         \ControlFlowTok{function}\NormalTok{(x)x,}
-                                         \ControlFlowTok{function}\NormalTok{(x)}\DecValTok{1} \OperatorTok{*}\StringTok{ }\NormalTok{(x }\OperatorTok{<=}\StringTok{ }\NormalTok{q.H2)),}
-                                \DataTypeTok{m =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.9}\NormalTok{, }\KeywordTok{mean}\NormalTok{(credit_data[, }\StringTok{"H2"}\NormalTok{]), }\FloatTok{0.75}\NormalTok{),}
-                                \DataTypeTok{k =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{6}\NormalTok{))}
-\CommentTok{# stress.credit <- stress_moment(x = stress.credit,}
-\CommentTok{#                                f = list(function(x)1 * (x <= VaR.L * 1.2),}
-\CommentTok{#                                         function(x)x,}
-\CommentTok{#                                         function(x)1 * (x <= q.H2)),}
-\CommentTok{#                                m = c(0.9, mean(credit_data[, "H2"]), 0.75), k = c(1, 6, 6))}
-\KeywordTok{summary}\NormalTok{(str.var.credit2)}
+\CommentTok{\# 90\% VaR of L under the baseline model}
+\NormalTok{VaR.L \textless{}{-}}\StringTok{ }\KeywordTok{quantile}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ credit\_data[, }\StringTok{"L"}\NormalTok{], }\DataTypeTok{prob =} \FloatTok{0.9}\NormalTok{, }\DataTypeTok{type =} \DecValTok{1}\NormalTok{) }
+\CommentTok{\# 75th quantile of H2 under the baseline model}
+\NormalTok{q.H2 \textless{}{-}}\StringTok{ }\KeywordTok{quantile}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ credit\_data[, }\StringTok{"H2"}\NormalTok{], }\DataTypeTok{prob =} \FloatTok{0.75}\NormalTok{, }\DataTypeTok{type =} \DecValTok{1}\NormalTok{) }
+\CommentTok{\# columns to be stressed (L, H2, H2)}
+\NormalTok{k.stressH2 =}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{6}\NormalTok{) }
+\CommentTok{\# functions to be applied to columns}
+\NormalTok{f.stressH2 \textless{}{-}}\StringTok{ }\KeywordTok{list}\NormalTok{(}
+                 \CommentTok{\# indicator function for L, for stress on VaR}
+                 \ControlFlowTok{function}\NormalTok{(x)}\DecValTok{1} \OperatorTok{*}\StringTok{ }\NormalTok{(x }\OperatorTok{\textless{}=}\StringTok{ }\NormalTok{VaR.L }\OperatorTok{*}\StringTok{ }\FloatTok{1.2}\NormalTok{), }
+                 \CommentTok{\# mean of H2}
+                 \ControlFlowTok{function}\NormalTok{(x)x, }
+                 \CommentTok{\# indicator function for 75th quaantile of H2}
+                 \ControlFlowTok{function}\NormalTok{(x)}\DecValTok{1} \OperatorTok{*}\StringTok{ }\NormalTok{(x }\OperatorTok{\textless{}=}\StringTok{ }\NormalTok{q.H2)) }
+\CommentTok{\# new values for the 90\% VaR of L, mean of H2, 75th quantile of H2}
+\NormalTok{m.stressH2 =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\FloatTok{0.9}\NormalTok{, }\KeywordTok{mean}\NormalTok{(credit\_data[, }\StringTok{"H2"}\NormalTok{]), }\FloatTok{0.75}\NormalTok{) }
+\NormalTok{stress.credit \textless{}{-}}\StringTok{ }\KeywordTok{stress\_moment}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ stress.credit, }\DataTypeTok{f =}\NormalTok{ f.stressH2, }\DataTypeTok{k =}\NormalTok{ k.stressH2, }
+                               \DataTypeTok{m =}\NormalTok{ m.stressH2)}
+\end{Highlighting}
+\end{Shaded}
+
+Using the \texttt{summary} function, we verify that the distribution of \(H_2\) under the new stress has unchanged mean and 75\textsuperscript{th} quantile. Then we compare the sensitivities of the subportfolio losses under all three stresses applied.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(stress.credit, }\DataTypeTok{wCol =} \DecValTok{3}\NormalTok{, }\DataTypeTok{xCol =} \DecValTok{6}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## $`stress 1`
-##                    L    L1    L2     L3       H1      H2     H3
-## mean        1140.535 20.06 456.0 664.47 0.000400 0.00968 0.0530
-## sd           616.930 28.48 340.9 371.14 0.000405 0.00706 0.0292
-## skewness       1.059  2.13   1.4   1.09 2.013196 1.39135 1.0949
-## ex kurtosis    0.895  6.40   2.3   1.31 5.899634 2.26506 1.3371
-## 1st Qu.      695.000  0.00 206.2 395.00 0.000113 0.00453 0.0318
-## Median      1001.875  0.00 365.6 590.00 0.000276 0.00786 0.0472
-## 3rd Qu.     1430.625 20.00 609.4 855.00 0.000554 0.01296 0.0679
+## $base
+##                  H2
+## mean        0.00968
+## sd          0.00649
+## skewness    1.30834
+## ex kurtosis 2.49792
+## 1st Qu.     0.00490
+## Median      0.00829
+## 3rd Qu.     0.01296
+## 
+## $`stress 3`
+##                  H2
+## mean        0.00968
+## sd          0.00706
+## skewness    1.39135
+## ex kurtosis 2.26506
+## 1st Qu.     0.00453
+## Median      0.00786
+## 3rd Qu.     0.01296
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# summary(stress.credit)}
-\KeywordTok{sensitivity}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ str.var.credit2, }\DataTypeTok{xCol =} \KeywordTok{c}\NormalTok{(}\DecValTok{2} \OperatorTok{:}\StringTok{ }\DecValTok{7}\NormalTok{), }\DataTypeTok{type =} \StringTok{"Gamma"}\NormalTok{)}
+\KeywordTok{sensitivity}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ stress.credit, }\DataTypeTok{xCol =} \KeywordTok{c}\NormalTok{(}\DecValTok{2}\OperatorTok{:}\DecValTok{4}\NormalTok{), }\DataTypeTok{type =} \StringTok{"Gamma"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-##     stress  type     L1     L2    L3        H1       H2    H3
-## 1 stress 1 Gamma 0.0102 0.0203 0.366 -0.000521 1.17e-08 0.359
+##     stress  type     L1     L2    L3
+## 1 stress 1 Gamma 0.1501 0.8195 0.772
+## 2 stress 2 Gamma 0.1131 0.7336 0.639
+## 3 stress 3 Gamma 0.0102 0.0203 0.366
+\end{verbatim}
+
+It is seen that, by fixing part of the distribution of \(H_2\), the importance ranking of the subportfolios changes, with \(L_2\) now being significantly less sensitive than \(L_3\). This confirms, in the credit risk model, the dominance of the systematic risk reflected in the randomness of default probabilities.
+
+\hypertarget{stressing-tails-of-subportfolios}{%
+\subsubsection{Stressing tails of subportfolios}\label{stressing-tails-of-subportfolios}}
+
+Up to now, we have considered the impact of stressing the aggregate portfolio loss on subportfolios. Now, following a forward sensitivity approach, we consider the opposite situation: stressing the subportfolio losses and monitoring the impact on the aggregate portfolio loss \(L\). First, we impose a stress requiring a simultaneous \(20\%\) increase in the 90\textsuperscript{th} quantile of the losses in subportfolios \(L_2\) and \(L_3\). Note that the function \texttt{stress\_VaR} (and \texttt{stress\_VaR\_ES}) allow to stress the VaR and/or the ES of only one model component. Thus, to induce a stress on the 90\textsuperscript{th} quantiles of \(L_2\) and \(L_3\), we use the function \texttt{stress\_moments} and interpret the quantile constraints as moment constraints, via \(E(1_{L_2 \leq \text{VaR}^W(L_2)})\) and \(E(1_{L_3 \leq \text{VaR}^W(L_3)})\), respectively, where \(\text{VaR}^W = \text{VaR} \cdot 1.2\) denotes the VaRs in the stressed model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# VaR of L2 and L3, respectively}
+\NormalTok{VaR.L2 \textless{}{-}}\StringTok{ }\KeywordTok{quantile}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ credit\_data[, }\StringTok{"L2"}\NormalTok{], }\DataTypeTok{prob =} \FloatTok{0.9}\NormalTok{, }\DataTypeTok{type =} \DecValTok{1}\NormalTok{) }
+\NormalTok{VaR.L3 \textless{}{-}}\StringTok{ }\KeywordTok{quantile}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ credit\_data[, }\StringTok{"L3"}\NormalTok{], }\DataTypeTok{prob =} \FloatTok{0.9}\NormalTok{, }\DataTypeTok{type =} \DecValTok{1}\NormalTok{) }
+\CommentTok{\#stressing VaR of L2 and L3}
+\NormalTok{f.stress \textless{}{-}}\StringTok{ }\KeywordTok{list}\NormalTok{(}\ControlFlowTok{function}\NormalTok{(x)}\DecValTok{1} \OperatorTok{*}\StringTok{ }\NormalTok{(x }\OperatorTok{\textless{}=}\StringTok{ }\NormalTok{VaR.L2 }\OperatorTok{*}\StringTok{ }\FloatTok{1.2}\NormalTok{), }
+                 \ControlFlowTok{function}\NormalTok{(x)}\DecValTok{1} \OperatorTok{*}\StringTok{ }\NormalTok{(x }\OperatorTok{\textless{}=}\StringTok{ }\NormalTok{VaR.L3 }\OperatorTok{*}\StringTok{ }\FloatTok{1.2}\NormalTok{)) }
+\NormalTok{stress.credit.L2L3 \textless{}{-}}\StringTok{ }\KeywordTok{stress\_moment}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ credit\_data, }\DataTypeTok{f =}\NormalTok{ f.stress, }\DataTypeTok{k =} \KeywordTok{list}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{), }
+                                    \DataTypeTok{m =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.9}\NormalTok{, }\FloatTok{0.9}\NormalTok{))}
+\CommentTok{\#impact on portfolio tail}
+\KeywordTok{VaR\_stressed}\NormalTok{(stress.credit.L2L3, }\DataTypeTok{alpha =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.75}\NormalTok{, }\FloatTok{0.9}\NormalTok{, }\FloatTok{0.95}\NormalTok{, }\FloatTok{0.99}\NormalTok{), }\DataTypeTok{xCol =} \StringTok{"L"}\NormalTok{, }
+             \DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        L base L
+## 75% 1556   1399
+## 90% 2086   1812
+## 95% 2423   2085
+## 99% 3072   2671
+\end{verbatim}
+
+It is seen how the stressing of subportfolios \(L_2\) and \(L_3\) has a substantial impact on the portfolio loss. Given the importance of dependence for the distribution of the aggregate loss of the portfolio, we strengthen this stress further, by additionally requiring that the frequency of joint high losses from \(L_2\) and \(L_3\) is increased. Specifically, we require the joint exceedance probability to be \(P^W(L_2 > VaR^W(L_2),~ L_3 > VaR^W(L_3)) = 0.06\), which is almost doubling the corresponding probability in the last stressed model, which was equal to 0.0308.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# probability of joint exceendance under the baseline model}
+\KeywordTok{mean}\NormalTok{(}\DecValTok{1} \OperatorTok{*}\StringTok{ }\NormalTok{(credit\_data[, }\StringTok{"L2"}\NormalTok{] }\OperatorTok{\textgreater{}}\StringTok{ }\NormalTok{VaR.L2 }\OperatorTok{*}\StringTok{ }\FloatTok{1.2}\NormalTok{) }\OperatorTok{*}\StringTok{ }\NormalTok{(credit\_data[, }\StringTok{"L3"}\NormalTok{] }\OperatorTok{\textgreater{}}\StringTok{ }
+\StringTok{    }\NormalTok{VaR.L3 }\OperatorTok{*}\StringTok{ }\FloatTok{1.2}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.00865
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# sensitivity(object = stress.credit, xCol = c(2 : 7), type = "Gamma")}
+\CommentTok{\# probability of joint exceendance under the stressed model}
+\KeywordTok{mean}\NormalTok{(}\KeywordTok{get\_weights}\NormalTok{(stress.credit.L2L3) }\OperatorTok{*}\StringTok{ }\NormalTok{(credit\_data[, }\StringTok{"L2"}\NormalTok{] }\OperatorTok{\textgreater{}}\StringTok{ }\NormalTok{VaR.L2 }\OperatorTok{*}\StringTok{ }
+\StringTok{    }\FloatTok{1.2}\NormalTok{) }\OperatorTok{*}\StringTok{ }\NormalTok{(credit\_data[, }\StringTok{"L3"}\NormalTok{] }\OperatorTok{\textgreater{}}\StringTok{ }\NormalTok{VaR.L3 }\OperatorTok{*}\StringTok{ }\FloatTok{1.2}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 
-+++THIS SHOULD BE APPENDED TO ``stress.credit'' WHEN ``stress\_moment'' IS FIXED
-It is then clear that systematic risk prevails on binomial (event) risk.
-
-The \texttt{stress\_moment} function is flexible and allows different type of stresses to be imposed on a model. The following example forces a \(50\%\) increase in correlation between the losses in the second and third portfolios, while keeping the means und standard deviations unchanged.
+\begin{verbatim}
+## [1] 0.0308
+\end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{m.L2 <-}\StringTok{ }\KeywordTok{mean}\NormalTok{(credit_data[, }\StringTok{"L2"}\NormalTok{])}
-\NormalTok{m.L3 <-}\StringTok{ }\KeywordTok{mean}\NormalTok{(credit_data[, }\StringTok{"L3"}\NormalTok{])}
-\NormalTok{m2.L2 <-}\StringTok{ }\KeywordTok{mean}\NormalTok{(credit_data[, }\StringTok{"L2"}\NormalTok{] }\OperatorTok{^}\StringTok{ }\DecValTok{2}\NormalTok{)}
-\NormalTok{m2.L3 <-}\StringTok{ }\KeywordTok{mean}\NormalTok{(credit_data[, }\StringTok{"L3"}\NormalTok{] }\OperatorTok{^}\StringTok{ }\DecValTok{2}\NormalTok{)}
-\NormalTok{cov.L2.L3 <-}\StringTok{ }\KeywordTok{cov}\NormalTok{(credit_data[, }\StringTok{"L2"}\NormalTok{], credit_data[, }\StringTok{"L3"}\NormalTok{])}
-\CommentTok{# str.var.credit2 <- stress_moment(x = credit_data,}
-\CommentTok{#                                 f = list(function(x)x,}
-\CommentTok{#                                          function(x)x,}
-\CommentTok{#                                          function(x)x ^ 2,}
-\CommentTok{#                                          function(x)x ^ 2,}
-\CommentTok{#                                          function(x)x[1] * x[2] - m.L2 * m.L3),}
-\CommentTok{#                                 k = list(3, 4, 3, 4, c(3, 4)),}
-\CommentTok{#                                 m = c(m.L2, m.L3, m2.L2, m2.L3, cov.L2.L3 * 1.5)}
+\CommentTok{\# additionally stress joint exceedance probability of L2 and L3}
+\NormalTok{f.stress.joint \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(f.stress, }\ControlFlowTok{function}\NormalTok{(x) }\DecValTok{1} \OperatorTok{*}\StringTok{ }\NormalTok{(x[}\DecValTok{1}\NormalTok{] }\OperatorTok{\textgreater{}}\StringTok{ }\NormalTok{VaR.L2 }\OperatorTok{*}\StringTok{ }\FloatTok{1.2}\NormalTok{) }\OperatorTok{*}\StringTok{ }\NormalTok{(x[}\DecValTok{2}\NormalTok{] }\OperatorTok{\textgreater{}}\StringTok{ }
+\StringTok{    }\NormalTok{VaR.L3 }\OperatorTok{*}\StringTok{ }\FloatTok{1.2}\NormalTok{))}
+\NormalTok{stress.credit.L2L3 \textless{}{-}}\StringTok{ }\KeywordTok{stress\_moment}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ stress.credit.L2L3, }\DataTypeTok{f =}\NormalTok{ f.stress.joint, }
+    \DataTypeTok{k =} \KeywordTok{list}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{)), }\DataTypeTok{m =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.9}\NormalTok{, }\FloatTok{0.9}\NormalTok{, }\FloatTok{0.06}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 
-+++CURRENTLY DOES NOT RUN - NEEDS TO BE FIXED OR REPLACED
+We analyse the impact the stresses of the tail of the subportfolios \(L_2\) and \(L_3\) have on the aggregate portfolio \(L\). For this, we plot in Figure \ref{fig:CM-joint-stress-VaR-2-effect} the quantile of the aggregate portfolio under the baseline model (blue), under the stress on the tail of \(L_2\) and \(L_3\) (red), and under the additional stress on the joint tail of \(L_2\) and \(L_3\) (green).
 
-+++FINAL COMMENTS?
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# stressed quantiles}
+\NormalTok{VaR.level \textless{}{-}}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\FloatTok{0.75}\NormalTok{, }\FloatTok{0.99}\NormalTok{, }\DataTypeTok{by =} \FloatTok{0.003}\NormalTok{)}
+\NormalTok{VaR.stress1 \textless{}{-}}\StringTok{ }\KeywordTok{VaR\_stressed}\NormalTok{(stress.credit.L2L3, }\DataTypeTok{alpha =}\NormalTok{ VaR.level, }\DataTypeTok{xCol =} \StringTok{"L"}\NormalTok{, }
+    \DataTypeTok{wCol =} \DecValTok{1}\NormalTok{, }\DataTypeTok{base =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{VaR.stress2 \textless{}{-}}\StringTok{ }\KeywordTok{VaR\_stressed}\NormalTok{(stress.credit.L2L3, }\DataTypeTok{alpha =}\NormalTok{ VaR.level, }\DataTypeTok{xCol =} \StringTok{"L"}\NormalTok{, }
+    \DataTypeTok{wCol =} \DecValTok{2}\NormalTok{, }\DataTypeTok{base =} \OtherTok{FALSE}\NormalTok{)}
+
+\KeywordTok{plot}\NormalTok{(VaR.level, VaR.stress1[, }\DecValTok{2}\NormalTok{], }\DataTypeTok{col =} \StringTok{"blue"}\NormalTok{, }\DataTypeTok{type =} \StringTok{"l"}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{"quantile levels"}\NormalTok{, }
+    \DataTypeTok{ylab =} \StringTok{"Quantiles of L under different models"}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(VaR.level, VaR.stress1[, }\DecValTok{1}\NormalTok{], }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(VaR.level, VaR.stress2, }\DataTypeTok{col =} \StringTok{"darkgreen"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{bookdown-SWIM_files/figure-latex/CM-joint-stress-VaR-2-effect-1} 
+
+}
+
+\caption{Quantiles of the aggregate loss $L$ under the baseline (blue), the stress on the tails of $L_2$ and $L_3$ (red), and the additional stress on the joint tail of $L_2$ and $L_3$ (green).}\label{fig:CM-joint-stress-VaR-2-effect}
+\end{figure}
+
+The results and the plots indicate that the additional stress on joint exceedances of subportfolios, increases the tail quantiles of \(L\) even further, demonstrating the importance of (tail-)dependence in portfolio risk management.
+
+\hypertarget{conclusion-and-future-work}{%
+\section{Conclusion and future work}\label{conclusion-and-future-work}}
+
+The \textbf{SWIM} package enables users to perform flexible and efficient sensitivity analyses of simulation models, using the method of stressing model components by re-weighting simulated scenarios. Multiple possibilities were demonstrated, from prioritising risk factors via reverse stress testing, to evaluating the impact on a portfolio distribution of increasing the probability of subportfolios' joint exceedances. The implemented analysis and visualisation tools help users derive insights into their models and perform formal comparisons of the importance of model components. Since \textbf{SWIM} does not require re-simulation from the model, these sensitivity analyses have a low computational cost; moreover, they can be performed on black-box models.
+
+Future work includes enhancing analysis tools, for example by including a \texttt{plot\_weights} function that enables the seamless visualisation and comparison of scenario weights arising from different stresses, as well as functions that will make it easier to extract distributional characteristics of stressed models -- e.g.~a \texttt{stressed\_cor} function that enables the monitoring of correlation changes when models are stressed. Furthermore, we consider including alternative ways of calculating scenario weights, such as minimising the \(\chi^2\) divergence instead of the Kullback-Leiber divergence.
+
+\hypertarget{acknowledgements}{%
+\section*{Acknowledgements}\label{acknowledgements}}
+\addcontentsline{toc}{section}{Acknowledgements}
+
+This vignette was written in \textbf{R} \citep{R-base} using the packages \textbf{SWIM} \citep{PesentiR} and \textbf{bookdown} \citep{R-bookdown}.
 
 \hypertarget{appendix-appendix}{%
 \appendix}
@@ -872,20 +1157,25 @@ The \texttt{stress\_moment} function is flexible and allows different type of st
 \hypertarget{credit-model-assumptions}{%
 \subsection{Credit Model assumptions}\label{credit-model-assumptions}}
 
-The credit model is based on the conditionally binomial credit model described in \citet{Mcneil2015B} which belongs to the family of mixture models. Specifically, we consider a portfolio that consists of three homogeneous sub-portfolios and denote the total aggregate loss of the portfolio by \(L = L_1 + L_2+ L_2\), where \(L_1, L_2, L_3\) are the aggregate losses of each sub-portfolio, given by
+The credit risk portfolio of Section \ref{Sec:CreditModel} is based on the conditionally binomial credit model described in Section 11.2 of \citet{Mcneil2015B} which belongs to the family of mixture models. Specifically, we consider a portfolio that consists of three homogeneous subportfolios and denote the aggregate portfolio loss by \(L = L_1 + L_2+ L_3\), with \(L_1, L_2, L_3\) the losses of each subportfolio, given by
 \begin{equation}
 L_i=e_i\cdot\text{LGD}_i\cdot M_i,\quad i=1,2,3, 
 \end{equation}
-where \(e_i\) and \(M_i\) are the exposure and number of insolvencies of the \(i^{\text{th}}\) sub-portfolio, respectively, and \(\text{LGD}_i\) is the loss given default of sub-portfolio \(i\). The number of insolvencies of the \(i^{\text{th}}\) sub-portfolio \(M_i\) is, conditionally on a \([0,1]\) valued random variable \(H_i\), independent and Binomially distributed with parameters \(m_i\), the sub-portfolio size, and common random probability \(H_i\). \(H_i, ~ i = 1,2,3\) follows a Beta distribution with parameters chosen such as to match the default probability \(p_i\) and the default correlation \(\rho_i\), that is the correlation between two default events within a sub-portfolio, see \citet{Mcneil2015B}. The dependence structure of \((H_1,H_2,H_3)\) is modelled via a Gaussian copula with correlation matrix\\
+where \(e_i\) and \(M_i\) are the exposure and number of defaults of the \(i^{\text{th}}\) subportfolio, respectively, and \(\text{LGD}_i\) is the loss given default of subportfolio \(i\). \(M_i\) is Binomially distributed, conditional on \(H_i\), a random common default probability. Specifically \(M_i|H_i \sim Binomial(m_i,H_i)\), where \(m_i\) is the portfolio size. The \(H_i\)s follow a Beta distributions with parameters chosen so as to match given overall unconditional default probabilities \(p_i\) and default correlations \(\rho_i\), that is, the correlation between (the indicators of) two default events within a subportfolio, see \citet{Mcneil2015B}. The dependence structure of \((H_1,H_2,H_3)\) is modelled via a Gaussian copula with correlation matrix\\
 \begin{equation}\Sigma = \begin{pmatrix}
 1 & 0.3 & 0.1\\
 0.3 & 1 & 0.4\\
 0.1 & 0.4 & 1
 \end{pmatrix}.\end{equation}
 
-The subsequent table summarises the parameter values used in the simulation.
+Table \ref{tab:credit} summarises the parameter values used in the simulation.
 
 \begin{longtable}[]{@{}llllll@{}}
+\caption{\label{tab:credit} Parameter values used in the simulation for the credit risk portfolio in Section \ref{Sec:CreditModel}.}\tabularnewline
+\toprule
+\(i\) & \(m_i\) & \(e_i\) & \(p_i\) & \(\rho_i\) & \(LGD_i\)\tabularnewline
+\midrule
+\endfirsthead
 \toprule
 \(i\) & \(m_i\) & \(e_i\) & \(p_i\) & \(\rho_i\) & \(LGD_i\)\tabularnewline
 \midrule
@@ -901,85 +1191,83 @@ The subsequent table summarises the parameter values used in the simulation.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-  \KeywordTok{library}\NormalTok{(SWIM)}
   \KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
   \KeywordTok{library}\NormalTok{(copula)}
-\NormalTok{  nsim <-}\StringTok{ }\DecValTok{100000}
+\NormalTok{  nsim \textless{}{-}}\StringTok{ }\DecValTok{100000}
   
-\CommentTok{# data}
-\NormalTok{  m1 <-}\StringTok{ }\DecValTok{2500} \CommentTok{# counterparties tranche A}
-\NormalTok{  m2 <-}\StringTok{ }\DecValTok{5000} \CommentTok{# counterparties tranche B}
-\NormalTok{  m3 <-}\StringTok{ }\DecValTok{2500} \CommentTok{# counterparties tranche C}
+\CommentTok{\# counterparties subportfolio 1, 2 and 3}
+\NormalTok{  m1 \textless{}{-}}\StringTok{ }\DecValTok{2500}
+\NormalTok{  m2 \textless{}{-}}\StringTok{ }\DecValTok{5000}
+\NormalTok{  m3 \textless{}{-}}\StringTok{ }\DecValTok{2500}
   
-\NormalTok{  p1 <-}\StringTok{ }\FloatTok{0.0004} \CommentTok{# prob of default }
-\NormalTok{  rho1 <-}\StringTok{ }\FloatTok{0.0004} \CommentTok{# correlation within the tranche}
-
-\NormalTok{  p2 <-}\StringTok{ }\FloatTok{0.0097} 
-\NormalTok{  rho2 <-}\StringTok{ }\FloatTok{0.0044}
+  \CommentTok{\# prob of default for subportfolios 1, 2 and 3}
+\NormalTok{  p1 \textless{}{-}}\StringTok{ }\FloatTok{0.0004} 
+\NormalTok{  p2 \textless{}{-}}\StringTok{ }\FloatTok{0.0097} 
+\NormalTok{  p3 \textless{}{-}}\StringTok{ }\FloatTok{0.0503}  
   
-\NormalTok{  p3 <-}\StringTok{ }\FloatTok{0.0503}  
-\NormalTok{  rho3 <-}\StringTok{ }\FloatTok{0.01328}
+  \CommentTok{\# correlation between default probabilities}
+\NormalTok{  rho1 \textless{}{-}}\StringTok{ }\FloatTok{0.0004}
+\NormalTok{  rho2 \textless{}{-}}\StringTok{ }\FloatTok{0.0044}
+\NormalTok{  rho3 \textless{}{-}}\StringTok{ }\FloatTok{0.01328}
   
-\CommentTok{# exposures}
-\NormalTok{  e1 <-}\StringTok{ }\DecValTok{80}
-\NormalTok{  e2 <-}\StringTok{ }\DecValTok{25} 
-\NormalTok{  e3 <-}\StringTok{ }\DecValTok{10} 
+\CommentTok{\# exposures}
+\NormalTok{  e1 \textless{}{-}}\StringTok{ }\DecValTok{80}
+\NormalTok{  e2 \textless{}{-}}\StringTok{ }\DecValTok{25} 
+\NormalTok{  e3 \textless{}{-}}\StringTok{ }\DecValTok{10} 
   
-\CommentTok{# loss given default}
-\NormalTok{  LGD1 <-}\StringTok{ }\FloatTok{0.25}
-\NormalTok{  LGD2 <-}\StringTok{ }\FloatTok{0.375}
-\NormalTok{  LGD3 <-}\StringTok{ }\FloatTok{0.5}
+\CommentTok{\# loss given default}
+\NormalTok{  LGD1 \textless{}{-}}\StringTok{ }\FloatTok{0.25}
+\NormalTok{  LGD2 \textless{}{-}}\StringTok{ }\FloatTok{0.375}
+\NormalTok{  LGD3 \textless{}{-}}\StringTok{ }\FloatTok{0.5}
   
-\CommentTok{# beta-binomial model with copula }
+\CommentTok{\# beta parameters: matching subportfolios default probabilities and correlation}
+\NormalTok{  alpha1 \textless{}{-}}\StringTok{ }\NormalTok{p1 }\OperatorTok{*}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{/}\StringTok{ }\NormalTok{rho1 }\OperatorTok{{-}}\StringTok{ }\DecValTok{1}\NormalTok{)}
+\NormalTok{  beta1 \textless{}{-}}\StringTok{ }\NormalTok{alpha1 }\OperatorTok{*}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{/}\StringTok{ }\NormalTok{p1 }\OperatorTok{{-}}\StringTok{ }\DecValTok{1}\NormalTok{)}
   
-\CommentTok{# beta parameters: matching tranches default probabilities and correlation}
-\NormalTok{  alpha1 <-}\StringTok{ }\NormalTok{p1 }\OperatorTok{*}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{/}\StringTok{ }\NormalTok{rho1 }\OperatorTok{-}\StringTok{ }\DecValTok{1}\NormalTok{)}
-\NormalTok{  beta1 <-}\StringTok{ }\NormalTok{alpha1 }\OperatorTok{*}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{/}\StringTok{ }\NormalTok{p1 }\OperatorTok{-}\StringTok{ }\DecValTok{1}\NormalTok{)}
+\NormalTok{  alpha2 \textless{}{-}}\StringTok{ }\NormalTok{p2 }\OperatorTok{*}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{/}\StringTok{ }\NormalTok{rho2 }\OperatorTok{{-}}\StringTok{ }\DecValTok{1}\NormalTok{)}
+\NormalTok{  beta2 \textless{}{-}}\StringTok{ }\NormalTok{alpha2 }\OperatorTok{*}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{/}\StringTok{ }\NormalTok{p2 }\OperatorTok{{-}}\StringTok{ }\DecValTok{1}\NormalTok{)}
   
-\NormalTok{  alpha2 <-}\StringTok{ }\NormalTok{p2 }\OperatorTok{*}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{/}\StringTok{ }\NormalTok{rho2 }\OperatorTok{-}\StringTok{ }\DecValTok{1}\NormalTok{)}
-\NormalTok{  beta2 <-}\StringTok{ }\NormalTok{alpha2 }\OperatorTok{*}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{/}\StringTok{ }\NormalTok{p2 }\OperatorTok{-}\StringTok{ }\DecValTok{1}\NormalTok{)}
+\NormalTok{  alpha3 \textless{}{-}}\StringTok{ }\NormalTok{p3 }\OperatorTok{*}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{/}\StringTok{ }\NormalTok{rho3 }\OperatorTok{{-}}\StringTok{ }\DecValTok{1}\NormalTok{)}
+\NormalTok{  beta3 \textless{}{-}}\StringTok{ }\NormalTok{alpha3 }\OperatorTok{*}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{/}\StringTok{ }\NormalTok{p3 }\OperatorTok{{-}}\StringTok{ }\DecValTok{1}\NormalTok{)}
   
-\NormalTok{  alpha3 <-}\StringTok{ }\NormalTok{p3 }\OperatorTok{*}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{/}\StringTok{ }\NormalTok{rho3 }\OperatorTok{-}\StringTok{ }\DecValTok{1}\NormalTok{)}
-\NormalTok{  beta3 <-}\StringTok{ }\NormalTok{alpha3 }\OperatorTok{*}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{/}\StringTok{ }\NormalTok{p3 }\OperatorTok{-}\StringTok{ }\DecValTok{1}\NormalTok{)}
+\CommentTok{\# correlations between subportfolios}
+\NormalTok{  cor12 \textless{}{-}}\StringTok{ }\FloatTok{0.3}
+\NormalTok{  cor13 \textless{}{-}}\StringTok{ }\FloatTok{0.1}
+\NormalTok{  cor23 \textless{}{-}}\StringTok{ }\FloatTok{0.4}
   
-\CommentTok{# correlations between sub-portfolios}
-\NormalTok{  cor12 <-}\StringTok{ }\FloatTok{0.3}
-\NormalTok{  cor13 <-}\StringTok{ }\FloatTok{0.1}
-\NormalTok{  cor23 <-}\StringTok{ }\FloatTok{0.4}
+\CommentTok{\# Gaussian copula structure}
+\NormalTok{  myCop \textless{}{-}}\StringTok{ }\KeywordTok{normalCopula}\NormalTok{(}\DataTypeTok{param =} \KeywordTok{c}\NormalTok{(cor12, cor13, cor23), }\DataTypeTok{dim =} \DecValTok{3}\NormalTok{, }\DataTypeTok{dispstr =} \StringTok{"un"}\NormalTok{)}
   
-\CommentTok{# Gaussian copula structure}
-\NormalTok{  myCop <-}\StringTok{ }\KeywordTok{normalCopula}\NormalTok{(}\DataTypeTok{param =} \KeywordTok{c}\NormalTok{(cor12, cor13, cor23), }\DataTypeTok{dim =} \DecValTok{3}\NormalTok{, }\DataTypeTok{dispstr =} \StringTok{"un"}\NormalTok{)}
-  
-\CommentTok{# define multivariate beta with given copula}
-\NormalTok{  myMvd <-}\StringTok{ }\KeywordTok{mvdc}\NormalTok{(}\DataTypeTok{copula =}\NormalTok{ myCop,}
+\CommentTok{\# multivariate beta with given copula}
+\NormalTok{  myMvd \textless{}{-}}\StringTok{ }\KeywordTok{mvdc}\NormalTok{(}\DataTypeTok{copula =}\NormalTok{ myCop,}
                 \DataTypeTok{margins =} \KeywordTok{c}\NormalTok{(}\StringTok{"beta"}\NormalTok{, }\StringTok{"beta"}\NormalTok{, }\StringTok{"beta"}\NormalTok{),}
                 \DataTypeTok{paramMargins =} \KeywordTok{list}\NormalTok{(}\KeywordTok{list}\NormalTok{(alpha1, beta1),}
                                     \KeywordTok{list}\NormalTok{(alpha2, beta2),}
                                     \KeywordTok{list}\NormalTok{(alpha3, beta3)))}
 
-\CommentTok{# simulation from the chosen copula}
-\NormalTok{  H <-}\StringTok{ }\KeywordTok{rMvdc}\NormalTok{(nsim, myMvd)}
+\CommentTok{\# simulation from the chosen copula}
+\NormalTok{  H \textless{}{-}}\StringTok{ }\KeywordTok{rMvdc}\NormalTok{(nsim, myMvd)}
   
-\CommentTok{# simulate number of default per tranches (binomial distributions)}
-\NormalTok{  M1 <-}\StringTok{ }\KeywordTok{rbinom}\NormalTok{(}\DataTypeTok{n =}\NormalTok{ nsim, }\DataTypeTok{size =}\NormalTok{ m1, }\DataTypeTok{prob =}\NormalTok{ H[, }\DecValTok{1}\NormalTok{])}
-\NormalTok{  M2 <-}\StringTok{ }\KeywordTok{rbinom}\NormalTok{(}\DataTypeTok{n =}\NormalTok{ nsim, }\DataTypeTok{size =}\NormalTok{ m2, }\DataTypeTok{prob =}\NormalTok{ H[, }\DecValTok{2}\NormalTok{])}
-\NormalTok{  M3 <-}\StringTok{ }\KeywordTok{rbinom}\NormalTok{(}\DataTypeTok{n =}\NormalTok{ nsim, }\DataTypeTok{size =}\NormalTok{ m3, }\DataTypeTok{prob =}\NormalTok{ H[, }\DecValTok{3}\NormalTok{])}
+\CommentTok{\# simulate number of default per subportfolios (binomial distributions)}
+\NormalTok{  M1 \textless{}{-}}\StringTok{ }\KeywordTok{rbinom}\NormalTok{(}\DataTypeTok{n =}\NormalTok{ nsim, }\DataTypeTok{size =}\NormalTok{ m1, }\DataTypeTok{prob =}\NormalTok{ H[, }\DecValTok{1}\NormalTok{])}
+\NormalTok{  M2 \textless{}{-}}\StringTok{ }\KeywordTok{rbinom}\NormalTok{(}\DataTypeTok{n =}\NormalTok{ nsim, }\DataTypeTok{size =}\NormalTok{ m2, }\DataTypeTok{prob =}\NormalTok{ H[, }\DecValTok{2}\NormalTok{])}
+\NormalTok{  M3 \textless{}{-}}\StringTok{ }\KeywordTok{rbinom}\NormalTok{(}\DataTypeTok{n =}\NormalTok{ nsim, }\DataTypeTok{size =}\NormalTok{ m3, }\DataTypeTok{prob =}\NormalTok{ H[, }\DecValTok{3}\NormalTok{])}
   
-\CommentTok{# total loss per sub-portfolio}
-\NormalTok{  L1 <-}\StringTok{ }\NormalTok{M1 }\OperatorTok{*}\StringTok{ }\NormalTok{e1 }\OperatorTok{*}\StringTok{ }\NormalTok{LGD1}
-\NormalTok{  L2 <-}\StringTok{ }\NormalTok{M2 }\OperatorTok{*}\StringTok{ }\NormalTok{e2 }\OperatorTok{*}\StringTok{ }\NormalTok{LGD2}
-\NormalTok{  L3 <-}\StringTok{ }\NormalTok{M3 }\OperatorTok{*}\StringTok{ }\NormalTok{e3 }\OperatorTok{*}\StringTok{ }\NormalTok{LGD3}
+\CommentTok{\# total loss per subportfolio}
+\NormalTok{  L1 \textless{}{-}}\StringTok{ }\NormalTok{M1 }\OperatorTok{*}\StringTok{ }\NormalTok{e1 }\OperatorTok{*}\StringTok{ }\NormalTok{LGD1}
+\NormalTok{  L2 \textless{}{-}}\StringTok{ }\NormalTok{M2 }\OperatorTok{*}\StringTok{ }\NormalTok{e2 }\OperatorTok{*}\StringTok{ }\NormalTok{LGD2}
+\NormalTok{  L3 \textless{}{-}}\StringTok{ }\NormalTok{M3 }\OperatorTok{*}\StringTok{ }\NormalTok{e3 }\OperatorTok{*}\StringTok{ }\NormalTok{LGD3}
   
-\CommentTok{# aggregate portfolio loss}
-\NormalTok{  L <-}\StringTok{ }\NormalTok{L1 }\OperatorTok{+}\StringTok{ }\NormalTok{L2 }\OperatorTok{+}\StringTok{ }\NormalTok{L3}
+\CommentTok{\# aggregate portfolio loss}
+\NormalTok{  L \textless{}{-}}\StringTok{ }\NormalTok{L1 }\OperatorTok{+}\StringTok{ }\NormalTok{L2 }\OperatorTok{+}\StringTok{ }\NormalTok{L3}
   
-\CommentTok{# DB for SWIM}
-\NormalTok{  credit_data <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(L, L1, L2, L3, H)}
-  \KeywordTok{colnames}\NormalTok{(credit_data) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"L"}\NormalTok{, }\StringTok{"L1"}\NormalTok{, }\StringTok{"L2"}\NormalTok{, }\StringTok{"L3"}\NormalTok{, }\StringTok{"H1"}\NormalTok{, }\StringTok{"H2"}\NormalTok{, }\StringTok{"H3"}\NormalTok{)}
+\CommentTok{\# the credit data included in SWIM}
+\NormalTok{  credit\_data \textless{}{-}}\StringTok{ }\KeywordTok{cbind}\NormalTok{(L, L1, L2, L3, H)}
+  \KeywordTok{colnames}\NormalTok{(credit\_data) \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"L"}\NormalTok{, }\StringTok{"L1"}\NormalTok{, }\StringTok{"L2"}\NormalTok{, }\StringTok{"L3"}\NormalTok{, }\StringTok{"H1"}\NormalTok{, }\StringTok{"H2"}\NormalTok{, }\StringTok{"H3"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-\bibliography{bibliography.bib}
 
+  \bibliography{bibliography.bib}
 
 \end{document}

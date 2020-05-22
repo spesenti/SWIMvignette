@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>A Appendix Credit Model | Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis</title>
+  <meta name="description" content="A Appendix Credit Model | Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis" />
+  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="A Appendix Credit Model | Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  <meta name="github-repo" content="spesenti/SWIMvignette" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="A Appendix Credit Model | Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis" />
+  
+  
+  
+
+<meta name="author" content="Silvana M. Pesenti 2, Alberto Bettini3, Pietro Millossovich4,5, Andreas Tsanakas5" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="references.html"/>
+
+<style type="text/css">
+p.abstract{
+  text-align: center;
+  font-weight: bold;
+}
+div.abstract{
+  margin: auto;
+  width: 90%;
+}
+</style>
+<script src="assets/header-attrs-2.1/header-attrs.js"></script>
+<script src="assets/jquery-2.2.3/jquery.min.js"></script>
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#background-and-contribution"><i class="fa fa-check"></i><b>1.1</b> Background and contribution</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#installation"><i class="fa fa-check"></i><b>1.2</b> Installation</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#structure-of-the-paper"><i class="fa fa-check"></i><b>1.3</b> Structure of the paper</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="Sec-Intro.html"><a href="Sec-Intro.html"><i class="fa fa-check"></i><b>2</b> What is <strong>SWIM</strong>?</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="Sec-Intro.html"><a href="Sec-Intro.html#sensitivity-testing-and-scenario-weights"><i class="fa fa-check"></i><b>2.1</b> Sensitivity testing and scenario weights</a></li>
+<li class="chapter" data-level="2.2" data-path="Sec-Intro.html"><a href="Sec-Intro.html#an-introductory-example"><i class="fa fa-check"></i><b>2.2</b> An introductory example</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="Sec-Scope.html"><a href="Sec-Scope.html"><i class="fa fa-check"></i><b>3</b> Scope of the <strong>SWIM</strong> package</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Rfunctions"><i class="fa fa-check"></i><b>3.1</b> Stressing a model</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Rstress"><i class="fa fa-check"></i><b>3.1.1</b> The <code>stress</code> function and the <strong>SWIM</strong> object</a></li>
+<li class="chapter" data-level="3.1.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#stressing-disjoint-probability-intervals"><i class="fa fa-check"></i><b>3.1.2</b> Stressing disjoint probability intervals</a></li>
+<li class="chapter" data-level="3.1.3" data-path="Sec-Scope.html"><a href="Sec-Scope.html#stressing-moments"><i class="fa fa-check"></i><b>3.1.3</b> Stressing moments</a></li>
+<li class="chapter" data-level="3.1.4" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Sec:RiskMeasures"><i class="fa fa-check"></i><b>3.1.4</b> Stressing risk measures</a></li>
+<li class="chapter" data-level="3.1.5" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Sec:User"><i class="fa fa-check"></i><b>3.1.5</b> User defined scenario weights</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Sec:analysis"><i class="fa fa-check"></i><b>3.2</b> Analysis of stressed models</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#distributional-comparison"><i class="fa fa-check"></i><b>3.2.1</b> Distributional comparison</a></li>
+<li class="chapter" data-level="3.2.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#sensitivity-measures"><i class="fa fa-check"></i><b>3.2.2</b> Sensitivity measures</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html"><i class="fa fa-check"></i><b>4</b> Case study</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#a-credit-risk-portfolio"><i class="fa fa-check"></i><b>4.1</b> A credit risk portfolio</a></li>
+<li class="chapter" data-level="4.2" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#stressing-the-portfolio-loss"><i class="fa fa-check"></i><b>4.2</b> Stressing the portfolio loss</a></li>
+<li class="chapter" data-level="4.3" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#analysing-stressed-models"><i class="fa fa-check"></i><b>4.3</b> Analysing stressed models</a></li>
+<li class="chapter" data-level="4.4" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#visualising-stressed-distributions"><i class="fa fa-check"></i><b>4.4</b> Visualising stressed distributions</a></li>
+<li class="chapter" data-level="4.5" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#sensitivity-measures-1"><i class="fa fa-check"></i><b>4.5</b> Sensitivity measures</a></li>
+<li class="chapter" data-level="4.6" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#constructing-more-advanced-stresses"><i class="fa fa-check"></i><b>4.6</b> Constructing more advanced stresses</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#sensitivity-of-default-probabilities"><i class="fa fa-check"></i><b>4.6.1</b> Sensitivity of default probabilities</a></li>
+<li class="chapter" data-level="4.6.2" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#stressing-tails-of-subportfolios"><i class="fa fa-check"></i><b>4.6.2</b> Stressing tails of subportfolios</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="conclusion-and-future-work.html"><a href="conclusion-and-future-work.html"><i class="fa fa-check"></i><b>5</b> Conclusion and future work</a></li>
+<li class="chapter" data-level="" data-path="acknowledgements.html"><a href="acknowledgements.html"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="AppendixCM.html"><a href="AppendixCM.html"><i class="fa fa-check"></i><b>A</b> Appendix Credit Model</a>
+<ul>
+<li class="chapter" data-level="A.1" data-path="AppendixCM.html"><a href="AppendixCM.html#credit-model-assumptions"><i class="fa fa-check"></i><b>A.1</b> Credit Model assumptions</a></li>
+<li class="chapter" data-level="A.2" data-path="AppendixCM.html"><a href="AppendixCM.html#code-for-generating-the-data"><i class="fa fa-check"></i><b>A.2</b> Code for generating the data</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Scenario Weights for Importance Measurement (<strong>SWIM</strong>) – an <strong>R</strong> package for sensitivity analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="AppendixCM" class="section level1" number="6">
+<h1><span class="header-section-number">A</span> Appendix Credit Model</h1>
+<div id="credit-model-assumptions" class="section level2" number="6.1">
+<h2><span class="header-section-number">A.1</span> Credit Model assumptions</h2>
+<p>The credit risk portfolio of Section <a href="Sec-CreditModel.html#Sec:CreditModel">4</a> is based on the conditionally binomial credit model described in Section 11.2 of <span class="citation">McNeil, Frey, and Embrechts (<a href="references.html#ref-Mcneil2015B" role="doc-biblioref">2015</a>)</span> which belongs to the family of mixture models. Specifically, we consider a portfolio that consists of three homogeneous subportfolios and denote the aggregate portfolio loss by <span class="math inline">\(L = L_1 + L_2+ L_3\)</span>, with <span class="math inline">\(L_1, L_2, L_3\)</span> the losses of each subportfolio, given by
+<span class="math display">\[\begin{equation}
+L_i=e_i\cdot\text{LGD}_i\cdot M_i,\quad i=1,2,3, 
+\end{equation}\]</span>
+where <span class="math inline">\(e_i\)</span> and <span class="math inline">\(M_i\)</span> are the exposure and number of defaults of the <span class="math inline">\(i^{\text{th}}\)</span> subportfolio, respectively, and <span class="math inline">\(\text{LGD}_i\)</span> is the loss given default of subportfolio <span class="math inline">\(i\)</span>. <span class="math inline">\(M_i\)</span> is Binomially distributed, conditional on <span class="math inline">\(H_i\)</span>, a random common default probability. Specifically <span class="math inline">\(M_i|H_i \sim Binomial(m_i,H_i)\)</span>, where <span class="math inline">\(m_i\)</span> is the portfolio size. The <span class="math inline">\(H_i\)</span>s follow a Beta distributions with parameters chosen so as to match given overall unconditional default probabilities <span class="math inline">\(p_i\)</span> and default correlations <span class="math inline">\(\rho_i\)</span>, that is, the correlation between (the indicators of) two default events within a subportfolio, see <span class="citation">McNeil, Frey, and Embrechts (<a href="references.html#ref-Mcneil2015B" role="doc-biblioref">2015</a>)</span>. The dependence structure of <span class="math inline">\((H_1,H_2,H_3)\)</span> is modelled via a Gaussian copula with correlation matrix<br />
+<span class="math display">\[\begin{equation}\Sigma = \begin{pmatrix}
+1 &amp; 0.3 &amp; 0.1\\
+0.3 &amp; 1 &amp; 0.4\\
+0.1 &amp; 0.4 &amp; 1
+\end{pmatrix}.\end{equation}\]</span></p>
+<p>Table <a href="AppendixCM.html#tab:credit">A.1</a> summarises the parameter values used in the simulation.</p>
+<table>
+<caption><span id="tab:credit">Table A.1: </span> Parameter values used in the simulation for the credit risk portfolio in Section <a href="Sec-CreditModel.html#Sec:CreditModel">4</a>.</caption>
+<thead>
+<tr class="header">
+<th align="left"><span class="math inline">\(i\)</span></th>
+<th align="left"><span class="math inline">\(m_i\)</span></th>
+<th align="left"><span class="math inline">\(e_i\)</span></th>
+<th align="left"><span class="math inline">\(p_i\)</span></th>
+<th align="left"><span class="math inline">\(\rho_i\)</span></th>
+<th align="left"><span class="math inline">\(LGD_i\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">2500</td>
+<td align="left">80</td>
+<td align="left">0.0004</td>
+<td align="left">0.00040</td>
+<td align="left">0.250</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="left">5000</td>
+<td align="left">25</td>
+<td align="left">0.0097</td>
+<td align="left">0.00440</td>
+<td align="left">0.375</td>
+</tr>
+<tr class="odd">
+<td align="left">3</td>
+<td align="left">2500</td>
+<td align="left">10</td>
+<td align="left">0.0503</td>
+<td align="left">0.01328</td>
+<td align="left">0.500</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="code-for-generating-the-data" class="section level2" number="6.2">
+<h2><span class="header-section-number">A.2</span> Code for generating the data</h2>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="AppendixCM.html#cb53-1"></a>  <span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb53-2"><a href="AppendixCM.html#cb53-2"></a>  <span class="kw">library</span>(copula)</span>
+<span id="cb53-3"><a href="AppendixCM.html#cb53-3"></a>  nsim &lt;-<span class="st"> </span><span class="dv">100000</span></span>
+<span id="cb53-4"><a href="AppendixCM.html#cb53-4"></a>  </span>
+<span id="cb53-5"><a href="AppendixCM.html#cb53-5"></a><span class="co"># counterparties subportfolio 1, 2 and 3</span></span>
+<span id="cb53-6"><a href="AppendixCM.html#cb53-6"></a>  m1 &lt;-<span class="st"> </span><span class="dv">2500</span></span>
+<span id="cb53-7"><a href="AppendixCM.html#cb53-7"></a>  m2 &lt;-<span class="st"> </span><span class="dv">5000</span></span>
+<span id="cb53-8"><a href="AppendixCM.html#cb53-8"></a>  m3 &lt;-<span class="st"> </span><span class="dv">2500</span></span>
+<span id="cb53-9"><a href="AppendixCM.html#cb53-9"></a>  </span>
+<span id="cb53-10"><a href="AppendixCM.html#cb53-10"></a>  <span class="co"># prob of default for subportfolios 1, 2 and 3</span></span>
+<span id="cb53-11"><a href="AppendixCM.html#cb53-11"></a>  p1 &lt;-<span class="st"> </span><span class="fl">0.0004</span> </span>
+<span id="cb53-12"><a href="AppendixCM.html#cb53-12"></a>  p2 &lt;-<span class="st"> </span><span class="fl">0.0097</span> </span>
+<span id="cb53-13"><a href="AppendixCM.html#cb53-13"></a>  p3 &lt;-<span class="st"> </span><span class="fl">0.0503</span>  </span>
+<span id="cb53-14"><a href="AppendixCM.html#cb53-14"></a>  </span>
+<span id="cb53-15"><a href="AppendixCM.html#cb53-15"></a>  <span class="co"># correlation between default probabilities</span></span>
+<span id="cb53-16"><a href="AppendixCM.html#cb53-16"></a>  rho1 &lt;-<span class="st"> </span><span class="fl">0.0004</span></span>
+<span id="cb53-17"><a href="AppendixCM.html#cb53-17"></a>  rho2 &lt;-<span class="st"> </span><span class="fl">0.0044</span></span>
+<span id="cb53-18"><a href="AppendixCM.html#cb53-18"></a>  rho3 &lt;-<span class="st"> </span><span class="fl">0.01328</span></span>
+<span id="cb53-19"><a href="AppendixCM.html#cb53-19"></a>  </span>
+<span id="cb53-20"><a href="AppendixCM.html#cb53-20"></a><span class="co"># exposures</span></span>
+<span id="cb53-21"><a href="AppendixCM.html#cb53-21"></a>  e1 &lt;-<span class="st"> </span><span class="dv">80</span></span>
+<span id="cb53-22"><a href="AppendixCM.html#cb53-22"></a>  e2 &lt;-<span class="st"> </span><span class="dv">25</span> </span>
+<span id="cb53-23"><a href="AppendixCM.html#cb53-23"></a>  e3 &lt;-<span class="st"> </span><span class="dv">10</span> </span>
+<span id="cb53-24"><a href="AppendixCM.html#cb53-24"></a>  </span>
+<span id="cb53-25"><a href="AppendixCM.html#cb53-25"></a><span class="co"># loss given default</span></span>
+<span id="cb53-26"><a href="AppendixCM.html#cb53-26"></a>  LGD1 &lt;-<span class="st"> </span><span class="fl">0.25</span></span>
+<span id="cb53-27"><a href="AppendixCM.html#cb53-27"></a>  LGD2 &lt;-<span class="st"> </span><span class="fl">0.375</span></span>
+<span id="cb53-28"><a href="AppendixCM.html#cb53-28"></a>  LGD3 &lt;-<span class="st"> </span><span class="fl">0.5</span></span>
+<span id="cb53-29"><a href="AppendixCM.html#cb53-29"></a>  </span>
+<span id="cb53-30"><a href="AppendixCM.html#cb53-30"></a><span class="co"># beta parameters: matching subportfolios default probabilities and correlation</span></span>
+<span id="cb53-31"><a href="AppendixCM.html#cb53-31"></a>  alpha1 &lt;-<span class="st"> </span>p1 <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span>rho1 <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb53-32"><a href="AppendixCM.html#cb53-32"></a>  beta1 &lt;-<span class="st"> </span>alpha1 <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span>p1 <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb53-33"><a href="AppendixCM.html#cb53-33"></a>  </span>
+<span id="cb53-34"><a href="AppendixCM.html#cb53-34"></a>  alpha2 &lt;-<span class="st"> </span>p2 <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span>rho2 <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb53-35"><a href="AppendixCM.html#cb53-35"></a>  beta2 &lt;-<span class="st"> </span>alpha2 <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span>p2 <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb53-36"><a href="AppendixCM.html#cb53-36"></a>  </span>
+<span id="cb53-37"><a href="AppendixCM.html#cb53-37"></a>  alpha3 &lt;-<span class="st"> </span>p3 <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span>rho3 <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb53-38"><a href="AppendixCM.html#cb53-38"></a>  beta3 &lt;-<span class="st"> </span>alpha3 <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span>p3 <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb53-39"><a href="AppendixCM.html#cb53-39"></a>  </span>
+<span id="cb53-40"><a href="AppendixCM.html#cb53-40"></a><span class="co"># correlations between subportfolios</span></span>
+<span id="cb53-41"><a href="AppendixCM.html#cb53-41"></a>  cor12 &lt;-<span class="st"> </span><span class="fl">0.3</span></span>
+<span id="cb53-42"><a href="AppendixCM.html#cb53-42"></a>  cor13 &lt;-<span class="st"> </span><span class="fl">0.1</span></span>
+<span id="cb53-43"><a href="AppendixCM.html#cb53-43"></a>  cor23 &lt;-<span class="st"> </span><span class="fl">0.4</span></span>
+<span id="cb53-44"><a href="AppendixCM.html#cb53-44"></a>  </span>
+<span id="cb53-45"><a href="AppendixCM.html#cb53-45"></a><span class="co"># Gaussian copula structure</span></span>
+<span id="cb53-46"><a href="AppendixCM.html#cb53-46"></a>  myCop &lt;-<span class="st"> </span><span class="kw">normalCopula</span>(<span class="dt">param =</span> <span class="kw">c</span>(cor12, cor13, cor23), <span class="dt">dim =</span> <span class="dv">3</span>, <span class="dt">dispstr =</span> <span class="st">&quot;un&quot;</span>)</span>
+<span id="cb53-47"><a href="AppendixCM.html#cb53-47"></a>  </span>
+<span id="cb53-48"><a href="AppendixCM.html#cb53-48"></a><span class="co"># multivariate beta with given copula</span></span>
+<span id="cb53-49"><a href="AppendixCM.html#cb53-49"></a>  myMvd &lt;-<span class="st"> </span><span class="kw">mvdc</span>(<span class="dt">copula =</span> myCop,</span>
+<span id="cb53-50"><a href="AppendixCM.html#cb53-50"></a>                <span class="dt">margins =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;beta&quot;</span>, <span class="st">&quot;beta&quot;</span>),</span>
+<span id="cb53-51"><a href="AppendixCM.html#cb53-51"></a>                <span class="dt">paramMargins =</span> <span class="kw">list</span>(<span class="kw">list</span>(alpha1, beta1),</span>
+<span id="cb53-52"><a href="AppendixCM.html#cb53-52"></a>                                    <span class="kw">list</span>(alpha2, beta2),</span>
+<span id="cb53-53"><a href="AppendixCM.html#cb53-53"></a>                                    <span class="kw">list</span>(alpha3, beta3)))</span>
+<span id="cb53-54"><a href="AppendixCM.html#cb53-54"></a></span>
+<span id="cb53-55"><a href="AppendixCM.html#cb53-55"></a><span class="co"># simulation from the chosen copula</span></span>
+<span id="cb53-56"><a href="AppendixCM.html#cb53-56"></a>  H &lt;-<span class="st"> </span><span class="kw">rMvdc</span>(nsim, myMvd)</span>
+<span id="cb53-57"><a href="AppendixCM.html#cb53-57"></a>  </span>
+<span id="cb53-58"><a href="AppendixCM.html#cb53-58"></a><span class="co"># simulate number of default per subportfolios (binomial distributions)</span></span>
+<span id="cb53-59"><a href="AppendixCM.html#cb53-59"></a>  M1 &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dt">n =</span> nsim, <span class="dt">size =</span> m1, <span class="dt">prob =</span> H[, <span class="dv">1</span>])</span>
+<span id="cb53-60"><a href="AppendixCM.html#cb53-60"></a>  M2 &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dt">n =</span> nsim, <span class="dt">size =</span> m2, <span class="dt">prob =</span> H[, <span class="dv">2</span>])</span>
+<span id="cb53-61"><a href="AppendixCM.html#cb53-61"></a>  M3 &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dt">n =</span> nsim, <span class="dt">size =</span> m3, <span class="dt">prob =</span> H[, <span class="dv">3</span>])</span>
+<span id="cb53-62"><a href="AppendixCM.html#cb53-62"></a>  </span>
+<span id="cb53-63"><a href="AppendixCM.html#cb53-63"></a><span class="co"># total loss per subportfolio</span></span>
+<span id="cb53-64"><a href="AppendixCM.html#cb53-64"></a>  L1 &lt;-<span class="st"> </span>M1 <span class="op">*</span><span class="st"> </span>e1 <span class="op">*</span><span class="st"> </span>LGD1</span>
+<span id="cb53-65"><a href="AppendixCM.html#cb53-65"></a>  L2 &lt;-<span class="st"> </span>M2 <span class="op">*</span><span class="st"> </span>e2 <span class="op">*</span><span class="st"> </span>LGD2</span>
+<span id="cb53-66"><a href="AppendixCM.html#cb53-66"></a>  L3 &lt;-<span class="st"> </span>M3 <span class="op">*</span><span class="st"> </span>e3 <span class="op">*</span><span class="st"> </span>LGD3</span>
+<span id="cb53-67"><a href="AppendixCM.html#cb53-67"></a>  </span>
+<span id="cb53-68"><a href="AppendixCM.html#cb53-68"></a><span class="co"># aggregate portfolio loss</span></span>
+<span id="cb53-69"><a href="AppendixCM.html#cb53-69"></a>  L &lt;-<span class="st"> </span>L1 <span class="op">+</span><span class="st"> </span>L2 <span class="op">+</span><span class="st"> </span>L3</span>
+<span id="cb53-70"><a href="AppendixCM.html#cb53-70"></a>  </span>
+<span id="cb53-71"><a href="AppendixCM.html#cb53-71"></a><span class="co"># the credit data included in SWIM</span></span>
+<span id="cb53-72"><a href="AppendixCM.html#cb53-72"></a>  credit_data &lt;-<span class="st"> </span><span class="kw">cbind</span>(L, L1, L2, L3, H)</span>
+<span id="cb53-73"><a href="AppendixCM.html#cb53-73"></a>  <span class="kw">colnames</span>(credit_data) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;L&quot;</span>, <span class="st">&quot;L1&quot;</span>, <span class="st">&quot;L2&quot;</span>, <span class="st">&quot;L3&quot;</span>, <span class="st">&quot;H1&quot;</span>, <span class="st">&quot;H2&quot;</span>, <span class="st">&quot;H3&quot;</span>)</span></code></pre></div>
+
+</div>
+</div>
+
+
+
+
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="references.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/lunr.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-SWIM.pdf"],
+"toc": {
+"collapse": "subsection"
+},
+"toolbar": {
+"position": "static"
+},
+"search": true,
+"css": "toc.css"
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
