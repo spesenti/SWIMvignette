@@ -6,7 +6,7 @@ author: Silvana M. Pesenti^[Correspondence to Silvana Pesenti, Department of Sta
 date: |
   | ^2^University of Toronto, ^3^Assicurazioni Generali S.p.A, ^4^DEAMS, University of Trieste, ^5^Cass Business School, City, University of London
   |
-  | 10. January 2020 
+  | 5. September 2020 
 bibliography: bibliography.bib
 documentclass: article
 github-repo: spesenti/SWIMvignette

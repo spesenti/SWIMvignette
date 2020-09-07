@@ -102,7 +102,7 @@ and `stress_VaR_ES` solves \@ref(eq:optimisation) with the constraints
 \text{VaR}_{\alpha }^W(X_j) = q \text{ and ES}_{\alpha }^W(X_j) = s.(\#eq:optimisationVaRES)
 \end{equation}
 
-Note that, since **SWIM** works with discrete distributions, the exact required VaR may not be achievable. In that case, `stress_VaR` will return scenario weights inducing the largest quantile in the dataset smaller or equal to the required VaR (i.e. $q$); this guarantees that $P^W(X_j\leq q)=\alpha$.
+Note that, since **SWIM** works with discrete distributions, the exact required constraints may not be achievable. In that case, the `stress` function will print a message with the achieved and required constraints. For example `stress_VaR` will return scenario weights inducing the largest quantile in the dataset smaller or equal to the required VaR (i.e. $q$); this guarantees that $P^W(X_j\leq q)=\alpha$.
 
 ### User defined scenario weights {#Sec:User}
 
@@ -121,6 +121,8 @@ Table \@ref(tab:Ranalysis) provides a complete list of all implemented **R** fun
 | `sensitivity`       |sensitivity measures 
 | `importance_rank`   |importance ranks    
 | `plot_cdf`          |plots cumulative distributions functions 
+| `plot_quantile`     |plots quantile functions 
+| `plot_weights`      |plots scenario weights 
 | `plot_hist`         |plots histograms
 | `plot_sensitivity`  |plots sensitivity measures       
 Table: (\#tab:Ranalysis) Implemented **R** function in **SWIM** for analysing stressed models. 
@@ -142,7 +144,7 @@ Table: (\#tab:summary) The output of the `summary` function applied to a **SWIM*
 
 The empirical distribution function of model components under a stressed model^[Note that \textbf{R} functions implementing the empirical cdf or the quantile, `ecdf` and `quantile`, will not return the empirical distribution function or the quantile function under a stressed model.] can be calculated using the `cdf` function of the **SWIM** package, applied to a **SWIM** object. To calculate sample quantiles of stressed model components, the function `quantile_stressed` can be used. The function `VaR_stressed` and `ES_stressed` provide the stressed VaR and ES of model components, which is of particular interest for stressed models resulting from constraints on risk measures, see Section \@ref(Sec:RiskMeasures). (While `quantile_stressed` works very similarly to the base **R** function `quantile`, `VaR_stressed` provides better capabilities for comparing different models and model components.) 
 
-Implemented visualisation of distribution functions are `plot_cdf`, for plotting empirical distribution functions, and `plot_hist`, for plotting histograms of model components under different (stressed) models.
+Implemented visualisation of distribution functions are `plot_cdf`, for plotting empirical distribution functions, `plot_quantile`, for plotting empirical quantile functions, and `plot_hist`, for plotting histograms of model components under different (stressed) models. The scenario weights can be plotted against a model compoent using the function `plot_weights`.
 
 
 ### Sensitivity measures 
