@@ -80,7 +80,7 @@ dat <- data.frame(Z1, Z2, Z3, Y)
 ```
 
 
-Now we introduce a stress to our baseline model. For our first stress, we require that the mean of $Z_1$ is increased from 100 to 110. This is done using the `stress` function, which generates as output the **SWIM** object `str.mean`. This object stores the stressed model, i.e. the realisations of the model components and the scenario weights. In the function call, the argument `k = 1` indicates that the stress is applied on the first column of `dat`, that is, on the realisations of the random variable $Z_1$.
+Now we introduce a stress to our baseline model. For our first stress, we require that the mean of $Z_1$ is increased from 100 to 110. This is done using the `stress` function, which generates as output a **SWIM** object, which we call `str.mean`. This object stores the stressed model, i.e. the realisations of the model components and the scenario weights. In the function call, the argument `k = 1` indicates that the stress is applied on the first column of `dat`, that is, on the realisations of the random variable $Z_1$.
 
 ``` {r, example1_first_stress, echo = -3, warning = FALSE, message = FALSE}
 library(SWIM)
@@ -106,10 +106,10 @@ The scenario weights, given their central role, can be extracted from a **SWIM**
 
 
 ``` {r, example1-weights-mean, warning = FALSE, message = FALSE, fig.show='hold', out.width = '50%',fig.cap = "Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the mean of $Z_1$."}
-# extract weights from stressed model
-w.mean <- get_weights(str.mean)
-plot(Z1[1:5000], w.mean[1:5000], pch = 20, xlab = "Z1", ylab = "scenario weights")
-plot(Y[1:5000], w.mean[1:5000], pch = 20, xlab = "Y", ylab = "scenario weights")
+plot_weights(str.mean, xCol = "Z1")
+# specifying the limits of the x-axis
+plot_weights(str.mean, xCol = "Y", x_limits = c(90, 550))
+
 ```
 
 
@@ -132,9 +132,8 @@ plot_cdf(str.sd, xCol = 4, base = TRUE)
 The different way in which a stress on the standard deviation of $Z_1$ impacts on the model, compared to a stress on the mean, is reflected by the scenario weights. Figure \@ref(fig:example1-weights-sd) shows the pattern of the scenario weights and how, when stressing standard deviations, higher weight is placed on scenarios where $Z_1$ is extreme, either much lower or much higher than its mean of 100.
 
 ``` {r, example1-weights-sd, cache = TRUE, warning = FALSE, message = FALSE, fig.show='hold', out.width = '50%',fig.cap = "Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$."}
-w.sd <- get_weights(str.sd)
-plot(Z1[1:5000], w.sd[1:5000], pch = 20, xlab = "Z1", ylab = "scenario weights")
-plot(Y[1:5000], w.sd[1:5000], pch = 20, xlab = "Y", ylab = "scenario weights")
+plot_weights(str.sd, xCol = "Z1")
+plot_weights(str.sd, xCol = "Y")
 ```
 
 
