@@ -22,12 +22,12 @@ knit_hooks$set(error = function(x, options) {
 The purpose of **SWIM** is to enable sensitivity analysis of models implemented in a Monte Carlo simulation framework, by distorting (*stressing*) some of the models' components and monitoring the resulting impact on quantities of interest.
 To clarify this idea and explain how **SWIM** works, we first define the terms used. By a *model*, we mean a set of $n$ (typically simulated) realisations from a vector of random variables $(X_1,\dots,X_d)$, along with *scenario weights* $W$ assigned to individual realisations, as shown in the table below. Hence each of of the columns 1 to $d$ corresponds to a random variable, called a *model component*, while each row corresponds to a *scenario*, that is, a state of the world.
 
-| $X_1$   	| $X_2$ 	    | $\dots$ 	| $X_d$ 	   | $W$ 	|
-|:--------:	|:----:      |:------:  |:-----:    |:-------------:	|
-| $x_{11}$ 	|$x_{21}$    | $\dots$  | $x_{d1}$  | $w_1$            	|
-| $x_{12}$ 	|$x_{22}$    | $\dots$  | $x_{d2}$  | $w_2$            	|
-| $\vdots$  |$\vdots$    | $\ddots$ | $\vdots$  | $\vdots$           |
-| $x_{1n}$  | $x_{2n}$   | $\dots$  | $x_{dn}$  | $w_n$             |
+|    $X_1$    | $X_2$    | $\dots$    |   $X_d$    |  $W$      |
+|:-----------:|---------:|-----------:|-----------:|----------:|
+|  $x_{11}$   | $x_{21}$ |  $\dots$   | $x_{d1}$   |  $w_1$    |
+|  $x_{12}$   | $x_{22}$ |  $\dots$   | $x_{d2}$   |  $w_2$    |
+|  $\vdots$   | $\vdots$ |  $\ddots$  | $\vdots$   |  $\vdots$ |
+|  $x_{1n}$   | $x_{2n}$ |  $\dots$   | $x_{dn}$   |  $w_n$    |
 Table: (\#tab:SWIMframework) Illustration of the **SWIM** framework, that is the baseline model, the stressed model and the scenario weights.  
 
 Each scenario has a *scenario weight*, shown in the last column, such that, scenario $i$ has probability $\frac{w_i}{n}$ of occurring. Scenario weights are always greater or equal than zero and have an average of 1. When all scenario weights are equal to 1, such that the probability of each scenario is $\frac 1 n$ (the standard Monte Carlo framework), we call the model a *baseline model* -- consequently weights of a baseline model will never be explicitly mentioned. When scenario weights are not identically equal to 1, such that some scenarios are more weighted than others, we say that we have a *stressed model*. 
