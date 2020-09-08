@@ -106,9 +106,10 @@ The scenario weights, given their central role, can be extracted from a **SWIM**
 
 
 ``` {r, example1-weights-mean, warning = FALSE, message = FALSE, fig.show='hold', out.width = '50%',fig.cap = "Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the mean of $Z_1$."}
-plot_weights(str.mean, xCol = "Z1")
+# parameter n specifies the number of scenario weights plotted
+plot_weights(str.mean, xCol = "Z1", n = 1000)
 # specifying the limits of the x-axis
-plot_weights(str.mean, xCol = "Y", x_limits = c(90, 550))
+plot_weights(str.mean, xCol = "Y", x_limits = c(90, 550), n = 1000)
 
 ```
 
@@ -132,8 +133,8 @@ plot_cdf(str.sd, xCol = 4, base = TRUE)
 The different way in which a stress on the standard deviation of $Z_1$ impacts on the model, compared to a stress on the mean, is reflected by the scenario weights. Figure \@ref(fig:example1-weights-sd) shows the pattern of the scenario weights and how, when stressing standard deviations, higher weight is placed on scenarios where $Z_1$ is extreme, either much lower or much higher than its mean of 100.
 
 ``` {r, example1-weights-sd, cache = TRUE, warning = FALSE, message = FALSE, fig.show='hold', out.width = '50%',fig.cap = "Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$."}
-plot_weights(str.sd, xCol = "Z1")
-plot_weights(str.sd, xCol = "Y")
+plot_weights(str.sd, xCol = "Z1", n = 2000)
+plot_weights(str.sd, xCol = "Y", n = 2000)
 ```
 
 

@@ -67,9 +67,9 @@ get_specs(stress.credit)
 Next, we produce a scatter plot of the scenario weights against the portfolio loss $L$. As the number of scenario weights is large, we only $5000$ data points. This can be achieved via the parameter `n` in the function `plot_weights`, that has a default of $n = 5000$. 
 
 ``` {r, credit-weights, warning = FALSE, cache = FALSE, message = FALSE, fig.show='hold', out.width = '50%',fig.cap = "Scenario weights against the portfolio loss $L$ for stressing VaR (left) and stressing both VaR and ES (right).", tidy = FALSE}
-plot_weights(stress.credit, xCol = "L", wCol = 1)
+plot_weights(stress.credit, xCol = "L", wCol = 1, n = 2000)
 # parameter `wCol` specifies the stresses, whose scenario weights are plotted.
-plot_weights(stress.credit, xCol = "L", wCol = 2)
+plot_weights(stress.credit, xCol = "L", wCol = 2, n = 7000)
 ```
 
 It is seen in Figure \@ref(fig:credit-weights) that the weights generated to stress VaR, and VaR and ES together, follow different patterns to the weights used to stress means and standard deviations, as shown in Section \@ref(Sec:Intro). Recall that **SWIM** calculates the scenario weights such that under the stressed model the given constraints are fulfilled. Thus, an increase in the VaR and/or ES of the portfolio loss $L$ results in large positive realisations of $L$ being assigned higher weight. On the other hand, when the standard deviation is stressed, scenario weights are calculated that inflate the probabilities of both large positive and negative values. 
