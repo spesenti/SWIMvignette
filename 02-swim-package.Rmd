@@ -83,7 +83,8 @@ E^W(f_k(\mathbf X_{J_k}) ) = m_k, ~k = 1, \ldots, K, (\#eq:optimisationmoment)
 \end{equation}
 for $m_k, ~k=1, \dots,K$ and $\mathbf X_{J_k}$ the subvector of model components with indices in $J_k$.
 
-Note that `stress_moment` not only allows to define constraints on higher moments of model components, but also to construct constraints that apply to multiple model components simultaneously. For example, the stress $E^W(X_h X_l) =m_k$ is achieved by setting $f_k(x_h, x_l) = x_h x_l$ in \@ref(eq:optimisationmoment) above. The functions `stress_mean`, `stress_mean_sd` and `stress_moment` can be applied to multiple model components and are the only `stress` functions that have scenario weights calculated via numerical optimisation, using the [**nleqslv**](https://CRAN.R-project.org/package=nleqslv) package. Thus, depending on the choice of constraints, existence or uniqueness of a stressed model is not guaranteed. The `stress_moment` function will print a message stating the specified values for the required moments, alongside the weighted moments achieved using the weights resulting from the function call. If the two match, the stress specification has been successfully fulfilled.
+Note that `stress_moment` not only allows to define constraints on higher moments of model components, but also to construct constraints that apply to multiple model components simultaneously. For example, the stress $E^W(X_h X_l) =m_k$ is achieved by setting $f_k(x_h, x_l) = x_h x_l$ in \@ref(eq:optimisationmoment) above. The functions `stress_mean`, `stress_mean_sd` and `stress_moment` can be applied to multiple model components and are the only `stress` functions that have scenario weights calculated via numerical optimisation, using the [**nleqslv**](https://CRAN.R-project.org/package=nleqslv) package. Thus, depending on the choice of constraints, existence or uniqueness of a stressed model is not guaranteed. The `stress_moment` function will print a message stating the specified values for the required moments, alongside the moments achieved under the stressed model resulting from the function call. If the two match, the stress specification has been successfully fulfilled.
+
 
 
 ### Stressing risk measures {#Sec:RiskMeasures}
@@ -111,7 +112,7 @@ The option `type = "user"` allows to generate a **SWIM** object with  scenario w
 ## Analysis of stressed models {#Sec:analysis}
 Table \@ref(tab:Ranalysis) provides a complete list of all implemented **R** functions in **SWIM** for analysing stressed models, which are described below in detail. 
 
-| R function          | analysis of stressed models                                
+| R function          | Analysis of Stressed Models                                
 | :-------------------| :------------------------------------  
 | `summary`           |summary statistics   
 | `cdf`               |cumulative distribution function

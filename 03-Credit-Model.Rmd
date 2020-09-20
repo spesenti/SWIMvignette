@@ -102,7 +102,8 @@ It is seen from both the distribution plots and the histograms in Figures \@ref(
 
 ## Sensitivity measures
 
-The impact of the stressed models on the model components can be quantified through sensitivity measures. The function `sensitivity` includes the *Kolmogorov* distance, the *Wasserstein* distance, and the sensitivity measure *Gamma*; the choice of measure is by the argument `type`. We refer to Section \@ref(Sec:analysis) for the definitions of those sensitivity measures. The Kolmogorov distance is useful for comparing different stressed models. It is seen that `stress 2` produces a more substantial distortion to the baseline distribution of $L$ compared to `stress 1`. 
+The impact of the stressed models on the model components can be quantified through sensitivity measures. The function `sensitivity` includes the *Kolmogorov* distance, the *Wasserstein* distance, and the sensitivity measure *Gamma*; the choice of measure is by the argument `type`. We refer to Section \@ref(Sec:analysis) for the definitions of those sensitivity measures. The Kolmogorov distance is useful for comparing different stressed models. Calculating the Kolmogorov distance, we observe that `stress 2` produces a larger Kolmogorov distance compared to `stress 1`, which reflects the additional stress on the ES for the stressed model `stress 2`. 
+
 
 ```{r, CM-sensitivity0, cache = TRUE}
 sensitivity(object = stress.credit, xCol = 1, wCol = "all", type = "Kolmogorov")
