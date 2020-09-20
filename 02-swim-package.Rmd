@@ -83,7 +83,8 @@ E^W(f_k(\mathbf X_{J_k}) ) = m_k, ~k = 1, \ldots, K, (\#eq:optimisationmoment)
 \end{equation}
 for $m_k, ~k=1, \dots,K$ and $\mathbf X_{J_k}$ the subvector of model components with indices in $J_k$.
 
-Note that `stress_moment` not only allows to define constraints on higher moments of model components, but also to construct constraints that apply to multiple model components simultaneously. For example, the stress $E^W(X_h X_l) =m_k$ is achieved by setting $f_k(x_h, x_l) = x_h x_l$ in \@ref(eq:optimisationmoment) above. The functions `stress_mean`, `stress_mean_sd` and `stress_moment` can be applied to multiple model components and are the only `stress` functions that have scenario weights calculated via numerical optimisation, using the [**nleqslv**](https://CRAN.R-project.org/package=nleqslv) package. Thus, depending on the choice of constraints, existence or uniqueness of a stressed model is not guaranteed. 
+Note that `stress_moment` not only allows to define constraints on higher moments of model components, but also to construct constraints that apply to multiple model components simultaneously. For example, the stress $E^W(X_h X_l) =m_k$ is achieved by setting $f_k(x_h, x_l) = x_h x_l$ in \@ref(eq:optimisationmoment) above. The functions `stress_mean`, `stress_mean_sd` and `stress_moment` can be applied to multiple model components and are the only `stress` functions that have scenario weights calculated via numerical optimisation, using the [**nleqslv**](https://CRAN.R-project.org/package=nleqslv) package. Thus, depending on the choice of constraints, existence or uniqueness of a stressed model is not guaranteed. The `stress_moment` function will print a message stating the specified values for the required moments, alongside the moments achieved under the stressed model resulting from the function call. If the two match, the stress specification has been successfully fulfilled.
+
 
 
 ### Stressing risk measures {#Sec:RiskMeasures}
@@ -102,7 +103,7 @@ and `stress_VaR_ES` solves \@ref(eq:optimisation) with the constraints
 \text{VaR}_{\alpha }^W(X_j) = q \text{ and ES}_{\alpha }^W(X_j) = s.(\#eq:optimisationVaRES)
 \end{equation}
 
-Note that, since **SWIM** works with discrete distributions, the exact required VaR may not be achievable. In that case, `stress_VaR` will return scenario weights inducing the largest quantile in the dataset smaller or equal to the required VaR (i.e. $q$); this guarantees that $P^W(X_j\leq q)=\alpha$.
+Note that, since **SWIM** works with discrete distributions, the exact required constraints may not be achievable. In that case, the `stress` function will print a message with the achieved and required constraints. For example `stress_VaR` will return scenario weights inducing the largest quantile in the dataset smaller or equal to the required VaR (i.e. $q$); this guarantees that $P^W(X_j\leq q)=\alpha$.
 
 ### User defined scenario weights {#Sec:User}
 
@@ -111,7 +112,7 @@ The option `type = "user"` allows to generate a **SWIM** object with  scenario w
 ## Analysis of stressed models {#Sec:analysis}
 Table \@ref(tab:Ranalysis) provides a complete list of all implemented **R** functions in **SWIM** for analysing stressed models, which are described below in detail. 
 
-| R function          | analysis of stressed models                                
+| R function          | Analysis of Stressed Models                                
 | :-------------------| :------------------------------------  
 | `summary`           |summary statistics   
 | `cdf`               |cumulative distribution function
@@ -121,6 +122,8 @@ Table \@ref(tab:Ranalysis) provides a complete list of all implemented **R** fun
 | `sensitivity`       |sensitivity measures 
 | `importance_rank`   |importance ranks    
 | `plot_cdf`          |plots cumulative distributions functions 
+| `plot_quantile`     |plots quantile functions 
+| `plot_weights`      |plots scenario weights 
 | `plot_hist`         |plots histograms
 | `plot_sensitivity`  |plots sensitivity measures       
 Table: (\#tab:Ranalysis) Implemented **R** function in **SWIM** for analysing stressed models. 
@@ -142,7 +145,7 @@ Table: (\#tab:summary) The output of the `summary` function applied to a **SWIM*
 
 The empirical distribution function of model components under a stressed model^[Note that \textbf{R} functions implementing the empirical cdf or the quantile, `ecdf` and `quantile`, will not return the empirical distribution function or the quantile function under a stressed model.] can be calculated using the `cdf` function of the **SWIM** package, applied to a **SWIM** object. To calculate sample quantiles of stressed model components, the function `quantile_stressed` can be used. The function `VaR_stressed` and `ES_stressed` provide the stressed VaR and ES of model components, which is of particular interest for stressed models resulting from constraints on risk measures, see Section \@ref(Sec:RiskMeasures). (While `quantile_stressed` works very similarly to the base **R** function `quantile`, `VaR_stressed` provides better capabilities for comparing different models and model components.) 
 
-Implemented visualisation of distribution functions are `plot_cdf`, for plotting empirical distribution functions, and `plot_hist`, for plotting histograms of model components under different (stressed) models.
+Implemented visualisation of distribution functions are `plot_cdf`, for plotting empirical distribution functions, `plot_quantile`, for plotting empirical quantile functions, and `plot_hist`, for plotting histograms of model components under different (stressed) models. The scenario weights can be plotted against a model component using the function `plot_weights`.
 
 
 ### Sensitivity measures 

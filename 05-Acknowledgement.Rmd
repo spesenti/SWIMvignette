@@ -1,3 +1,6 @@
 # Acknowledgements {-}
 
 This vignette was written in **R** [@R-base] using the packages **SWIM** [@PesentiR] and **bookdown** [@R-bookdown].
+
+SP would like to acknowledge the support of the Natural Sciences and Engineering Research Council of Canada
+(NSERC) with funding reference numbers DGECR-2020-00333 and RGPIN-2020-04289.

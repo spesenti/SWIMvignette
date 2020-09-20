@@ -22,12 +22,12 @@ knit_hooks$set(error = function(x, options) {
 The purpose of **SWIM** is to enable sensitivity analysis of models implemented in a Monte Carlo simulation framework, by distorting (*stressing*) some of the models' components and monitoring the resulting impact on quantities of interest.
 To clarify this idea and explain how **SWIM** works, we first define the terms used. By a *model*, we mean a set of $n$ (typically simulated) realisations from a vector of random variables $(X_1,\dots,X_d)$, along with *scenario weights* $W$ assigned to individual realisations, as shown in the table below. Hence each of of the columns 1 to $d$ corresponds to a random variable, called a *model component*, while each row corresponds to a *scenario*, that is, a state of the world.
 
-| $X_1$   	| $X_2$ 	    | $\dots$ 	| $X_d$ 	   | $W$ 	|
-|:--------:	|:----:      |:------:  |:-----:    |:-------------:	|
-| $x_{11}$ 	|$x_{21}$    | $\dots$  | $x_{d1}$  | $w_1$            	|
-| $x_{12}$ 	|$x_{22}$    | $\dots$  | $x_{d2}$  | $w_2$            	|
-| $\vdots$  |$\vdots$    | $\ddots$ | $\vdots$  | $\vdots$           |
-| $x_{1n}$  | $x_{2n}$   | $\dots$  | $x_{dn}$  | $w_n$             |
+|    $X_1$    | $X_2$    | $\dots$    |   $X_d$    |  $W$      |
+|:-----------:|---------:|-----------:|-----------:|----------:|
+|  $x_{11}$   | $x_{21}$ |  $\dots$   | $x_{d1}$   |  $w_1$    |
+|  $x_{12}$   | $x_{22}$ |  $\dots$   | $x_{d2}$   |  $w_2$    |
+|  $\vdots$   | $\vdots$ |  $\ddots$  | $\vdots$   |  $\vdots$ |
+|  $x_{1n}$   | $x_{2n}$ |  $\dots$   | $x_{dn}$   |  $w_n$    |
 Table: (\#tab:SWIMframework) Illustration of the **SWIM** framework, that is the baseline model, the stressed model and the scenario weights.  
 
 Each scenario has a *scenario weight*, shown in the last column, such that, scenario $i$ has probability $\frac{w_i}{n}$ of occurring. Scenario weights are always greater or equal than zero and have an average of 1. When all scenario weights are equal to 1, such that the probability of each scenario is $\frac 1 n$ (the standard Monte Carlo framework), we call the model a *baseline model* -- consequently weights of a baseline model will never be explicitly mentioned. When scenario weights are not identically equal to 1, such that some scenarios are more weighted than others, we say that we have a *stressed model*. 
@@ -80,7 +80,7 @@ dat <- data.frame(Z1, Z2, Z3, Y)
 ```
 
 
-Now we introduce a stress to our baseline model. For our first stress, we require that the mean of $Z_1$ is increased from 100 to 110. This is done using the `stress` function, which generates as output the **SWIM** object `str.mean`. This object stores the stressed model, i.e. the realisations of the model components and the scenario weights. In the function call, the argument `k = 1` indicates that the stress is applied on the first column of `dat`, that is, on the realisations of the random variable $Z_1$.
+Now we introduce a stress to our baseline model. For our first stress, we require that the mean of $Z_1$ is increased from 100 to 110. This is done using the `stress` function, which generates as output a **SWIM** object, which we call `str.mean`. This object stores the stressed model, i.e. the realisations of the model components and the scenario weights. In the function call, the argument `k = 1` indicates that the stress is applied on the first column of `dat`, that is, on the realisations of the random variable $Z_1$.
 
 ``` {r, example1_first_stress, echo = -3, warning = FALSE, message = FALSE}
 library(SWIM)
@@ -106,10 +106,11 @@ The scenario weights, given their central role, can be extracted from a **SWIM**
 
 
 ``` {r, example1-weights-mean, warning = FALSE, message = FALSE, fig.show='hold', out.width = '50%',fig.cap = "Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the mean of $Z_1$."}
-# extract weights from stressed model
-w.mean <- get_weights(str.mean)
-plot(Z1[1:5000], w.mean[1:5000], pch = 20, xlab = "Z1", ylab = "scenario weights")
-plot(Y[1:5000], w.mean[1:5000], pch = 20, xlab = "Y", ylab = "scenario weights")
+# parameter n specifies the number of scenario weights plotted
+plot_weights(str.mean, xCol = "Z1", n = 1000)
+# specifying the limits of the x-axis
+plot_weights(str.mean, xCol = "Y", x_limits = c(90, 550), n = 1000)
+
 ```
 
 
@@ -132,9 +133,8 @@ plot_cdf(str.sd, xCol = 4, base = TRUE)
 The different way in which a stress on the standard deviation of $Z_1$ impacts on the model, compared to a stress on the mean, is reflected by the scenario weights. Figure \@ref(fig:example1-weights-sd) shows the pattern of the scenario weights and how, when stressing standard deviations, higher weight is placed on scenarios where $Z_1$ is extreme, either much lower or much higher than its mean of 100.
 
 ``` {r, example1-weights-sd, cache = TRUE, warning = FALSE, message = FALSE, fig.show='hold', out.width = '50%',fig.cap = "Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the standard deviation of $Z_1$."}
-w.sd <- get_weights(str.sd)
-plot(Z1[1:5000], w.sd[1:5000], pch = 20, xlab = "Z1", ylab = "scenario weights")
-plot(Y[1:5000], w.sd[1:5000], pch = 20, xlab = "Y", ylab = "scenario weights")
+plot_weights(str.sd, xCol = "Z1", n = 2000)
+plot_weights(str.sd, xCol = "Y", n = 2000)
 ```
 
 
