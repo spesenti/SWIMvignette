@@ -1,6 +1,7 @@
 # What is **SWIM**? {#Sec:Intro}
 
-```{r wrap-hook, echo = FALSE}
+```{r wrap-hook, echo = FALSE, warning = FALSE}
+library(ggplot2)
 library(knitr)
 hook_error = knit_hooks$get('error')
 knit_hooks$set(error = function(x, options) {
@@ -20,7 +21,11 @@ knit_hooks$set(error = function(x, options) {
 ## Sensitivity testing and scenario weights
 
 The purpose of **SWIM** is to enable sensitivity analysis of models implemented in a Monte Carlo simulation framework, by distorting (*stressing*) some of the models' components and monitoring the resulting impact on quantities of interest.
-To clarify this idea and explain how **SWIM** works, we first define the terms used. By a *model*, we mean a set of $n$ (typically simulated) realisations from a vector of random variables $(X_1,\dots,X_d)$, along with *scenario weights* $W$ assigned to individual realisations, as shown in the table below. Hence each of of the columns 1 to $d$ corresponds to a random variable, called a *model component*, while each row corresponds to a *scenario*, that is, a state of the world.
+To clarify this idea and explain how **SWIM** works, we first define the terms used. By a *model*, we mean a set of $n$ (typically simulated) realisations from a vector of random variables $(X_1,\dots,X_d)$, along with *scenario weights* $W$ assigned to individual realisations, as shown in Table \@ref(tab:SWIMframework). Hence each of the columns 1 to $d$ corresponds to a random variable, called a *model component*, while each row corresponds to a *scenario*, that is, a state of the world.
+
+There is a conceptual distinction between the model from which the scenarios are simulated and the model as understood here. Specifically, as we are considering the case when an analyst has access to simulated scenarios only, and not the data-generating mechanism, we are consistently working with the empirical probability measure and any expectations or probabilities stated below are given with respect to that measure. Furthermore, as we work on an empirical space, we systematically conflate a random variable with its vector of realisations -- in particular, the scenario weights $W$ can be identified with a Radon-Nikodym on that space. For relevant notation on the space we are working on, see Section \@ref(Sec:Scope).
+
+
 
 |    $X_1$    | $X_2$    | $\dots$    |   $X_d$    |  $W$      |
 |:-----------:|---------:|-----------:|-----------:|----------:|
@@ -56,7 +61,11 @@ Through this process, the modeller can monitor the impact of the stress on $X_1$
 
 ## An introductory example
 Here, through an example, we illustrate the basic concepts and usage of **SWIM** for sensitivity analysis. More advanced usage of **SWIM** and options for constructing stresses are demonstrated in Sections \@ref(Sec:Scope) and \@ref(Sec:CreditModel).
-We consider a simple portfolio model, with the portfolio loss defined by $Y=Z_1+Z_2+Z_3$. The random variables $Z_1,Z_2,Z_3$ represent normally distributed losses, with $Z_1\sim N(100,40^2)$, $Z_2\sim Z_3\sim N(100,20^2)$. $Z_1$ and $Z_2$ are correlated, while $Z_3$ is independent of $(Z_1,Z_2)$.  Our purpose in this example is to investigate how a stress on the loss $Z_1$ impacts on the overall portfolio loss $Y$.
+
+In sensitivity analysis, one often considers a model with a vector of inputs $\mathbf Z$ and an output $Y=g(Z)$, for some aggregation function $g$ that maps inputs to the real line. Then the importance of model inputs can be investigated by stressing the distribution of inputs and observing the impact on the output distribution and vice versa @Pesenti2019. (We note that in **SWIM** there is no ex ante assumption about which of the model components $(X_1, \dots,X_d)$ should be interpreted as inputs or outputs -- these variables could represent any randomly varying quantity in the model. For that reason, we use $X_i$ for variable labels when documenting the **SWIM**'s capabilities, but avoid such use in illustrations where variables have specific interpretable meanings, as in the current section and in the case study of Section \@ref(Sec:CreditModel)).
+
+
+Here, we consider a simple portfolio model, with the portfolio loss defined by $Y=Z_1+Z_2+Z_3$. The random variables $Z_1,Z_2,Z_3$ represent normally distributed losses, with $Z_1\sim N(100,40^2)$, $Z_2\sim Z_3\sim N(100,20^2)$. $Z_1$ and $Z_2$ are correlated, while $Z_3$ is independent of $(Z_1,Z_2)$.  Our purpose in this example is to investigate how a stress on the loss $Z_1$ impacts on the overall portfolio loss $Y$.
 First we derive simulated data from the random vector $(Z_1,Z_2,Z_3,Y)$, forming our baseline model.
 
 ``` {r, example1_sim_data, include = TRUE}
@@ -112,6 +121,18 @@ plot_weights(str.mean, xCol = "Z1", n = 1000)
 plot_weights(str.mean, xCol = "Y", x_limits = c(90, 550), n = 1000)
 
 ```
+
+
+```{r, example-weights-z1-z2, echo = FALSE, fig.align='center', out.width = '50%', fig.cap = "Scenario weights for observations of model components $Z_1$ $Z_2$ subject to a stress on the mean of $Z_1$."}
+dat.w <- cbind(dat, get_weights(str.mean))
+colnames(dat.w) <- c(colnames(dat),"stress1")
+n <- 10000
+dat.w <- dat.w[1:n,]
+ggplot(dat.w, aes(Z1, Z2)) + geom_point(aes(colour = stress1)) + scale_color_gradient(low="blue", high="red")+
+  ggplot2::theme_minimal() + ggplot2::theme(legend.title = ggplot2::element_blank(), 
+                                          legend.key = ggplot2::element_blank())
+```
+
 
 
 The stress to the mean of $Z_1$ did not impact the volatility of either $Z_1$ or $Y$, as can be seen by the practically unchanged standard deviations in the output of `summary(str.mean)`. Thus, we introduce an alternative stress that keeps the mean of $Z_1$ fixed at 100, but increases its standard deviation from 40 to 50. This new stress is seen to impact the standard deviation of the portfolio loss $Y$.

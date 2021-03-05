@@ -6,8 +6,13 @@
 
 We briefly introduce key concepts, using slightly more technical language compared to Section \@ref(Sec:Intro). A *model* consists of a random vector of *model components* $\mathbf X = (X_1,\dots,X_d)$ and a probability measure; we denote the probability measure of a *baseline model* by $P$ and that of a *stressed model* by $P^W$, where $W= \frac{dP^W}{dP}$, satisfying $E(W)=1$ and $W\geq 0$, is a Radon-Nikodym derivative. In a Monte Carlo simulation context, the probability space is discrete with $n$ states $\Omega=\{\omega_1,\dots,\omega_n\}$, each of which corresponds to a simulated scenario. To reconcile this formulation with the notation of Section \@ref(Sec:Intro), we denote, for $i=1, \dots, n,~j=1,\dots, d$, the realisations $X_j(\omega_i):= x_{ji}$ and $W(\omega_i):=w_i$; the latter are the *scenario weights*. Under the baseline model, each scenario has the same probability $P(\omega_i)=1/n$, while under a stressed model it is $P^W(\omega_i)=W(\omega_i)/n=w_i/n$.
 
-The stressed model thus arises from a change of measure from $P$ to $P^W$, which entails the application of scenario weights $w_1,\dots, w_n$ on individual simulations. **SWIM** calculates scenario weights such that model components fulfil specific stresses, while the distortion to the baseline model is as small as possible when measured by the Kullback-Leibler divergence (or relative entropy). Mathematically, a stressed model is derived by solving
+The stressed model thus arises from a change of measure from $P$ to $P^W$, which entails the application of scenario weights $w_1,\dots, w_n$ on individual simulations. **SWIM** calculates scenario weights such that model components fulfil specific stresses, while the distortion to the baseline model is as small as possible when measured by the Kullback-Leibler divergence (or relative entropy). The Kullback-Leibler divergence of the probability measure of the baseline model $P$ with respect to that of a stressed model $P^W$ is defined as
+\begin{equation} 
+E(W \log (W)) = \int  \frac{dP^W}{dP} \log \left( \frac{dP^W}{dP}\right)\, dP.
+\end{equation}
+The Kullback-Leibler divergence is non-negative, vanishes if and only if both probabilities are equal, i.e., if $P = P^W$, and is often used as a measure of discrepancy between probability measures [@Pesenti2019].
 
+A stressed model is defined as the solution to
 \begin{equation} 
 \min_{ W } ~E(W \log (W)), \quad
 \text{subject to constraints on } \mathbf X \text{ under } P^W.
@@ -59,7 +64,7 @@ for disjoint intervals $B_1, \ldots, B_K$ with $P(X_j \in B_k) >0$ for all $k = 
 
 ### Stressing moments 
 
-The functions `stress_mean`, `stress_mean_sd` and `stress_moment` provide stressed models with moment constraints. The function `stress_mean` returns a stressed model that fulfils constraints on the first moment of model components. Specifically, 
+The functions `stress_mean`, `stress_mean_sd` and `stress_moment` implement the solution in @Csiszar1975dAP and provide stressed models with moment constraints. The function `stress_mean` returns a stressed model that fulfils constraints on the first moment of model components. Specifically, 
 
 >`stress_mean` solves \@ref(eq:optimisation) with the constraints
 \begin{equation} 
@@ -103,7 +108,7 @@ and `stress_VaR_ES` solves \@ref(eq:optimisation) with the constraints
 \text{VaR}_{\alpha }^W(X_j) = q \text{ and ES}_{\alpha }^W(X_j) = s.(\#eq:optimisationVaRES)
 \end{equation}
 
-Note that, since **SWIM** works with discrete distributions, the exact required constraints may not be achievable. In that case, the `stress` function will print a message with the achieved and required constraints. For example `stress_VaR` will return scenario weights inducing the largest quantile in the dataset smaller or equal to the required VaR (i.e. $q$); this guarantees that $P^W(X_j\leq q)=\alpha$.
+Note that, since **SWIM** works with discrete distributions, the exact required constraints may not be achievable, see @Pesenti2019 for more details. In that case, the `stress` function will print a message with the achieved and required constraints. For example `stress_VaR` will return scenario weights inducing the largest quantile in the dataset smaller or equal to the required VaR (i.e. $q$); this guarantees that $P^W(X_j\leq q)=\alpha$.
 
 ### User defined scenario weights {#Sec:User}
 
@@ -149,7 +154,7 @@ Implemented visualisation of distribution functions are `plot_cdf`, for plotting
 
 
 ### Sensitivity measures 
-Comparison of baseline and stressed models and how model components change under different models, is typically done via sensitivity measures. The **SWIM** packages contains the `sensitivity` function, which calculates sensitivity measures of stressed models and model components. The implemented sensitivity measures, summarised in the table below, are the *Wasserstein*, *Kolmogorov* and the *Gamma* sensitivity measures, see @Pesenti2016DM @Pesenti2019 @Emmer2015JR. 
+Determining sensitivities of different model components is a fundamental component of model building, interpretation, and validation and we refer to @Saltelli2008 and @Borgonovo2016 for a comprehensive review. A key tool in sensitivity analysis are sensitivity measures that associate to every model component a sensitivity score. Here we introduce the sensitivity measures implemented in the **SWIM** packages for comparing a baseline and stressed models and how model components change under different models. In particular, the **SWIM** packages contains the `sensitivity` function, which calculates sensitivity measures of stressed models and model components. The implemented sensitivity measures, summarised in the table below, are the *Wasserstein of order 1*, *Kolmogorov* and the *Gamma* sensitivity measures, see also @Pesenti2016DM, @Pesenti2019, and @Emmer2015JR. While the Wasserstein and the Kolmogorov sensitivity measures are defined as distances on the space of distributions, they nevertheless provide useful insight in how the baseline model changes under a stress.
 
 | **Metric**     |**Definition**         
 | :---           | :--- | :--- | 
@@ -158,6 +163,8 @@ Comparison of baseline and stressed models and how model components change under
 |Gamma         |$\frac{E^W(X) - E(X)}{c}$, for a normalisation $c$ 
 Table: (\#tab:sensitivity) Definition of the sensitivity measures implemented in **SWIM**.
 
-The Gamma sensitivity measure is normalised such that it takes values between -1 and 1, with higher positive (negative) values corresponding to a larger positive (negative) impact of the stress on the particular model component. The sensitivity measures can be plotted using `plot_sensitivity`. The function `importance_rank` returns the effective rank of model components according to the chosen sensitivity measure. 
+The Wasserstein distance is typically defined via the mass-transportation problem and we refer to @Villani2008book for a detailed treatment of the Wasserstein distance and its properties. For distributions on the real line, the Wasserstein distance admits the above representation which is convenient for numerical evaluations [@Vallender1974TPA]. The difference between the Wasserstein and the Kolmogorov sensitivity is that while the latter determines the largest pointwise distance between a stressed and the baseline model, the former sensitivity sensitivity reflects the entire distribution. 
+
+The Gamma sensitivity is introduced in @Pesenti2019 and we refer to that paper for further properties of the Gamma sensitivity measure and an comparison of the Gamma measure with variance based sensitivity measures as well as moment independent sensitivity measures. The Gamma measure is normalised such that it takes values between -1 and 1, with higher positive (negative) values corresponding to a larger positive (negative) impact of the stress on the particular model component. Loosely speaking, the Gamma sensitivity measure is the normalised difference between the first moment and the stressed and the baseline distribution of a model component. The sensitivity measures can be plotted using `plot_sensitivity`. The function `importance_rank` returns the effective rank of model components according to the chosen sensitivity measure. A small rank of a model component's sensitivity measure corresponds to high sensitivity to that model component. The functions `sensitivity` together with `plot_sensitivity` and `importance_rank` allow for a numerically efficient sensitivity analysis of a model and provides visual assessments of model components' sensitivities to a stressed model. 
 
 
