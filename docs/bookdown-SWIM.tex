@@ -132,7 +132,7 @@
 \author{Silvana M. Pesenti\footnote{Correspondence to Silvana Pesenti, Department of Statistical Sciences, University of Toronto, Canada. \href{mailto:silvana.pesenti@utoronto.ca}{\nolinkurl{silvana.pesenti@utoronto.ca}}} \textsuperscript{2}, Alberto Bettini\textsuperscript{3}, Pietro Millossovich\textsuperscript{4,5}, Andreas Tsanakas\textsuperscript{5}}
 \date{\textsuperscript{2}University of Toronto, \textsuperscript{3}Assicurazioni Generali S.p.A, \textsuperscript{4}DEAMS, University of Trieste, \textsuperscript{5}Cass Business School, City, University of London\\
 ~\\
-20. September 2020}
+05. March 2021}
 
 \begin{document}
 \maketitle
@@ -152,7 +152,7 @@ Complex quantitative models are used extensively in actuarial and financial risk
 
 When model inputs are subject to uncertainty, \emph{global} sensitivity methods are often used, considering the full space of (randomly generated) multivariate scenarios, which represent possible configurations of the model input vector. The particular task of ranking the importance of different model inputs leads to the use of sensitivity measures, which assign a score to each model input. A rich literature on global sensitivity analysis exists, with variance decomposition methods being particularly prominent; see \citet{Saltelli2008} and \citet{Borgonovo2016} for wide-ranging reviews. The \textbf{R} package \textbf{sensitivity} \citep{Rsensitivity} implements a wide range of sensitivity analysis approaches and measures.
 
-We introduce an alternative approach to sensitivity analysis called \emph{Scenario Weights for Importance Measurement} (\textbf{SWIM}) and present the \textbf{R} package implementing it \citep{PesentiR}. This approach was developed with actuarial risk models in mind, particularly those used for risk management and economic capital calculations. The aim of this paper is to provide an accessible introduction to the concepts underlying \textbf{SWIM} and a vignette demonstrating how the package is used. \textbf{SWIM} quantifies how distorting a particular model component (which could be a model input, output, or an intermediate quantity) impacts all other model components. The \textbf{SWIM} approach can be summarised as follows:
+We introduce an alternative approach to sensitivity analysis called \emph{Scenario Weights for Importance Measurement} (\textbf{SWIM}) and present the \textbf{R} package implementing it \citep{PesentiR}. This approach was developed with actuarial risk models in mind, particularly those used for risk management and economic capital calculations. The aim of this paper is to provide an accessible introduction to the concepts underlying \textbf{SWIM} and a vignette demonstrating how the package is used. \textbf{SWIM} quantifies how distorting a particular model component (which could be a model input, output, or an intermediate quantity) impacts all other model components. Such analyses allow a risk modeller, for example, to rank the importance of model inputs either by the extent that their being stressed impacts the output or, conversely, the way that they respond to a stress in model output -- the latter has been termed reverse sensitivity testing by \citet{Pesenti2019}. The \textbf{SWIM} approach can be summarised as follows:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -167,6 +167,10 @@ We introduce an alternative approach to sensitivity analysis called \emph{Scenar
 \end{enumerate}
 
 A key benefit of \textbf{SWIM} are that it provides a sensitivity analysis framework that is economical both computationally and in terms of the information needed to perform the analysis. Specifically, sensitivity analysis is performed using only one set of simulated scenarios. No further simulations are needed, thus eliminating the need for repeated evaluation of the model, which could be numerically expensive. Furthermore, the user of \textbf{SWIM} needs to know neither the explicit form of the joint distribution of model components nor the exact form of functional relations between them. Hence, \textbf{SWIM} is appropriate for the analysis of \emph{black box} models, thus having a wide scope of applications. Specifically, SWIM is well suited to simulation models used in insurance risk management, which are characterised by high dimensions, complex interactions between risk factors, and high computational cost of re-simulating under different assumptions.
+
+While there is an extensive literature on sensitivity analysis and there exist multitudes of sensitivity measures, our proposed sensitivity analysis framework differs in that it is model independent and can be applied in a numerically efficient way since it does not require potentially expensive re-evaluation of the model's output. Moreover, our sensitivity analysis framework focuses on risk measures which are widely used in risk management \citep{Mcneil2015B}, whereas much of the literature on sensitivity analysis focuses on variance-based and moment-independent sensitivity measures \citep{borgonovo2016common}; thus the current manuscript adds a perspective that is missing by standard variance-based and moment-independent approaches.
+
+The proposed sensitivity analysis framework implemented in \textbf{SWIM} is based on theoretical results derived in \citet{Pesenti2019}. While these results hold in generality, the \textbf{SWIM} package fundamentally hinges on the fact that it works on a set of Monte Carlo simulations. Thus, the quality of the sensitivity analysis conducted using \textbf{SWIM} is intimately connected with the quality of the dataset. Specifically, as we work on an empirical space, the user is constrained to change the probability of already simulated scenarios, without the ability to introduce new ones. Hence, the user must specify stresses judiciously so that they can be supported by the given dataset.
 
 The \textbf{SWIM} approach is largely based on \citet{Pesenti2019} and uses theoretical results on risk measures and sensitivity measures developed in that paper. An early sensitivity analysis approach based on scenario weighting was proposed by \citet{Beckman1987}. The Kullback-Leibler divergence has been used extensively in the financial risk management literature -- papers that are conceptually close to \textbf{SWIM} include \citet{Weber2007}; \citet{Breuer2013}; and \citet{Cambou2017}. Some foundational results related to the minimisation of the Kullback-Leibler divergence are provided in \citet{Csiszar1975dAP}.
 
@@ -195,7 +199,9 @@ Section \ref{Sec:Intro} provides an introduction to \textbf{SWIM}, illustrating 
 \subsection{Sensitivity testing and scenario weights}\label{sensitivity-testing-and-scenario-weights}}
 
 The purpose of \textbf{SWIM} is to enable sensitivity analysis of models implemented in a Monte Carlo simulation framework, by distorting (\emph{stressing}) some of the models' components and monitoring the resulting impact on quantities of interest.
-To clarify this idea and explain how \textbf{SWIM} works, we first define the terms used. By a \emph{model}, we mean a set of \(n\) (typically simulated) realisations from a vector of random variables \((X_1,\dots,X_d)\), along with \emph{scenario weights} \(W\) assigned to individual realisations, as shown in the table below. Hence each of of the columns 1 to \(d\) corresponds to a random variable, called a \emph{model component}, while each row corresponds to a \emph{scenario}, that is, a state of the world.
+To clarify this idea and explain how \textbf{SWIM} works, we first define the terms used. By a \emph{model}, we mean a set of \(n\) (typically simulated) realisations from a vector of random variables \((X_1,\dots,X_d)\), along with \emph{scenario weights} \(W\) assigned to individual realisations, as shown in Table \ref{tab:SWIMframework}. Hence each of the columns 1 to \(d\) corresponds to a random variable, called a \emph{model component}, while each row corresponds to a \emph{scenario}, that is, a state of the world.
+
+There is a conceptual distinction between the model from which the scenarios are simulated and the model as understood here. Specifically, as we are considering the case when an analyst has access to simulated scenarios only, and not the data-generating mechanism, we are consistently working with the empirical probability measure and any expectations or probabilities stated below are given with respect to that measure. Furthermore, as we work on an empirical space, we systematically conflate a random variable with its vector of realisations -- in particular, the scenario weights \(W\) can be identified with a Radon-Nikodym on that space. For relevant notation on the space we are working on, see Section \ref{Sec:Scope}.
 
 \begin{longtable}[]{@{}crrrr@{}}
 \caption{\label{tab:SWIMframework} Illustration of the \textbf{SWIM} framework, that is the baseline model, the stressed model and the scenario weights.}\tabularnewline
@@ -242,7 +248,10 @@ Through this process, the modeller can monitor the impact of the stress on \(X_1
 \subsection{An introductory example}\label{an-introductory-example}}
 
 Here, through an example, we illustrate the basic concepts and usage of \textbf{SWIM} for sensitivity analysis. More advanced usage of \textbf{SWIM} and options for constructing stresses are demonstrated in Sections \ref{Sec:Scope} and \ref{Sec:CreditModel}.
-We consider a simple portfolio model, with the portfolio loss defined by \(Y=Z_1+Z_2+Z_3\). The random variables \(Z_1,Z_2,Z_3\) represent normally distributed losses, with \(Z_1\sim N(100,40^2)\), \(Z_2\sim Z_3\sim N(100,20^2)\). \(Z_1\) and \(Z_2\) are correlated, while \(Z_3\) is independent of \((Z_1,Z_2)\). Our purpose in this example is to investigate how a stress on the loss \(Z_1\) impacts on the overall portfolio loss \(Y\).
+
+In sensitivity analysis, one often considers a model with a vector of inputs \(\mathbf Z\) and an output \(Y=g(Z)\), for some aggregation function \(g\) that maps inputs to the real line. Then the importance of model inputs can be investigated by stressing the distribution of inputs and observing the impact on the output distribution and vice versa \citep{Pesenti2019}. (We note that in \textbf{SWIM} there is no ex ante assumption about which of the model components \((X_1, \dots,X_d)\) should be interpreted as inputs or outputs -- these variables could represent any randomly varying quantity in the model. For that reason, we use \(X_i\) for variable labels when documenting the \textbf{SWIM}'s capabilities, but use alternative notation in illustrations where variables have specific interpretable meanings, as in the current section and in the case study of Section \ref{Sec:CreditModel}).
+
+Here, we consider a simple portfolio model, with the portfolio loss defined by \(Y=Z_1+Z_2+Z_3\). The random variables \(Z_1,Z_2,Z_3\) represent normally distributed losses, with \(Z_1\sim N(100,40^2)\), \(Z_2\sim Z_3\sim N(100,20^2)\). \(Z_1\) and \(Z_2\) are correlated, while \(Z_3\) is independent of \((Z_1,Z_2)\). Our purpose in this example is to investigate how a stress on the loss \(Z_1\) impacts on the overall portfolio loss \(Y\).
 First we derive simulated data from the random vector \((Z_1,Z_2,Z_3,Y)\), forming our baseline model.
 
 \begin{Shaded}
@@ -326,7 +335,7 @@ Beyond considering the standard statistics evaluated via the \texttt{summary} fu
 \includegraphics[width=0.5\linewidth]{bookdown-SWIM_files/figure-latex/example1-cdfs-mean-1} \includegraphics[width=0.5\linewidth]{bookdown-SWIM_files/figure-latex/example1-cdfs-mean-2} \caption{Baseline and stressed empirical distribution functions of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the mean of $Z_1$.}\label{fig:example1-cdfs-mean}
 \end{figure}
 
-The scenario weights, given their central role, can be extracted from a \textbf{SWIM} object. In Figure \ref{fig:example1-weights-mean}, the scenario weights from \texttt{str.mean} are plotted against realisations from \(Z_1\) and \(Y\) respectively. It is seen how the weights are increasing in the realisations from \(Z_1\). This is a consequence of the weights' derivation via a stress on the model component \(Z_1\). The increasingness shows that those scenarios for which \(Z_1\) is largest are assigned a higher weight. The relation between scenario weights and \(Y\) is still increasing (reflecting that high outcomes of \(Y\) tend to receive higher weights), but no longer deterministic (showing that \(Y\) is not completely driven by changes in \(Z_1\)).
+The scenario weights, given their central role, can be extracted from a \textbf{SWIM} object. In Figure \ref{fig:example1-weights-mean}, the scenario weights from \texttt{str.mean} are plotted against realisations from \(Z_1\) and \(Y\) respectively. It is seen how the weights are increasing in the realisations from \(Z_1\). This is a consequence of the weights' derivation via a stress on the model component \(Z_1\). The increasingness shows that those scenarios for which \(Z_1\) is largest are assigned a higher weight. The relation between scenario weights and \(Y\) is still increasing (reflecting that high outcomes of \(Y\) tend to receive higher weights), but no longer deterministic (showing that \(Y\) is not completely driven by changes in \(Z_1\)). Figure \ref{fig:example-weights-z1-z2} displays the scenario weights as a function of the input variable \(Z_1\) and \(Z_2\). The different colours of the scenario weights indicate their relative sizes. We observe that the scenario weights are increasing jointly in \(Z_1\) and \(Z_2\).
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -339,6 +348,15 @@ The scenario weights, given their central role, can be extracted from a \textbf{
 
 \begin{figure}
 \includegraphics[width=0.5\linewidth]{bookdown-SWIM_files/figure-latex/example1-weights-mean-1} \includegraphics[width=0.5\linewidth]{bookdown-SWIM_files/figure-latex/example1-weights-mean-2} \caption{Scenario weights against observations of model components  $Z_1$ (left) and $Y$ (right), subject to a stress on the mean of $Z_1$.}\label{fig:example1-weights-mean}
+\end{figure}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.5\linewidth]{bookdown-SWIM_files/figure-latex/example-weights-z1-z2-1} 
+
+}
+
+\caption{Scenario weights for observations of model components $Z_1$ $Z_2$ subject to a stress on the mean of $Z_1$.}\label{fig:example-weights-z1-z2}
 \end{figure}
 
 The stress to the mean of \(Z_1\) did not impact the volatility of either \(Z_1\) or \(Y\), as can be seen by the practically unchanged standard deviations in the output of \texttt{summary(str.mean)}. Thus, we introduce an alternative stress that keeps the mean of \(Z_1\) fixed at 100, but increases its standard deviation from 40 to 50. This new stress is seen to impact the standard deviation of the portfolio loss \(Y\).
@@ -362,7 +380,7 @@ The stress to the mean of \(Z_1\) did not impact the volatility of either \(Z_1\
 ## 3rd Qu.     133.7733 114.301 113.4701 345.9159
 \end{verbatim}
 
-Furthermore, in Figure \ref{fig:example1-cdfs-sd}, we compare the baseline and stressed cdfs of \(Z_1\) and \(Y\), under the new stress on \(Z_1\). The crossing of probability distribution reflects the increase in volatility.
+Furthermore, in Figure \ref{fig:example1-cdfs-sd}, we compare the baseline and stressed cdfs of \(Z_1\) and \(Y\), under the new stress on \(Z_1\). The crossing of probability distributions reflects the increase in volatility.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -419,14 +437,19 @@ Values in m must be in the range of f(x)
 
 We briefly introduce key concepts, using slightly more technical language compared to Section \ref{Sec:Intro}. A \emph{model} consists of a random vector of \emph{model components} \(\mathbf X = (X_1,\dots,X_d)\) and a probability measure; we denote the probability measure of a \emph{baseline model} by \(P\) and that of a \emph{stressed model} by \(P^W\), where \(W= \frac{dP^W}{dP}\), satisfying \(E(W)=1\) and \(W\geq 0\), is a Radon-Nikodym derivative. In a Monte Carlo simulation context, the probability space is discrete with \(n\) states \(\Omega=\{\omega_1,\dots,\omega_n\}\), each of which corresponds to a simulated scenario. To reconcile this formulation with the notation of Section \ref{Sec:Intro}, we denote, for \(i=1, \dots, n,~j=1,\dots, d\), the realisations \(X_j(\omega_i):= x_{ji}\) and \(W(\omega_i):=w_i\); the latter are the \emph{scenario weights}. Under the baseline model, each scenario has the same probability \(P(\omega_i)=1/n\), while under a stressed model it is \(P^W(\omega_i)=W(\omega_i)/n=w_i/n\).
 
-The stressed model thus arises from a change of measure from \(P\) to \(P^W\), which entails the application of scenario weights \(w_1,\dots, w_n\) on individual simulations. \textbf{SWIM} calculates scenario weights such that model components fulfil specific stresses, while the distortion to the baseline model is as small as possible when measured by the Kullback-Leibler divergence (or relative entropy). Mathematically, a stressed model is derived by solving
+The stressed model thus arises from a change of measure from \(P\) to \(P^W\), which entails the application of scenario weights \(w_1,\dots, w_n\) on individual simulations. \textbf{SWIM} calculates scenario weights such that model components fulfil specific stresses, while the distortion to the baseline model is as small as possible when measured by the Kullback-Leibler divergence (or relative entropy). The Kullback-Leibler divergence of the probability measure of the baseline model \(P\) with respect to that of a stressed model \(P^W\) is defined as
+\begin{equation} 
+E(W \log (W)) = \int  \frac{dP^W}{dP} \log \left( \frac{dP^W}{dP}\right)\, dP.
+\end{equation}
+The Kullback-Leibler divergence is non-negative, vanishes if and only if the probabilities coincide, i.e., if \(P = P^W\), and is often used as a measure of discrepancy between probability measures \citep{Pesenti2019}.
 
+A stressed model is defined as the solution to
 \begin{equation} 
 \min_{ W } ~E(W \log (W)), \quad
 \text{subject to constraints on } \mathbf X \text{ under } P^W.
 \label{eq:optimisation}
 \end{equation}
-In what follows, we denote by a superscript \(W\) quantities of interest under the stressed model, such as \(F^W, ~ E^W\) for the probability distribution and expectation under the stressed model, respectively. We refer to \citet{Pesenti2019} and references therein for further mathematical details and derivations of solutions to \eqref{eq:optimisation}.
+In what follows, we denote by a superscript \(W\) operators under the stressed model, such as \(F^W, ~ E^W\) for the probability distribution and expectation under the stressed model, respectively. We refer to \citet{Pesenti2019} and references therein for further mathematical details and derivations of solutions to \eqref{eq:optimisation}.
 
 Table \ref{tab:Rfunstress} provides a collection of all implemented types of stresses in the \textbf{SWIM} package. The precise constraints of \eqref{eq:optimisation} are explained below.
 
@@ -567,7 +590,7 @@ for disjoint intervals \(B_1, \ldots, B_K\) with \(P(X_j \in B_k) >0\) for all \
 \hypertarget{stressing-moments}{%
 \subsubsection{Stressing moments}\label{stressing-moments}}
 
-The functions \texttt{stress\_mean}, \texttt{stress\_mean\_sd} and \texttt{stress\_moment} provide stressed models with moment constraints. The function \texttt{stress\_mean} returns a stressed model that fulfils constraints on the first moment of model components. Specifically,
+The functions \texttt{stress\_mean}, \texttt{stress\_mean\_sd} and \texttt{stress\_moment} implement the solution in \citet{Csiszar1975dAP} and provide stressed models with moment constraints. The function \texttt{stress\_mean} returns a stressed model that fulfils constraints on the first moment of model components. Specifically,
 
 \begin{quote}
 \texttt{stress\_mean} solves \eqref{eq:optimisation} with the constraints
@@ -618,7 +641,7 @@ and \texttt{stress\_VaR\_ES} solves \eqref{eq:optimisation} with the constraints
 \end{equation}
 \end{quote}
 
-Note that, since \textbf{SWIM} works with discrete distributions, the exact required constraints may not be achievable. In that case, the \texttt{stress} function will print a message with the achieved and required constraints. For example \texttt{stress\_VaR} will return scenario weights inducing the largest quantile in the dataset smaller or equal to the required VaR (i.e.~\(q\)); this guarantees that \(P^W(X_j\leq q)=\alpha\).
+Note that, since \textbf{SWIM} works with discrete distributions, the exact required constraints may not be achievable, see \citet{Pesenti2019} for more details. In that case, the \texttt{stress} function will print a message with the achieved and required constraints. For example \texttt{stress\_VaR} will return scenario weights inducing the largest quantile in the dataset smaller or equal to the required VaR (i.e.~\(q\)); this guarantees that \(P^W(X_j\leq q)=\alpha\).
 
 \hypertarget{Sec:User}{%
 \subsubsection{User defined scenario weights}\label{Sec:User}}
@@ -684,7 +707,7 @@ Implemented visualisation of distribution functions are \texttt{plot\_cdf}, for 
 \hypertarget{sensitivity-measures}{%
 \subsubsection{Sensitivity measures}\label{sensitivity-measures}}
 
-Comparison of baseline and stressed models and how model components change under different models, is typically done via sensitivity measures. The \textbf{SWIM} packages contains the \texttt{sensitivity} function, which calculates sensitivity measures of stressed models and model components. The implemented sensitivity measures, summarised in the table below, are the \emph{Wasserstein}, \emph{Kolmogorov} and the \emph{Gamma} sensitivity measures, see \citet{Pesenti2016DM} \citet{Pesenti2019} \citet{Emmer2015JR}.
+Determining sensitivities of different model components is a fundamental component of model building, interpretation, and validation and we refer to \citet{Saltelli2008} and \citet{Borgonovo2016} for a comprehensive review. A key tool in sensitivity analysis are sensitivity measures that associate to every model component a sensitivity score. Here we introduce the sensitivity measures implemented in the \textbf{SWIM} package for comparing baseline and stressed models and how model components change under different models. In particular, the \textbf{SWIM} packages contains the \texttt{sensitivity} function, which calculates sensitivity measures of stressed models and model components. The implemented sensitivity measures, summarised in the table below, are the \emph{Wasserstein of order 1}, \emph{Kolmogorov} and the \emph{Gamma} sensitivity measures, see also \citet{Pesenti2016DM}, \citet{Pesenti2019}, and \citet{Emmer2015JR}. While the Wasserstein and the Kolmogorov sensitivity measures are defined as distances on the space of distributions, they nevertheless provide useful insight in how the baseline model changes under a stress.
 
 \begin{longtable}[]{@{}lll@{}}
 \caption{\label{tab:sensitivity} Definition of the sensitivity measures implemented in \textbf{SWIM}.}\tabularnewline
@@ -702,7 +725,9 @@ Gamma & \(\frac{E^W(X) - E(X)}{c}\), for a normalisation \(c\) &\tabularnewline
 \bottomrule
 \end{longtable}
 
-The Gamma sensitivity measure is normalised such that it takes values between -1 and 1, with higher positive (negative) values corresponding to a larger positive (negative) impact of the stress on the particular model component. The sensitivity measures can be plotted using \texttt{plot\_sensitivity}. The function \texttt{importance\_rank} returns the effective rank of model components according to the chosen sensitivity measure.
+The Wasserstein distance is typically defined via the mass-transportation problem and we refer to \citet{Villani2008book} for a detailed treatment of its properties. For distributions on the real line, the Wasserstein distance admits the above representation which is convenient for numerical evaluations \citep{Vallender1974TPA}. The difference between the Wasserstein and the Kolmogorov sensitivity is that, while the latter determines the largest pointwise distance between a stressed and the baseline model, the former sensitivity sensitivity reflects the entire distribution.
+
+The Gamma sensitivity is introduced in \citet{Pesenti2019} and we refer to that paper for its properties and a comparison to variance-based sensitivity measures and moment independent sensitivity measures. Loosely speaking, the Gamma sensitivity measure represents the difference between the first moments of the stressed and the baseline distribution of a model component. The Gamma measure is normalised such that it takes values between -1 and 1, with higher positive (negative) values corresponding to a larger positive (negative) impact of the stress on the particular model component. The sensitivity measures can be plotted using \texttt{plot\_sensitivity}. The function \texttt{importance\_rank} returns the effective rank of model components according to the chosen sensitivity measure. A small rank of a model component's sensitivity measure corresponds to high sensitivity to that model component. The functions \texttt{sensitivity} together with \texttt{plot\_sensitivity} and \texttt{importance\_rank} allow for a numerically efficient sensitivity analysis of a model and provide visual assessments of model components' sensitivities to a stressed model.
 
 \hypertarget{Sec:CreditModel}{%
 \section{Case study}\label{Sec:CreditModel}}
@@ -710,7 +735,9 @@ The Gamma sensitivity measure is normalised such that it takes values between -1
 \hypertarget{a-credit-risk-portfolio}{%
 \subsection{A credit risk portfolio}\label{a-credit-risk-portfolio}}
 
-The credit model in this section is a conditionally binomial loan portfolio model including systematic and specific portfolio risk. We refer to the Appendix \ref{AppendixCM} for details about the model and the generation of the simulated data. A key variable of interest is the total aggregate portfolio loss \(L = L_1 + L_2 + L_3\), where \(L_1, L_2, L_3\) are homogeneous subportfolios on a comparable scale (say, thousands of \$). The dataset contains 100,000 simulations of the portfolio \(L\), the subportfolios \(L_1, L_2, L_3\) as well as the random default probabilities within each subportfolio, \(H_1, H_2, H_3\). These default probabilities represent the systematic risk \emph{within} each subportfolio, while their dependence structure represents a systematic risk effect \emph{between} the subportfolios. The simulated data of the credit risk portfolio are included in the \textbf{SWIM} package and can be accessed via \texttt{data("credit\_data")}. A snippet of the dataset looks as follows:
+In this section we provide a detailed case study of the use of \textbf{SWIM} in analysing a credit risk model. Through this analysis, we also illustrate more advanced capabilities of the package. The credit model in this section is a conditionally binomial loan portfolio model, including systematic and specific portfolio risk. We refer to the Appendix \ref{AppendixCM} for details about the model and the generation of the simulated data. A key variable of interest is the total aggregate portfolio loss \(L = L_1 + L_2 + L_3\), where \(L_1, L_2, L_3\) are homogeneous subportfolios on a comparable scale (say, thousands of \$). The dataset contains 100,000 simulations of the portfolio \(L\), the subportfolios \(L_1, L_2, L_3\) as well as the random default probabilities within each subportfolio, \(H_1, H_2, H_3\). These default probabilities represent the systematic risk \emph{within} each subportfolio, while their dependence structure represents a systematic risk effect \emph{between} the subportfolios. We may thus think of \(L\) as the model output, \(H_1,H_2,H_3\) as model inputs, and \(L_1,L_2,L_3\) as intermediate model outputs.
+
+The simulated data of the credit risk portfolio are included in the \textbf{SWIM} package and can be accessed via \texttt{data("credit\_data")}. A snippet of the dataset looks as follows:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -732,7 +759,9 @@ The credit model in this section is a conditionally binomial loan portfolio mode
 \hypertarget{stressing-the-portfolio-loss}{%
 \subsection{Stressing the portfolio loss}\label{stressing-the-portfolio-loss}}
 
-In this section, following a reverse sensitivity approach, we study the effects that stresses on (the tail of) the aggregate portfolio loss \(L\) have on the three subportfolios; thus assessing their comparative importance. First, we impose a \(20\%\) increase on the VaR at level \(90\%\) of the portfolio loss.
+In this section, we follow a reverse sensitivity approach, similar to \citet{Pesenti2019}. Specifically, we study the effects that stresses on (the tail of) the aggregate portfolio loss \(L\) have on the three subportfolios. This enables us to assess their comparative importance. If a subportfolio's loss distribution substantially changes following a stress on the portfolio loss, we interpret this as a high sensitivity to that subportfolio.
+
+First, we impose a \(20\%\) increase on the VaR at level \(90\%\) of the portfolio loss.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -776,7 +805,7 @@ Using the function \texttt{VaR\_stressed}, we can quantify how tail quantiles of
 ## 90% 2535   2191
 \end{verbatim}
 
-As a second stress, we consider, additionally to the \(20\%\) increase in the \(\text{VaR}_{0.9}\), an increase in \(\text{ES}_{0.9}\) of the portfolio loss \(L\). When stressing VaR and ES together via \texttt{stress\_VaR\_ES}, both VaR and ES need to be stressed at the same level, here \texttt{alpha\ =\ 0.9}. We observe that when stressing the VaR alone, ES increases to 2535. For the second stress we want a greater impact on ES, thus we require that the stressed ES be equal to 3500. This can be achieved by specifying the argument \texttt{s}, which is the stressed value of ES (rather than \texttt{s\_ratio}, the proportional increase).
+As a second stress, we consider, additionally to the \(20\%\) increase in the \(\text{VaR}_{0.9}\), an increase in \(\text{ES}_{0.9}\) of the portfolio loss \(L\). When stressing VaR and ES together via \texttt{stress\_VaR\_ES}, both VaR and ES need to be stressed at the same level, here \texttt{alpha\ =\ 0.9}. We observe that when stressing the VaR alone, ES increases to 2535. For the second stress we want to induce a greater impact on the tail of the portfolio loss distribution, thus we require that the stressed ES be equal to 3500. This can be achieved by specifying the argument \texttt{s}, which is the stressed value of ES (rather than \texttt{s\_ratio}, the proportional increase).
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -834,7 +863,7 @@ The \texttt{summary} function provides a statistical summary of the stressed mod
 ## 3rd Qu.     1505.62 40.00 675.00 875.00 0.000594 0.01439 0.0697
 \end{verbatim}
 
-Note that \texttt{stress\ 1} is the \texttt{summary} output corresponding to the \(20\%\) increase in the VaR, while \texttt{stress\ 2} corresponds to the stress in both VaR and ES. The information on individual stresses can be recovered through the \texttt{get\_specs} function, and the actual scenario weights using \texttt{get\_weights}. Since the \textbf{SWIM} object \texttt{stress.credit} contains two stresses, the scenario weights that are returned by \texttt{get\_weights} form a data frame consisting of two columns, corresponding to \texttt{stress\ 1} and to \texttt{stress\ 2}, respectively.
+In the \texttt{summary} output, \texttt{stress\ 1} corresponds to the \(20\%\) increase in the VaR, while \texttt{stress\ 2} corresponds to the stress in both VaR and ES. The information on individual stresses can be recovered through the \texttt{get\_specs} function, and the actual scenario weights using \texttt{get\_weights}. Since the \textbf{SWIM} object \texttt{stress.credit} contains two stresses, the scenario weights that are returned by \texttt{get\_weights} form a data frame consisting of two columns, corresponding to \texttt{stress\ 1} and to \texttt{stress\ 2}, respectively. We can observe from the summary that the two stresses modify the distributions of model components in somewhat different ways. For example, the more tail-oriented \texttt{stress\ 2} leads to an increase in both the skewness and excess kurtosis of the portfolio loss.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -848,7 +877,7 @@ Note that \texttt{stress\ 1} is the \texttt{summary} output corresponding to the
 ## stress 2 VaR ES L   0.9 2173.75 3500
 \end{verbatim}
 
-Next, we produce a scatter plot of the scenario weights against the portfolio loss \(L\). As the number of scenario weights is large, we only \(5000\) data points. This can be achieved via the parameter \texttt{n} in the function \texttt{plot\_weights}, that has a default of \(n = 5000\).
+Next, we illustrate the difference between the two stresses applied, by a scatter plot of the scenario weights against the portfolio loss \(L\). As the number of scenario weights is large, we only \(5000\) data points. This can be achieved via the parameter \texttt{n} in the function \texttt{plot\_weights}, that has a default of \(n = 5000\).
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -862,12 +891,12 @@ Next, we produce a scatter plot of the scenario weights against the portfolio lo
 \includegraphics[width=0.5\linewidth]{bookdown-SWIM_files/figure-latex/credit-weights-1} \includegraphics[width=0.5\linewidth]{bookdown-SWIM_files/figure-latex/credit-weights-2} \caption{Scenario weights against the portfolio loss $L$ for stressing VaR (left) and stressing both VaR and ES (right).}\label{fig:credit-weights}
 \end{figure}
 
-It is seen in Figure \ref{fig:credit-weights} that the weights generated to stress VaR, and VaR and ES together, follow different patterns to the weights used to stress means and standard deviations, as shown in Section \ref{Sec:Intro}. Recall that \textbf{SWIM} calculates the scenario weights such that under the stressed model the given constraints are fulfilled. Thus, an increase in the VaR and/or ES of the portfolio loss \(L\) results in large positive realisations of \(L\) being assigned higher weight. On the other hand, when the standard deviation is stressed, scenario weights are calculated that inflate the probabilities of both large positive and negative values.
+It is seen in Figure \ref{fig:credit-weights} that the weights generated to stress VaR, and VaR and ES together, follow different patterns to the weights used to stress means and standard deviations, as shown in Section \ref{Sec:Intro}. Recall that \textbf{SWIM} calculates the scenario weights such that under the stressed model the given constraints are fulfilled. Thus, an increase in the VaR and/or ES of the portfolio loss \(L\) results in large positive realisations of \(L\) being assigned higher weight. On the other hand, when the standard deviation is stressed, scenario weights are calculated that inflate the probabilities of both large positive and negative values. When we compare \texttt{stress\ 1} and \texttt{stress\ 2} in this example, we see that stressing VaR induces a high but constant weight on scenarios that correspond to large outcomes of \(L\), while when stressing VaR and ES, the weights are exponentially increasing in (tail observations of) \(L\). This difference in pattern is associated with the different impacts on the shape of the tail of \(L\).
 
 \hypertarget{visualising-stressed-distributions}{%
 \subsection{Visualising stressed distributions}\label{visualising-stressed-distributions}}
 
-The change in the distributions of the portfolio and subportfolio losses, when moving from the baseline to the stressed models, can be visualised through the functions \texttt{plot\_hist} and \texttt{plot\_cdf}. The following figure displays the histogram of the aggregate portfolio loss under the baseline and the two stressed models. It is seen how stressing VaR and ES has a higher impact on the right tail of \(L\), compared to stressing VaR only. This is consistent with the tail-sensitive nature of the Expected Shortfall risk measure \citep{Mcneil2015B}.
+The change in the distributions of the portfolio and subportfolio losses, when moving from the baseline to the stressed models, can be visualised through the functions \texttt{plot\_hist} and \texttt{plot\_cdf}. The following figure displays the histogram of the aggregate portfolio loss under the baseline and the two stressed models. It is seen how stressing VaR and ES has a higher impact on the right tail of \(L\), compared to stressing VaR only. This is consistent with the tail-sensitive nature of the Expected Shortfall risk measure \citep{Mcneil2015B}. Moreover, the discontinuity in the way that, for \texttt{stress\ 1}, values of \(L\) map to the weights \(W\), as seen in Figure \ref{fig:credit-weights}, makes the stressed density of \(L\) no longer monotonic in the tail. These observations indicate that stressing both VaR and ES together may be a preferable option for risk management applications.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -884,7 +913,7 @@ The change in the distributions of the portfolio and subportfolio losses, when m
 \caption{Histogram of the portfolio loss $L$ under the baseline and the two stressed models.}\label{fig:CM-histL}
 \end{figure}
 
-The arguments \texttt{xCol} and \texttt{wCol} (with default to plot all stresses) define the columns of the data and the columns of the scenario weights, respectively, that are used for plotting. Next, we analyse the impact that stressing the aggregate loss \(L\) has on the subportfolios \(L_1,~ L_2~L_3\). Again, we use the function \texttt{plot\_hist} and \texttt{plot\_cdf} for visual comparison, but this time placing the distribution plots and histograms of subportfolio losses along each other via the function \texttt{ggarrange} (from the package \textbf{ggpubr}). The plots obtained from \texttt{plot\_hist} and \texttt{plot\_cdf} can be further personalised when specifying the argument \texttt{displ\ =\ FALSE}, as then the graphical functions \texttt{plot\_hist} and \texttt{plot\_cdf} return data frames compatible with the package \textbf{ggplot2}.
+The arguments \texttt{xCol} and \texttt{wCol} (with default to plot all stresses) define the columns of the data and the columns of the scenario weights, respectively, that are used for plotting. Next, we analyse the impact that stressing the aggregate loss \(L\) has on the subportfolios \(L_1,~ L_2~L_3\). Again, we use the function \texttt{plot\_hist} and \texttt{plot\_cdf} for visual comparison, but this time placing the distribution plots and histograms of subportfolio losses along each other via the function \texttt{ggarrange} (from the package \textbf{ggpubr}). The plots obtained from \texttt{plot\_hist} and \texttt{plot\_cdf} can be further customised when specifying the argument \texttt{displ\ =\ FALSE}, as then the graphical functions \texttt{plot\_hist} and \texttt{plot\_cdf} return data frames compatible with the package \textbf{ggplot2}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -910,10 +939,10 @@ The arguments \texttt{xCol} and \texttt{wCol} (with default to plot all stresses
 \caption{Distribution functions and histograms of the subportfolios $L_1, L_2, L_3$ for the stresses on the VaR (stress 1) and on both the VaR and ES (stress 2) of the portfolio loss $L$.}\label{fig:CM-plot1}
 \end{figure}
 
-It is seen from both the distribution plots and the histograms in Figures \ref{fig:CM-histL} and \ref{fig:CM-plot1} that the stresses have no substantial impact on \(L_1\), while \(L_2\) and \(L_3\) are more affected, indicating a higher sensitivity. The higher impact on the tails of stress 2 (on both VaR and ES) is also visible. Sensitivity measures quantifying these effects are introduced in the following subsection.
+It is seen from both the distribution plots and the histograms in Figure \ref{fig:CM-plot1} that the stresses have no substantial impact on \(L_1\), while \(L_2\) and \(L_3\) are more affected, indicating a higher sensitivity. Specifically, the distributions of \(L_1\) under the baseline model and the two stresses are visually indistinguishable. This indicates the lack of importance of \(L_1\) with respect to portfolio tail risk. The higher impact on the tails of \texttt{stress\ 2} (on both VaR and ES) is also visible. Sensitivity measures quantifying these effects are introduced in the following subsection.
 
-\hypertarget{sensitivity-measures}{%
-\subsection{Sensitivity measures}\label{sensitivity-measures}}
+\hypertarget{sensitivity-measures-1}{%
+\subsection{Sensitivity measures}\label{sensitivity-measures-1}}
 
 The impact of the stressed models on the model components can be quantified through sensitivity measures. The function \texttt{sensitivity} includes the \emph{Kolmogorov} distance, the \emph{Wasserstein} distance, and the sensitivity measure \emph{Gamma}; the choice of measure is by the argument \texttt{type}. We refer to Section \ref{Sec:analysis} for the definitions of those sensitivity measures. The Kolmogorov distance is useful for comparing different stressed models. Calculating the Kolmogorov distance, we observe that \texttt{stress\ 2} produces a larger Kolmogorov distance compared to \texttt{stress\ 1}, which reflects the additional stress on the ES for the stressed model \texttt{stress\ 2}.
 
@@ -957,7 +986,7 @@ Using the \texttt{sensitivity} function we can analyse whether the sensitivity o
 ## 1 stress 1 Gamma 0.783
 \end{verbatim}
 
-We observe that the sensitivity of \(L_1 + L_3\) is larger than the sensitivity to either \(L_1\) and \(L_3\), reflecting the positive dependence structure of the credit risk portfolio. Nonetheless, subportfolio \(L_2\) has not only the largest sensitivity compared to \(L_1\) and \(L_3\) but also a higher sensitivity than the combined subportfolios \(L_1 + L_3\).
+We observe that the sensitivity of \(L_1 + L_3\) is larger than the sensitivity to either \(L_1\) and \(L_3\), reflecting the positive dependence structure of the credit risk portfolio. Nonetheless, subportfolio \(L_2\) has not only the largest sensitivity compared to \(L_1\) and \(L_3\) but also a higher sensitivity than the combined subportfolios \(L_1 + L_3\). This has a clear risk management implication, as it shows conclusively that \(L_2\) should be an area of priority for the owner of this portfolio of credit liabilities. Loosely speaking, \(L_2\) is the portfolio from which `problems may arise'.
 
 The \texttt{importance\_rank} function, having the same structure as the \texttt{sensitivity} function, returns the ranks of the sensitivity measures. This function is particularly useful when several risk factors are involved.
 
@@ -978,7 +1007,7 @@ The \texttt{importance\_rank} function, having the same structure as the \texttt
 \hypertarget{sensitivity-of-default-probabilities}{%
 \subsubsection{Sensitivity of default probabilities}\label{sensitivity-of-default-probabilities}}
 
-From the preceding analysis, it transpires that the subportfolios \(L_2\) and \(L_3\) are, in that order, most responsible for the stress in the portfolio loss, under both stresses considered. Furthermore, most of the sensitivity seems to be attributable to the systematic risk components \(H_2\) and \(H_3\), reflected by their high values of the Gamma measure. To investigate this, we perform another stress, resulting once again in a \(20\%\) increase in \(\text{VaR}(L)\), but this time fixing some elements of the distribution of \(H_2\). Specifically, in addition to the \(20\%\) increase in \(\text{VaR}(L)\), we fix the mean and the \(75\%\) quantile of \(H_2\) to the same values as in the baseline model. This set of constraints is implemented via the function \texttt{stress\_moment}.
+From the preceding analysis, it transpires that the subportfolios \(L_2\) and \(L_3\) are, in that order, most responsible for the stress in the portfolio loss, under both stresses considered. Furthermore, most of the sensitivity seems to be attributable to the systematic risk components \(H_2\) and \(H_3\), reflected by their high values of the Gamma measure. To investigate this, we perform another stress, resulting once again in a \(20\%\) increase in \(\text{VaR}(L)\), but this time fixing some elements of the distribution of \(H_2\). Specifically, in addition to the \(20\%\) increase in \(\text{VaR}(L)\), we fix the mean and the \(75\%\) quantile of \(H_2\) to the same values as in the baseline model. Hence, we once again perform a reverse stress test, but this time intentionally restricting the movement in the distribution of \(H_2\), to enable us to focus on other variables. This set of constraints is implemented via the function \texttt{stress\_moment}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1046,7 +1075,7 @@ Using the \texttt{summary} function, we verify that the distribution of \(H_2\) 
 ## 3 stress 3 Gamma 0.0102 0.0203 0.366
 \end{verbatim}
 
-It is seen that, by fixing part of the distribution of \(H_2\), the importance ranking of the subportfolios changes, with \(L_2\) now being significantly less sensitive than \(L_3\). This confirms, in the credit risk model, the dominance of the systematic risk reflected in the randomness of default probabilities.
+It is seen that, by fixing part of the distribution of \(H_2\), the importance ranking of the subportfolios changes, with \(L_2\) now being significantly less sensitive than \(L_3\). This confirms, in the credit risk model, the dominance of the systematic risk, reflected in the randomness of default probabilities.
 
 \hypertarget{stressing-tails-of-subportfolios}{%
 \subsubsection{Stressing tails of subportfolios}\label{stressing-tails-of-subportfolios}}
@@ -1140,7 +1169,9 @@ The \textbf{SWIM} package enables users to perform flexible and efficient sensit
 
 While working with a single set of simulated scenarios is computationally efficient, it also poses some limitations, as \textbf{SWIM} cannot currently consider states of the world outside those already generated by the simulation model. This places a constraint on how different the baseline and stressed model can be; technically speaking the latter must be absolutely continuous with respect to the former. We aim to address this limitation in the future, for example by allowing users to augment a given set of simulated scenarios with additional ones and/or to consider more than one set of scenarios as part of a single sensitivity analysis.
 
-Future work includes enhancing analysis tools, for example functions that will make it easier to extract distributional characteristics of stressed models -- e.g.~a \texttt{stressed\_cor} function that enables the monitoring of correlation changes when models are stressed. Furthermore, we consider including alternative ways of calculating scenario weights, such as minimising the \(\chi^2\) divergence instead of the Kullback-Leiber divergence.
+A different issue emanating from working with a limited set of scenarios relates to the impact of sampling error on estimates of stressed distributions and sensitivity measures. Substantial sampling errors may occur in cases where users specify stresses that are technically feasible, but concentrate a lot of weight on only a few scenarios. In future updates of the package we intend to implement relevant warnings, as well as bootstrap estimates of confidence intervals for key \textbf{SWIM} outputs.
+
+Furthermore, future work includes enhancing analysis tools, for example functions that will make it easier to extract distributional characteristics of stressed models -- e.g.~a \texttt{stressed\_cor} function that enables the monitoring of correlation changes when models are stressed.
 
 \hypertarget{acknowledgements}{%
 \section*{Acknowledgements}\label{acknowledgements}}

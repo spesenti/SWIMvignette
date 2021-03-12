@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis</title>
   <meta name="description" content="Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis" />
-  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis" />
   <meta property="og:type" content="book" />
@@ -42,7 +42,6 @@ div.abstract{
   width: 90%;
 }
 </style>
-<script src="assets/header-attrs-2.1/header-attrs.js"></script>
 <script src="assets/jquery-2.2.3/jquery.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -60,20 +59,22 @@ div.abstract{
 
 
 
+<script src="assets/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -93,7 +94,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -138,42 +139,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
-<ul>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#background-and-contribution"><i class="fa fa-check"></i><b>1.1</b> Background and contribution</a></li>
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#installation"><i class="fa fa-check"></i><b>1.2</b> Installation</a></li>
 <li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#structure-of-the-paper"><i class="fa fa-check"></i><b>1.3</b> Structure of the paper</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="Sec-Intro.html"><a href="Sec-Intro.html"><i class="fa fa-check"></i><b>2</b> What is <strong>SWIM</strong>?</a>
-<ul>
+<li class="chapter" data-level="2" data-path="Sec-Intro.html"><a href="Sec-Intro.html"><i class="fa fa-check"></i><b>2</b> What is <strong>SWIM</strong>?</a><ul>
 <li class="chapter" data-level="2.1" data-path="Sec-Intro.html"><a href="Sec-Intro.html#sensitivity-testing-and-scenario-weights"><i class="fa fa-check"></i><b>2.1</b> Sensitivity testing and scenario weights</a></li>
 <li class="chapter" data-level="2.2" data-path="Sec-Intro.html"><a href="Sec-Intro.html#an-introductory-example"><i class="fa fa-check"></i><b>2.2</b> An introductory example</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="Sec-Scope.html"><a href="Sec-Scope.html"><i class="fa fa-check"></i><b>3</b> Scope of the <strong>SWIM</strong> package</a>
-<ul>
-<li class="chapter" data-level="3.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Rfunctions"><i class="fa fa-check"></i><b>3.1</b> Stressing a model</a>
-<ul>
+<li class="chapter" data-level="3" data-path="Sec-Scope.html"><a href="Sec-Scope.html"><i class="fa fa-check"></i><b>3</b> Scope of the <strong>SWIM</strong> package</a><ul>
+<li class="chapter" data-level="3.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Rfunctions"><i class="fa fa-check"></i><b>3.1</b> Stressing a model</a><ul>
 <li class="chapter" data-level="3.1.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Rstress"><i class="fa fa-check"></i><b>3.1.1</b> The <code>stress</code> function and the <strong>SWIM</strong> object</a></li>
 <li class="chapter" data-level="3.1.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#stressing-disjoint-probability-intervals"><i class="fa fa-check"></i><b>3.1.2</b> Stressing disjoint probability intervals</a></li>
 <li class="chapter" data-level="3.1.3" data-path="Sec-Scope.html"><a href="Sec-Scope.html#stressing-moments"><i class="fa fa-check"></i><b>3.1.3</b> Stressing moments</a></li>
 <li class="chapter" data-level="3.1.4" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Sec:RiskMeasures"><i class="fa fa-check"></i><b>3.1.4</b> Stressing risk measures</a></li>
 <li class="chapter" data-level="3.1.5" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Sec:User"><i class="fa fa-check"></i><b>3.1.5</b> User defined scenario weights</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Sec:analysis"><i class="fa fa-check"></i><b>3.2</b> Analysis of stressed models</a>
-<ul>
+<li class="chapter" data-level="3.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Sec:analysis"><i class="fa fa-check"></i><b>3.2</b> Analysis of stressed models</a><ul>
 <li class="chapter" data-level="3.2.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#distributional-comparison"><i class="fa fa-check"></i><b>3.2.1</b> Distributional comparison</a></li>
 <li class="chapter" data-level="3.2.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#sensitivity-measures"><i class="fa fa-check"></i><b>3.2.2</b> Sensitivity measures</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html"><i class="fa fa-check"></i><b>4</b> Case study</a>
-<ul>
+<li class="chapter" data-level="4" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html"><i class="fa fa-check"></i><b>4</b> Case study</a><ul>
 <li class="chapter" data-level="4.1" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#a-credit-risk-portfolio"><i class="fa fa-check"></i><b>4.1</b> A credit risk portfolio</a></li>
 <li class="chapter" data-level="4.2" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#stressing-the-portfolio-loss"><i class="fa fa-check"></i><b>4.2</b> Stressing the portfolio loss</a></li>
 <li class="chapter" data-level="4.3" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#analysing-stressed-models"><i class="fa fa-check"></i><b>4.3</b> Analysing stressed models</a></li>
 <li class="chapter" data-level="4.4" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#visualising-stressed-distributions"><i class="fa fa-check"></i><b>4.4</b> Visualising stressed distributions</a></li>
 <li class="chapter" data-level="4.5" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#sensitivity-measures-1"><i class="fa fa-check"></i><b>4.5</b> Sensitivity measures</a></li>
-<li class="chapter" data-level="4.6" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#constructing-more-advanced-stresses"><i class="fa fa-check"></i><b>4.6</b> Constructing more advanced stresses</a>
-<ul>
+<li class="chapter" data-level="4.6" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#constructing-more-advanced-stresses"><i class="fa fa-check"></i><b>4.6</b> Constructing more advanced stresses</a><ul>
 <li class="chapter" data-level="4.6.1" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#sensitivity-of-default-probabilities"><i class="fa fa-check"></i><b>4.6.1</b> Sensitivity of default probabilities</a></li>
 <li class="chapter" data-level="4.6.2" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#stressing-tails-of-subportfolios"><i class="fa fa-check"></i><b>4.6.2</b> Stressing tails of subportfolios</a></li>
 </ul></li>
@@ -182,8 +176,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="acknowledgements.html"><a href="acknowledgements.html"><i class="fa fa-check"></i>Acknowledgements</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
-<li class="chapter" data-level="A" data-path="AppendixCM.html"><a href="AppendixCM.html"><i class="fa fa-check"></i><b>A</b> Appendix Credit Model</a>
-<ul>
+<li class="chapter" data-level="A" data-path="AppendixCM.html"><a href="AppendixCM.html"><i class="fa fa-check"></i><b>A</b> Appendix Credit Model</a><ul>
 <li class="chapter" data-level="A.1" data-path="AppendixCM.html"><a href="AppendixCM.html#credit-model-assumptions"><i class="fa fa-check"></i><b>A.1</b> Credit Model assumptions</a></li>
 <li class="chapter" data-level="A.2" data-path="AppendixCM.html"><a href="AppendixCM.html#code-for-generating-the-data"><i class="fa fa-check"></i><b>A.2</b> Code for generating the data</a></li>
 </ul></li>
@@ -209,29 +202,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p class="author"><em>Silvana M. Pesenti<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> <sup>2</sup>, Alberto Bettini<sup>3</sup>, Pietro Millossovich<sup>4,5</sup>, Andreas Tsanakas<sup>5</sup></em></p>
 <p class="date"><em><div class="line-block"><sup>2</sup>University of Toronto, <sup>3</sup>Assicurazioni Generali S.p.A, <sup>4</sup>DEAMS, University of Trieste, <sup>5</sup>Cass Business School, City, University of London<br />
 <br />
-10. January 2020</div></em></p>
+05. March 2021</div></em></p>
 <div class="abstract">
 <p class="abstract">Abstract</p>
 The <strong>SWIM</strong> package implements a flexible sensitivity analysis framework, based primarily on results and tools developed by <span class="citation">Pesenti, Millossovich, and Tsanakas (<a href="references.html#ref-Pesenti2019" role="doc-biblioref">2019</a>)</span>. <strong>SWIM</strong> provides a stressed version of a stochastic model, subject to model components (random variables) fulfilling given probabilistic constraints (stresses). Possible stresses can be applied on moments, probabilities of given events, and risk measures such as Value-at-Risk and Expected Shortfall. <strong>SWIM</strong> operates upon a single set of simulated scenarios from a stochastic model, returning scenario weights, which encode the required stress and allow monitoring the impact of the stress on all model components. The scenario weights are calculated to minimise the relative entropy with respect to the baseline model, subject to the stress applied. As well as calculating scenario weights, the package provides tools for the analysis of stressed models, including plotting facilities and evaluation of sensitivity measures. <strong>SWIM</strong> does not require additional evaluations of the simulation model or explicit knowledge of its underlying statistical and functional relations; hence it is suitable for the analysis of black box models. The capabilities of <strong>SWIM</strong> are demonstrated through a case study of a credit portfolio model.
 </div>
 </div>
-<div id="introduction" class="section level1" number="1">
+<div id="introduction" class="section level1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
-<div id="background-and-contribution" class="section level2" number="1.1">
+<div id="background-and-contribution" class="section level2">
 <h2><span class="header-section-number">1.1</span> Background and contribution</h2>
 <p>Complex quantitative models are used extensively in actuarial and financial risk management applications, as well as in wider fields such as environmental risk modelling <span class="citation">(Tsanakas and Millossovich <a href="references.html#ref-Tsanakas2016b" role="doc-biblioref">2016</a>; Borgonovo and Plischke <a href="references.html#ref-Borgonovo2016" role="doc-biblioref">2016</a>; Pesenti, Millossovich, and Tsanakas <a href="references.html#ref-Pesenti2019" role="doc-biblioref">2019</a>)</span>. The complexity of such models (high dimensionality of inputs; non-linear relationships) motivates the performance of sensitivity analyses, with the aim of providing insight into the ways that model inputs interact and impact upon the model output.</p>
 <p>When model inputs are subject to uncertainty, <em>global</em> sensitivity methods are often used, considering the full space of (randomly generated) multivariate scenarios, which represent possible configurations of the model input vector. The particular task of ranking the importance of different model inputs leads to the use of sensitivity measures, which assign a score to each model input. A rich literature on global sensitivity analysis exists, with variance decomposition methods being particularly prominent; see <span class="citation">Saltelli et al. (<a href="references.html#ref-Saltelli2008" role="doc-biblioref">2008</a>)</span> and <span class="citation">Borgonovo and Plischke (<a href="references.html#ref-Borgonovo2016" role="doc-biblioref">2016</a>)</span> for wide-ranging reviews. The <strong>R</strong> package <strong>sensitivity</strong> <span class="citation">(Iooss, Janon, and Pujol <a href="references.html#ref-Rsensitivity" role="doc-biblioref">2019</a>)</span> implements a wide range of sensitivity analysis approaches and measures.</p>
-<p>We introduce an alternative approach to sensitivity analysis called <em>Scenario Weights for Importance Measurement</em> (<strong>SWIM</strong>) and present the <strong>R</strong> package implementing it <span class="citation">(Pesenti et al. <a href="references.html#ref-PesentiR" role="doc-biblioref">2020</a>)</span>. The aim of this paper is to provide an accessible introduction to the concepts underlying <strong>SWIM</strong> and a vignette demonstrating how the package is used. <strong>SWIM</strong> quantifies how distorting a particular model component (which could be a model input, output, or an intermediate quantity) impacts all other model components. The <strong>SWIM</strong> approach can be summarised as follows:</p>
+<p>We introduce an alternative approach to sensitivity analysis called <em>Scenario Weights for Importance Measurement</em> (<strong>SWIM</strong>) and present the <strong>R</strong> package implementing it <span class="citation">(Pesenti et al. <a href="references.html#ref-PesentiR" role="doc-biblioref">2020</a>)</span>. This approach was developed with actuarial risk models in mind, particularly those used for risk management and economic capital calculations. The aim of this paper is to provide an accessible introduction to the concepts underlying <strong>SWIM</strong> and a vignette demonstrating how the package is used. <strong>SWIM</strong> quantifies how distorting a particular model component (which could be a model input, output, or an intermediate quantity) impacts all other model components. Such analyses allow a risk modeller, for exmaple, to rank the importance of model inputs either by the extent that their being stressed impacts the output or, conversely, the way that they respond to a stress in model output – the latter has been termed reverse sensitivity testing by <span class="citation">Pesenti, Millossovich, and Tsanakas (<a href="references.html#ref-Pesenti2019" role="doc-biblioref">2019</a>)</span>. The <strong>SWIM</strong> approach can be summarised as follows:</p>
 <ol style="list-style-type: decimal">
 <li><p>The starting point is a table of simulated scenarios, each column containing realisations of a different model component. This table forms the <em>baseline model</em> as well as the dataset on which the <strong>SWIM</strong> bases its calculations.</p></li>
-<li><p>A <em>stress</em> is defined as a particular modification of a model component (or group of components). This could relate to a change in moments, probabilities of events of interest, or risk measures, such as Value-at-Risk or Expected Shortfall (e.g. <span class="citation">McNeil, Frey, and Embrechts (<a href="references.html#ref-Mcneil2015B" role="doc-biblioref">2015</a>)</span>).</p></li>
-<li><p><strong>SWIM</strong> calculates a set of <em>scenario weights</em>, acting upon the simulated scenarios and thus modifying the relative probabilities of scenarios occurring. Scenario weights are derived such that the defined stress on model components is fulfilled, while keeping the distortion to the baseline model to a minimum, as quantified by the Kullback-Leibler divergence (relative entropy).</p></li>
+<li><p>A <em>stress</em> is defined as a particular modification of a model component (or group of components). This could relate to a change in moments, probabilities of events of interest, or risk measures, such as Value-at-Risk or Expected Shortfall (e.g. <span class="citation">McNeil, Frey, and Embrechts (<a href="references.html#ref-Mcneil2015B" role="doc-biblioref">2015</a>)</span>). Furthermore, there is the facility for users to design their own stresses, involving potentially more than one model component.</p></li>
+<li><p><strong>SWIM</strong> calculates a set of <em>scenario weights</em>, acting upon the simulated scenarios and thus modifying the relative probabilities of scenarios occurring. Scenario weights are derived such that the defined stress on model components is fulfilled, while keeping the distortion to the baseline model to a minimum, as quantified by the Kullback-Leibler divergence (relative entropy). Alternatively, users are able to import their own set of weights, generated by a method of their choice.</p></li>
 <li><p>Given the calculated scenario weights, the impact of the stress on the distributions of all model components is worked out and sensitivity measures, useful for ranking model components, are evaluated.</p></li>
 </ol>
-<p>A key benefit of <strong>SWIM</strong> are that it provides a sensitivity analysis framework that is economical both computationally and in terms of the information needed to perform the analysis. Specifically, sensitivity analysis is performed using only one set of simulated scenarios. No further simulations are needed, thus eliminating the need for repeated evaluation of the model, which could be numerically expensive. Furthermore, the user of <strong>SWIM</strong> needs to know neither the explicit form of the joint distribution of model components nor the exact form of functional relations between them. Hence, <strong>SWIM</strong> is appropriate for the analysis of <em>black box</em> models, thus having a wide scope of applications.</p>
+<p>A key benefit of <strong>SWIM</strong> are that it provides a sensitivity analysis framework that is economical both computationally and in terms of the information needed to perform the analysis. Specifically, sensitivity analysis is performed using only one set of simulated scenarios. No further simulations are needed, thus eliminating the need for repeated evaluation of the model, which could be numerically expensive. Furthermore, the user of <strong>SWIM</strong> needs to know neither the explicit form of the joint distribution of model components nor the exact form of functional relations between them. Hence, <strong>SWIM</strong> is appropriate for the analysis of <em>black box</em> models, thus having a wide scope of applications. Specifically, SWIM is well suited to simulation models used in insurance risk management, which are characterised by high dimensions, complex interactions between risk factors, and high computational cost of re-simulating under different assumptions.</p>
+<p>While there is an extensive literature on sensitivity analysis and there exist multitudes of sensitivity measures, our proposed sensitivity analysis framework differs in that it is model independent and can be applied in a numerically efficient way since it does not require potentially expensive re-evaluation of the model’s output. Moreover, our sensitivity analysis framework focuses on risk measures which are widely used in risk management <span class="citation">(McNeil, Frey, and Embrechts <a href="references.html#ref-Mcneil2015B" role="doc-biblioref">2015</a>)</span>, whereas much of the literature on sensitivity analysis focuses on variance-based and moment-independent sensitivity measures <span class="citation">(Borgonovo, Hazen, and Plischke <a href="references.html#ref-borgonovo2016common" role="doc-biblioref">2016</a>)</span>; thus the current manuscript adds a perspective that is missing by standard variance-based and moment-independent approaches.</p>
+<p>The proposed sensitivity analysis framework implemented in <strong>SWIM</strong> is based on theoretical results derived in <span class="citation">Pesenti, Millossovich, and Tsanakas (<a href="references.html#ref-Pesenti2019" role="doc-biblioref">2019</a>)</span>. While these results hold in generality, the <strong>SWIM</strong> package fundamentally hinges on the fact that it works on a set of Monte Carlo simulations. Thus, the quality of the sensitivity analysis conducted using <strong>SWIM</strong> is intimately connected with the quality of the dataset. Specifically, as we work on an empirical space the user is constraint to change the probability of already simulated scenarios, without the ability to introduce new ones. Hence, the user must specify stresses judiciously so that they can be supported by the given dataset.</p>
 <p>The <strong>SWIM</strong> approach is largely based on <span class="citation">Pesenti, Millossovich, and Tsanakas (<a href="references.html#ref-Pesenti2019" role="doc-biblioref">2019</a>)</span> and uses theoretical results on risk measures and sensitivity measures developed in that paper. An early sensitivity analysis approach based on scenario weighting was proposed by <span class="citation">Beckman and McKay (<a href="references.html#ref-Beckman1987" role="doc-biblioref">1987</a>)</span>. The Kullback-Leibler divergence has been used extensively in the financial risk management literature – papers that are conceptually close to <strong>SWIM</strong> include <span class="citation">Weber (<a href="references.html#ref-Weber2007" role="doc-biblioref">2007</a>)</span>; <span class="citation">Breuer and Csiszár (<a href="references.html#ref-Breuer2013" role="doc-biblioref">2013</a>)</span>; and <span class="citation">Cambou and Filipović (<a href="references.html#ref-Cambou2017" role="doc-biblioref">2017</a>)</span>. Some foundational results related to the minimisation of the Kullback-Leibler divergence are provided in <span class="citation">Csiszár (<a href="references.html#ref-Csiszar1975dAP" role="doc-biblioref">1975</a>)</span>.</p>
 </div>
-<div id="installation" class="section level2" number="1.2">
+<div id="installation" class="section level2">
 <h2><span class="header-section-number">1.2</span> Installation</h2>
 <p>The <strong>SWIM</strong> package can be installed from <a href="https://CRAN.R-project.org/package=SWIM">CRAN</a> or through <a href="https://github.com/spesenti/SWIM">GitHub</a>:</p>
 <pre class="r}"><code># directly from CRAN
@@ -239,10 +234,10 @@ install.packages(&quot;SWIM&quot;)
 # and the development version from GitHub 
 devtools::install_github(&quot;spesenti/SWIM&quot;)</code></pre>
 </div>
-<div id="structure-of-the-paper" class="section level2" number="1.3">
+<div id="structure-of-the-paper" class="section level2">
 <h2><span class="header-section-number">1.3</span> Structure of the paper</h2>
 <p>Section <a href="Sec-Intro.html#Sec:Intro">2</a> provides an introduction to <strong>SWIM</strong>, illustrating key concepts and basic functionalities of the package on a simple example. Section
-<a href="Sec-Scope.html#Sec:Scope">3</a> contains technical background on the optimisations that underlay the <strong>SWIM</strong> package implementation. Furthermore, Section <a href="Sec-Scope.html#Sec:Scope">3</a> includes a brief reference guide, providing an overview of implemented <strong>R</strong> functions, objects, and graphical/analysis tools. Finally, a detailed case study of a credit risk portfolio is presented in Section <a href="Sec-CreditModel.html#Sec:CreditModel">4</a>. Through this case study, advanced capabilities of <strong>SWIM</strong> for sensitivity analysis are demonstrated.</p>
+<a href="Sec-Scope.html#Sec:Scope">3</a> contains technical background on the optimisations that underlay the <strong>SWIM</strong> package implementation. Furthermore, Section <a href="Sec-Scope.html#Sec:Scope">3</a> includes a brief reference guide, providing an overview of implemented <strong>R</strong> functions, objects, and graphical/analysis tools. Finally, a detailed case study of a credit risk portfolio is presented in Section <a href="Sec-CreditModel.html#Sec:CreditModel">4</a>. Through this case study, advanced capabilities of <strong>SWIM</strong> for sensitivity analysis are demonstrated, including more complex user-designed stresses.</p>
 
 </div>
 </div>

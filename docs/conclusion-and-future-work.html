@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>5 Conclusion and future work | Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis</title>
   <meta name="description" content="5 Conclusion and future work | Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis" />
-  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="5 Conclusion and future work | Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis" />
   <meta property="og:type" content="book" />
@@ -42,7 +42,6 @@ div.abstract{
   width: 90%;
 }
 </style>
-<script src="assets/header-attrs-2.1/header-attrs.js"></script>
 <script src="assets/jquery-2.2.3/jquery.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -60,20 +59,22 @@ div.abstract{
 
 
 
+<script src="assets/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -93,7 +94,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -138,42 +139,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
-<ul>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#background-and-contribution"><i class="fa fa-check"></i><b>1.1</b> Background and contribution</a></li>
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#installation"><i class="fa fa-check"></i><b>1.2</b> Installation</a></li>
 <li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#structure-of-the-paper"><i class="fa fa-check"></i><b>1.3</b> Structure of the paper</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="Sec-Intro.html"><a href="Sec-Intro.html"><i class="fa fa-check"></i><b>2</b> What is <strong>SWIM</strong>?</a>
-<ul>
+<li class="chapter" data-level="2" data-path="Sec-Intro.html"><a href="Sec-Intro.html"><i class="fa fa-check"></i><b>2</b> What is <strong>SWIM</strong>?</a><ul>
 <li class="chapter" data-level="2.1" data-path="Sec-Intro.html"><a href="Sec-Intro.html#sensitivity-testing-and-scenario-weights"><i class="fa fa-check"></i><b>2.1</b> Sensitivity testing and scenario weights</a></li>
 <li class="chapter" data-level="2.2" data-path="Sec-Intro.html"><a href="Sec-Intro.html#an-introductory-example"><i class="fa fa-check"></i><b>2.2</b> An introductory example</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="Sec-Scope.html"><a href="Sec-Scope.html"><i class="fa fa-check"></i><b>3</b> Scope of the <strong>SWIM</strong> package</a>
-<ul>
-<li class="chapter" data-level="3.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Rfunctions"><i class="fa fa-check"></i><b>3.1</b> Stressing a model</a>
-<ul>
+<li class="chapter" data-level="3" data-path="Sec-Scope.html"><a href="Sec-Scope.html"><i class="fa fa-check"></i><b>3</b> Scope of the <strong>SWIM</strong> package</a><ul>
+<li class="chapter" data-level="3.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Rfunctions"><i class="fa fa-check"></i><b>3.1</b> Stressing a model</a><ul>
 <li class="chapter" data-level="3.1.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Rstress"><i class="fa fa-check"></i><b>3.1.1</b> The <code>stress</code> function and the <strong>SWIM</strong> object</a></li>
 <li class="chapter" data-level="3.1.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#stressing-disjoint-probability-intervals"><i class="fa fa-check"></i><b>3.1.2</b> Stressing disjoint probability intervals</a></li>
 <li class="chapter" data-level="3.1.3" data-path="Sec-Scope.html"><a href="Sec-Scope.html#stressing-moments"><i class="fa fa-check"></i><b>3.1.3</b> Stressing moments</a></li>
 <li class="chapter" data-level="3.1.4" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Sec:RiskMeasures"><i class="fa fa-check"></i><b>3.1.4</b> Stressing risk measures</a></li>
 <li class="chapter" data-level="3.1.5" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Sec:User"><i class="fa fa-check"></i><b>3.1.5</b> User defined scenario weights</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Sec:analysis"><i class="fa fa-check"></i><b>3.2</b> Analysis of stressed models</a>
-<ul>
+<li class="chapter" data-level="3.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#Sec:analysis"><i class="fa fa-check"></i><b>3.2</b> Analysis of stressed models</a><ul>
 <li class="chapter" data-level="3.2.1" data-path="Sec-Scope.html"><a href="Sec-Scope.html#distributional-comparison"><i class="fa fa-check"></i><b>3.2.1</b> Distributional comparison</a></li>
 <li class="chapter" data-level="3.2.2" data-path="Sec-Scope.html"><a href="Sec-Scope.html#sensitivity-measures"><i class="fa fa-check"></i><b>3.2.2</b> Sensitivity measures</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html"><i class="fa fa-check"></i><b>4</b> Case study</a>
-<ul>
+<li class="chapter" data-level="4" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html"><i class="fa fa-check"></i><b>4</b> Case study</a><ul>
 <li class="chapter" data-level="4.1" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#a-credit-risk-portfolio"><i class="fa fa-check"></i><b>4.1</b> A credit risk portfolio</a></li>
 <li class="chapter" data-level="4.2" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#stressing-the-portfolio-loss"><i class="fa fa-check"></i><b>4.2</b> Stressing the portfolio loss</a></li>
 <li class="chapter" data-level="4.3" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#analysing-stressed-models"><i class="fa fa-check"></i><b>4.3</b> Analysing stressed models</a></li>
 <li class="chapter" data-level="4.4" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#visualising-stressed-distributions"><i class="fa fa-check"></i><b>4.4</b> Visualising stressed distributions</a></li>
 <li class="chapter" data-level="4.5" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#sensitivity-measures-1"><i class="fa fa-check"></i><b>4.5</b> Sensitivity measures</a></li>
-<li class="chapter" data-level="4.6" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#constructing-more-advanced-stresses"><i class="fa fa-check"></i><b>4.6</b> Constructing more advanced stresses</a>
-<ul>
+<li class="chapter" data-level="4.6" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#constructing-more-advanced-stresses"><i class="fa fa-check"></i><b>4.6</b> Constructing more advanced stresses</a><ul>
 <li class="chapter" data-level="4.6.1" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#sensitivity-of-default-probabilities"><i class="fa fa-check"></i><b>4.6.1</b> Sensitivity of default probabilities</a></li>
 <li class="chapter" data-level="4.6.2" data-path="Sec-CreditModel.html"><a href="Sec-CreditModel.html#stressing-tails-of-subportfolios"><i class="fa fa-check"></i><b>4.6.2</b> Stressing tails of subportfolios</a></li>
 </ul></li>
@@ -182,8 +176,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="acknowledgements.html"><a href="acknowledgements.html"><i class="fa fa-check"></i>Acknowledgements</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
-<li class="chapter" data-level="A" data-path="AppendixCM.html"><a href="AppendixCM.html"><i class="fa fa-check"></i><b>A</b> Appendix Credit Model</a>
-<ul>
+<li class="chapter" data-level="A" data-path="AppendixCM.html"><a href="AppendixCM.html"><i class="fa fa-check"></i><b>A</b> Appendix Credit Model</a><ul>
 <li class="chapter" data-level="A.1" data-path="AppendixCM.html"><a href="AppendixCM.html#credit-model-assumptions"><i class="fa fa-check"></i><b>A.1</b> Credit Model assumptions</a></li>
 <li class="chapter" data-level="A.2" data-path="AppendixCM.html"><a href="AppendixCM.html#code-for-generating-the-data"><i class="fa fa-check"></i><b>A.2</b> Code for generating the data</a></li>
 </ul></li>
@@ -204,10 +197,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="conclusion-and-future-work" class="section level1" number="5">
+<div id="conclusion-and-future-work" class="section level1">
 <h1><span class="header-section-number">5</span> Conclusion and future work</h1>
 <p>The <strong>SWIM</strong> package enables users to perform flexible and efficient sensitivity analyses of simulation models, using the method of stressing model components by re-weighting simulated scenarios. Multiple possibilities were demonstrated, from prioritising risk factors via reverse stress testing, to evaluating the impact on a portfolio distribution of increasing the probability of subportfolios’ joint exceedances. The implemented analysis and visualisation tools help users derive insights into their models and perform formal comparisons of the importance of model components. Since <strong>SWIM</strong> does not require re-simulation from the model, these sensitivity analyses have a low computational cost; moreover, they can be performed on black-box models.</p>
-<p>Future work includes enhancing analysis tools, for example by including a <code>plot_weights</code> function that enables the seamless visualisation and comparison of scenario weights arising from different stresses, as well as functions that will make it easier to extract distributional characteristics of stressed models – e.g. a <code>stressed_cor</code> function that enables the monitoring of correlation changes when models are stressed. Furthermore, we consider including alternative ways of calculating scenario weights, such as minimising the <span class="math inline">\(\chi^2\)</span> divergence instead of the Kullback-Leiber divergence.</p>
+<p>While working with a single set of simulated scenarios is computationally efficient, it also poses some limitations, as <strong>SWIM</strong> cannot currently consider states of the world outside those already generated by the simulation model. This places a constraint on how different the baseline and stressed model can be; technically speaking the latter must be absolutely continuous with respect to the former. We aim to address this limitation in the future, for example by allowing users to augment a given set of simulated scenarios with additional ones and/or to consider more than one set of scenarios as part of a single sensitivity analysis.</p>
+<p>A different issue emanating from working with a limited set of scenarios relates to the impact of sampling error on estimates of stressed distributions and sensitivity measures. Substantial sampling errors may occur in cases where users specify stresses that are technically feasible, but concentrate a lot of weight on only a few scenarios. In future updates of the package we intend to implement relevant warnings, as well as bootstrap estimates of confidence intervals for key <strong>SWIM</strong> outputs.</p>
+<p>Furthermore, future work includes enhancing analysis tools, for example functions that will make it easier to extract distributional characteristics of stressed models – e.g. a <code>stressed_cor</code> function that enables the monitoring of correlation changes when models are stressed.</p>
 
 </div>
             </section>
