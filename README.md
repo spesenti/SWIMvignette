@@ -13,3 +13,6 @@ The `SWIM` ([CRAN](https://CRAN.R-project.org/package=SWIM); [GitHub](https://gi
   functional relations; hence it is suitable for the analysis of black box models.
   The capabilities of SWIM are demonstrated through a case study of a credit portfolio
   model. 
+  
+  This vignette has been published in the Annals of Actuarial Science:    
+Pesenti, S., Bettini, A., Millossovich, P., & Tsanakas, A. (2021). Scenario Weights for Importance Measurement (SWIM) – an R package for sensitivity analysis. Annals of Actuarial Science, 15(2), 458-483. doi:10.1017/S1748499521000130. A html cersion can be found on https://utstat.toronto.edu/pesenti/SWIMVignette/.
